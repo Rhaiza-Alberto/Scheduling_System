@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_green"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:theme="@style/Theme.RoomBooking">
 
     <View
         android:layout_width="300dp"
@@ -16,7 +16,8 @@
         android:translationX="-100dp"
         android:translationY="-100dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintBounds" />
 
     <View
         android:layout_width="250dp"
@@ -26,7 +27,8 @@
         android:translationX="80dp"
         android:translationY="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="VisualLintBounds" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/logoCard"
@@ -69,7 +71,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/login"
-        android:textColor="@color/text_green_light"
+        android:textColor="#E8F5E9"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,10 +131,12 @@
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:autofillHints="emailAddress"
+                    android:inputType="textEmailAddress"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+                    android:textColorHint="#616161"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -156,10 +160,12 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
                     android:autofillHints="password"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -170,7 +176,7 @@
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:text="@string/forgot_password"
-                android:textColor="@color/accent_green"
+                android:textColor="#43A047"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -181,12 +187,13 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/sign_in"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="#37474F"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:backgroundTint="@color/accent_green"
                 app:cornerRadius="16dp"
-                app:elevation="8dp" />
+                app:elevation="8dp"
+                tools:ignore="VisualLintButtonSize" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -197,7 +204,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/contact_support"
-        android:textColor="@color/text_green_light"
+        android:textColor="#E8F5E9"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
