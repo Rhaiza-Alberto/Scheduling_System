@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="12dp"
     android:background="#EFEFEF"
     android:layout_marginBottom="10dp"
@@ -10,7 +11,7 @@
 
     <TextView
         android:id="@+id/txtDay"
-        android:text="Monday"
+        tools:text="@string/sample_day"
         android:textStyle="bold"
         android:textSize="18sp"
         android:layout_width="wrap_content"
@@ -20,7 +21,7 @@
 
     <TextView
         android:id="@+id/txtTime"
-        android:text="08:00 - 10:00"
+        tools:text="@string/sample_time"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +31,7 @@
 
     <TextView
         android:id="@+id/txtSubject"
-        android:text="IT101 - Intro to Computing"
+        tools:text="@string/sample_subject"
         android:textSize="15sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +42,7 @@
 
     <TextView
         android:id="@+id/txtSection"
-        android:text="BSIT-1A"
+        tools:text="@string/sample_section"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +52,7 @@
 
     <TextView
         android:id="@+id/txtRoom"
-        android:text="Room G301"
+        tools:text="@string/sample_room"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +62,7 @@
 
     <TextView
         android:id="@+id/txtTeacher"
-        android:text="Prof. Juan Dela Cruz"
+        tools:text="@string/sample_teacher"
         android:textStyle="italic"
         android:textSize="15sp"
         android:layout_width="wrap_content"

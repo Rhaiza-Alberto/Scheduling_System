@@ -11,13 +11,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F5F5">
+        android:background="@color/app_background">
 
         <View
             android:id="@+id/headerBg"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:background="#2E7D32"
+            android:background="@color/primary_green"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -26,8 +26,9 @@
             android:layout_height="32dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:contentDescription="@string/nav_open_drawer"
             android:src="@drawable/ic_menu_hamburger"
-            app:tint="#FFFFFF"
+            app:tint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,6 +44,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/user_profile_image"
                 android:src="@drawable/ic_person_placeholder"
                 android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
@@ -54,7 +56,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:text="@string/welcome"
-            android:textColor="#C8E6C9"
+            android:textColor="@color/text_green_light"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnOpenDrawer" />
@@ -64,8 +66,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Professor"
-            android:textColor="#FFFFFF"
+            android:text="@string/default_prof_name"
+            android:textColor="@color/white"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tvProfName">
@@ -93,8 +95,9 @@
                     android:id="@+id/iconAlert"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:contentDescription="@string/notifications_icon"
                     android:src="@drawable/ic_notifications"
-                    app:tint="#F57F17"
+                    app:tint="@color/icon_orange"
                     android:background="@drawable/bg_circle_light_orange"
                     android:padding="8dp"/>
 
@@ -110,15 +113,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/pending_approvals"
                         android:textSize="14sp"
-                        android:textColor="#757575"/>
+                        android:textColor="@color/text_secondary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2 Requests Waiting"
+                        android:text="@string/default_request_count"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="#212121"/>
+                        android:textColor="@color/text_primary"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -130,7 +133,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:text="All Rooms"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +162,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/nav_menu"
-        app:itemIconTint="#2E7D32"
-        app:itemTextColor="#212121"/>
+        app:itemIconTint="@color/primary_green"
+        app:itemTextColor="@color/text_primary"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

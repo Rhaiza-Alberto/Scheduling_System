@@ -2,11 +2,9 @@
     <string name="app_name">Scheduling System</string>
     <string name="professor_login">Professor Login</string>
 
-
     <string name="room_scheduler">Room Scheduler</string>
     <string name="login">Log In</string>
     <string name="welcome">Welcome Back</string>
-
 
     <string name="email">Email Address</string>
     <string name="password">Password</string>
@@ -19,38 +17,35 @@
         <item>My Rooms</item>
         <item>All Rooms</item>
     </string-array>
-        <!-- Admin Dashboard -->
-        <string name="admin_portal">Admin Portal</string>
-        <string name="dashboard">Dashboard</string>
-        <string name="settings">Settings</string>
 
-        <!-- Pending Approvals Card -->
-        <string name="pending_approvals">Pending Approvals</string>
-        <string name="professors_waiting">3 Professors waiting</string>
-        <string name="review">Review</string>
-        <string name="notifications_icon">Notifications icon</string>
+    <string name="admin_portal">Admin Portal</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="settings">Settings</string>
 
-        <!-- Manage Rooms -->
-        <string name="manage_rooms">Manage Rooms</string>
-        <string name="lab_101">Lab 101</string>
-        <string name="lecture_hall_a">Lecture Hall A</string>
-        <string name="status_available">Status: Available</string>
-        <string name="status_occupied">Status: Occupied (Prof. Rham)</string>
+    <string name="pending_approvals">Pending Approvals</string>
+    <string name="professors_waiting">3 Professors waiting</string>
+    <string name="review">Review</string>
+    <string name="notifications_icon">Notifications icon</string>
 
-        <!-- Room-specific Actions (Lab 101) -->
-        <string name="edit_lab_101">Edit Lab 101</string>
-        <string name="delete_lab_101">Delete Lab 101</string>
+    <string name="manage_rooms">Manage Rooms</string>
+    <string name="lab_101">Lab 101</string>
+    <string name="lecture_hall_a">Lecture Hall A</string>
+    <string name="status_available">Status: Available</string>
+    <string name="status_occupied">Status: Occupied (Prof. Rham)</string>
 
-        <!-- Room-specific Actions (Lecture Hall A) -->
-        <string name="edit_lecture_hall_a">Edit Lecture Hall A</string>
-        <string name="delete_lecture_hall_a">Delete Lecture Hall A</string>
+    <string name="edit_lab_101">Edit Lab 101</string>
+    <string name="delete_lab_101">Delete Lab 101</string>
+    <string name="edit_lecture_hall_a">Edit Lecture Hall A</string>
+    <string name="delete_lecture_hall_a">Delete Lecture Hall A</string>
 
-        <!-- General Actions -->
-        <string name="edit_room">Edit room</string>
-        <string name="delete_room">Delete room</string>
-        <string name="add_new_room">Add new room</string>
+    <string name="edit_room">Edit room</string>
+    <string name="delete_room">Delete room</string>
+    <string name="add_new_room">Add New Room</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
 
-        <!-- Activity Labels -->
-        <string name="admin_dashboard">Admin Dashboard</string>
-    </resources>
-
+    <string name="back">Back</string>
+    <string name="hint_room_name">Room Name (e.g. Lab 101)</string>
+    <string name="hint_capacity">Capacity</string>
+    <string name="switch_room_active">Room is currently active</string>
+    <string name="save_room">Save Room</string>
+</resources>

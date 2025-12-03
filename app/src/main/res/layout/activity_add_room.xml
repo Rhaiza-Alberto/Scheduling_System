@@ -4,32 +4,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/app_background">
 
     <View
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#1B5E20"
+        android:background="@color/primary_dark_green"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:padding="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:padding="12dp"
         android:src="@drawable/ic_arrow_back"
-        app:tint="#FFFFFF"
+        android:contentDescription="@string/back"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/header" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add New Room"
-        android:textColor="#FFFFFF"
+        android:text="@string/add_new_room"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/header"
@@ -38,10 +39,12 @@
         app:layout_constraintTop_toTopOf="@+id/header" />
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="24dp"
         app:layout_constraintBottom_toTopOf="@+id/btnSaveRoom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header">
 
         <LinearLayout
@@ -52,34 +55,49 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Room Name (e.g. Lab 101)"
-                app:boxBackgroundMode="outline">
+                android:hint="@string/hint_room_name"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etRoomName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Capacity"
-                app:boxBackgroundMode="outline">
+                android:hint="@string/hint_capacity"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCapacity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:minHeight="48dp"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchActive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginTop="24dp"
                 android:checked="true"
-                android:text="Room is currently active"
+                android:text="@string/switch_room_active"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -90,11 +108,13 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="24dp"
-        android:text="Save Room"
+        android:text="@string/save_room"
         android:textSize="18sp"
         android:textAllCaps="false"
         app:cornerRadius="12dp"
-        app:backgroundTint="#1B5E20"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:backgroundTint="@color/primary_dark_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
