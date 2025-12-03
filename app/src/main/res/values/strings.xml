@@ -53,4 +53,23 @@
     <string name="default_prof_name" />
     <string name="default_request_count" />
     <string name="all_rooms">All Rooms</string>
+    <string name="todo">TODO</string>
+    <string name="status_pending_review">Status: Pending Review</string>
+    <string name="request_details">Request Details</string>
+    <string name="submitted_2_hours_ago">Submitted 2 hours ago</string>
+    <string name="room_information">Room Information</string>
+    <string name="building_a_2nd_floor">Building A, 2nd Floor</string>
+    <string name="date">DATE</string>
+    <string name="oct_24_2023">Oct 24, 2023</string>
+    <string name="time">TIME</string>
+    <string name="_10_00_11_30_am">10:00 - 11:30 AM</string>
+    <string name="request_information">Request Information</string>
+    <string name="prof_sherard_chris">Prof. Sherard Chris</string>
+    <string name="purpose_class">PURPOSE / CLASS</string>
+    <string name="information_technology_dept">Information Technology Dept.</string>
+    <string name="advanced_java_programming_cs_302_midterm_examination_makeup_session">Advanced Java Programming (CS-302) Midterm Examination Makeup Session.</string>
+    <string name="approve">Approve</string>
+    <string name="computer_lab_101">Computer Lab 101</string>
+    <string name="reject">Reject</string>
+    <string name="cancel_request">Cancel Request</string>
 </resources>
