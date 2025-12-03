@@ -124,8 +124,7 @@
                 app:boxStrokeColor="#4CAF50"
                 app:boxStrokeWidth="2dp"
                 app:hintTextColor="#4CAF50"
-                app:startIconDrawable="@drawable/ic_email"
-                app:startIconTint="#4CAF50">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
@@ -152,8 +151,7 @@
                 app:endIconMode="password_toggle"
                 app:endIconTint="#757575"
                 app:hintTextColor="#4CAF50"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="#4CAF50">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
