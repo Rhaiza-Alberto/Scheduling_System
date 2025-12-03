@@ -113,11 +113,12 @@
                 android:id="@+id/btnReview"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:text="@string/review"
-                android:textSize="14sp"
                 android:minHeight="48dp"
-                app:cornerRadius="24dp"
+                android:text="@string/review"
+                android:textColor="#311B92"
+                android:textSize="14sp"
                 app:backgroundTint="@color/icon_orange"
+                app:cornerRadius="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -298,8 +299,9 @@
         android:contentDescription="@string/add_new_room"
         android:src="@drawable/ic_add"
         app:backgroundTint="@color/primary_green"
-        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        tools:ignore="ClassNameCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
