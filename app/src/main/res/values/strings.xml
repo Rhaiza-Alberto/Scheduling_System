@@ -104,4 +104,7 @@
     <string name="refresh_list">Refresh List</string>
     <string name="professor_sherard_chris">Professor Sherard Chris</string>
     <string name="sherardchris_wmsu_edu_ph">sherardchris@wmsu.edu.ph</string>
+    <string name="my_requests">My Requests</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
 </resources>
