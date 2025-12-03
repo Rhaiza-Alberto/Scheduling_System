@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">Scheduling System</string>
     <string name="professor_login">Professor Login</string>
-    <string name="email">Email</string>
+
+
+    <string name="room_scheduler">Room Scheduler</string>
+    <string name="login">Log In</string>
+    <string name="welcome">Welcome Back</string>
+
+
+    <string name="email">Email Address</string>
     <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="sign_in">Sign In</string>
+    <string name="sign_in_text">Sign in to manage your schedules</string>
+    <string name="contact_support">Need help? Contact IT Support</string>
 
     <string-array name="dashboard_tabs">
         <item>My Rooms</item>
