@@ -48,4 +48,9 @@
     <string name="hint_capacity">Capacity</string>
     <string name="switch_room_active">Room is currently active</string>
     <string name="save_room">Save Room</string>
+    <string name="nav_open_drawer" />
+    <string name="user_profile_image" />
+    <string name="default_prof_name" />
+    <string name="default_request_count" />
+    <string name="all_rooms">All Rooms</string>
 </resources>

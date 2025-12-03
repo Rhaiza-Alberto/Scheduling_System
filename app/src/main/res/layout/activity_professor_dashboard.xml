@@ -6,6 +6,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.RoomBooking"
     tools:context=".ProfessorDashboardActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,7 +57,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:text="@string/welcome"
-            android:textColor="@color/text_green_light"
+            android:textColor="#E8F5E9"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnOpenDrawer" />
@@ -95,11 +96,12 @@
                     android:id="@+id/iconAlert"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_light_orange"
                     android:contentDescription="@string/notifications_icon"
+                    android:padding="8dp"
                     android:src="@drawable/ic_notifications"
                     app:tint="@color/icon_orange"
-                    android:background="@drawable/bg_circle_light_orange"
-                    android:padding="8dp"/>
+                    tools:ignore="ImageContrastCheck" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -132,7 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:text="All Rooms"
+            android:text="@string/all_rooms"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -163,6 +165,7 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/nav_menu"
         app:itemIconTint="@color/primary_green"
-        app:itemTextColor="@color/text_primary"/>
+        app:itemTextColor="@color/text_primary"
+        tools:ignore="VisualLintBounds" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
