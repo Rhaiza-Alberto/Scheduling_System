@@ -48,4 +48,17 @@
     <string name="hint_capacity">Capacity</string>
     <string name="switch_room_active">Room is currently active</string>
     <string name="save_room">Save Room</string>
+<!-- Navigation -->
+<string name="nav_open_drawer">Open navigation drawer</string>
+<string name="user_profile_image">User profile image</string>
+<string name="default_prof_name">Professor</string>
+<string name="default_request_count">3 requests pending</string>
+
+<!-- Sample data for testing -->
+<string name="sample_day">Monday</string>
+<string name="sample_time">08:00 AM - 10:00 AM</string>
+<string name="sample_subject">IT 101 - Introduction to Programming</string>
+<string name="sample_section">BSIT-1A</string>
+<string name="sample_room">Lab 1</string>
+<string name="sample_teacher">Prof. John Doe</string>
 </resources>
