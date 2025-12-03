@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+    tools:context=".AdminDashboardActivity">
 
     <View
         android:id="@+id/headerBg"
@@ -13,24 +15,28 @@
         android:layout_height="160dp"
         android:background="#1B5E20"
         app:layout_constraintTop_toTopOf="parent" />
-    <ImageView
+
+    <ImageButton
         android:id="@+id/btnSettings"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/settings"
         android:src="@drawable/ic_settings"
         app:tint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvAdminTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Admin Portal"
-        android:textColor="#C8E6C9"
+        android:text="@string/admin_portal"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
-        android:text="Dashboard"
+        android:text="@string/dashboard"
         android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -69,19 +75,21 @@
                 android:id="@+id/iconAlert"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:contentDescription="@string/notifications_icon"
                 android:src="@drawable/ic_notifications"
-                app:tint="#F57F17"
+                app:tint="#E65100"
                 android:background="@drawable/bg_circle_light_orange"
                 android:padding="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
             <TextView
                 android:id="@+id/tvReqTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Pending Approvals"
+                android:text="@string/pending_approvals"
                 android:textColor="#212121"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -89,12 +97,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvPendingCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="2dp"
-                android:text="3 Professors waiting"
-                android:textColor="#757575"
+                android:text="@string/professors_waiting"
+                android:textColor="#616161"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/iconAlert"
                 app:layout_constraintTop_toBottomOf="@id/tvReqTitle" />
@@ -102,10 +111,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnReview"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Review"
-                android:textSize="12sp"
-                app:cornerRadius="18dp"
+                android:layout_height="48dp"
+                android:text="@string/review"
+                android:textSize="14sp"
+                android:minHeight="48dp"
+                app:cornerRadius="24dp"
                 app:backgroundTint="#F57F17"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Manage Rooms"
+        android:text="@string/manage_rooms"
         android:textColor="#212121"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -142,6 +152,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="80dp">
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -157,25 +168,28 @@
 
                     <TextView
                         android:id="@+id/r1Name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Lab 101"
+                        android:text="@string/lab_101"
                         android:textColor="#212121"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/roomActionsLayout1"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/r1Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Status: Available"
-                        android:textColor="#388E3C"
-                        android:textSize="12sp"
+                        android:text="@string/status_available"
+                        android:textColor="#2E7D32"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/r1Name" />
 
                     <LinearLayout
+                        android:id="@+id/roomActionsLayout1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -184,20 +198,23 @@
                         app:layout_constraintBottom_toBottomOf="parent">
 
                         <ImageButton
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:id="@+id/btnEdit1"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_edit"
-                            app:tint="#757575"
-                            android:contentDescription="Edit" />
+                            android:contentDescription="@string/edit_lab_101"
+                            app:tint="#616161" />
+
                         <ImageButton
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:id="@+id/btnDelete1"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="8dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_delete"
-                            app:tint="#D32F2F"
-                            android:contentDescription="Delete" />
+                            android:contentDescription="@string/delete_lab_101"
+                            app:tint="#D32F2F" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -217,25 +234,28 @@
 
                     <TextView
                         android:id="@+id/r2Name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Lecture Hall A"
+                        android:text="@string/lecture_hall_a"
                         android:textColor="#212121"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/roomActionsLayout2"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/r2Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Status: Occupied (Prof. Rham)"
-                        android:textColor="#D32F2F"
-                        android:textSize="12sp"
+                        android:text="@string/status_occupied"
+                        android:textColor="#C62828"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/r2Name" />
 
                     <LinearLayout
+                        android:id="@+id/roomActionsLayout2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -244,18 +264,22 @@
                         app:layout_constraintBottom_toBottomOf="parent">
 
                         <ImageButton
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:id="@+id/btnEdit2"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_edit"
-                            app:tint="#757575" />
+                            android:contentDescription="@string/edit_lecture_hall_a"
+                            app:tint="#616161" />
 
                         <ImageButton
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:id="@+id/btnDelete2"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="8dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_delete"
+                            android:contentDescription="@string/delete_lecture_hall_a"
                             app:tint="#D32F2F" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -269,10 +293,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:contentDescription="Add Room"
+        android:contentDescription="@string/add_new_room"
         android:src="@drawable/ic_add"
         app:backgroundTint="#2E7D32"
         app:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
