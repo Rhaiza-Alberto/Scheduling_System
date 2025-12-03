@@ -72,4 +72,15 @@
     <string name="computer_lab_101">Computer Lab 101</string>
     <string name="reject">Reject</string>
     <string name="cancel_request">Cancel Request</string>
+    <string name="lecture_room_2">Lecture Room 2</string>
+    <string name="available_until_2_00_pm">Available until 2:00 PM</string>
+    <string name="status_occupied_class_in_session">Status: Occupied (Class in Session)</string>
+    <string name="request">Request</string>
+    <string name="details">Details</string>
+    <string name="reserved_by_prof_jaydee">Reserved by Prof. Jaydee</string>
+    <string name="conference_room_b">Conference Room B</string>
+    <string name="status_reserved_another_prof">Status: Reserved (Another Prof)</string>
+    <string name="busy">Busy</string>
+    <string name="occupied_mad_121">Occupied: MAD 121</string>
+    <string name="laboratory_1">Laboratory 1</string>
 </resources>
