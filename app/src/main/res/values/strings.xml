@@ -83,4 +83,7 @@
     <string name="busy">Busy</string>
     <string name="occupied_mad_121">Occupied: MAD 121</string>
     <string name="laboratory_1">Laboratory 1</string>
+    <string name="success">Success!</string>
+    <string name="awesome">Awesome</string>
+    <string name="your_room_request_has_been_sent_for_approval">Your room request has been sent for approval.</string>
 </resources>
