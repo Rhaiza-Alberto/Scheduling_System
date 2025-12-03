@@ -86,4 +86,7 @@
     <string name="success">Success!</string>
     <string name="awesome">Awesome</string>
     <string name="your_room_request_has_been_sent_for_approval">Your room request has been sent for approval.</string>
+    <string name="room_available">Room Available</string>
+    <string name="lecture_room_1">Lecture Room 1</string>
+    <string name="vacant_until_2_00_pm">Vacant until 2:00 PM</string>
 </resources>
