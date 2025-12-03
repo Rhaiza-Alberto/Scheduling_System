@@ -89,4 +89,19 @@
     <string name="room_available">Room Available</string>
     <string name="lecture_room_1">Lecture Room 1</string>
     <string name="vacant_until_2_00_pm">Vacant until 2:00 PM</string>
+    <string name="book_room">Book Room</string>
+    <string name="requesting_computer_lab_101">Requesting: Computer Lab 101</string>
+    <string name="select_date">Select Date</string>
+    <string name="mon_oct_24_2023">Mon, Oct 24, 2023</string>
+    <string name="start_time">Start Time</string>
+    <string name="_09_00_am">09:00 AM</string>
+    <string name="end_time">End Time</string>
+    <string name="_10_30_am">10:30 AM</string>
+    <string name="purpose_class_name">Purpose / Class Name</string>
+    <string name="send_request">Send Request</string>
+    <string name="you_re_all_caught_up_there_are_no_requests_waiting_for_approval_right_now">You\'re all caught up! There are no requests waiting for approval right now.</string>
+    <string name="no_pending_requests">No Pending Requests</string>
+    <string name="refresh_list">Refresh List</string>
+    <string name="professor_sherard_chris">Professor Sherard Chris</string>
+    <string name="sherardchris_wmsu_edu_ph">sherardchris@wmsu.edu.ph</string>
 </resources>
