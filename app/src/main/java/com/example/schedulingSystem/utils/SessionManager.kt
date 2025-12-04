@@ -20,7 +20,7 @@ class SessionManager(context: Context) {
     private val gson = Gson()
 
     companion object {
-        private const val PREF_NAME = "scheduling_system_session"
+        private const val PREF_NAME = "scheduling-system_session"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_USER_DATA = "user_data"
         private const val KEY_PERSON_ID = "person_id"

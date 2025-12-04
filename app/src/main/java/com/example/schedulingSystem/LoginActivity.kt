@@ -2,6 +2,7 @@ package com.example.schedulingSystem
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
@@ -42,12 +43,32 @@ class LoginActivity : AppCompatActivity() {
 
             performLogin(email, password)
         }
+
+        // Test connectivity on app start
+        testConnectivity()
+    }
+
+    private fun testConnectivity() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val request = Request.Builder()
+                    .url("http://10.0.2.2:80/scheduling-api/login.php")
+                    .get()
+                    .build()
+
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string() ?: ""
+                Log.d("LoginActivity", "Test Connection - Code: ${response.code}, Body: $responseBody")
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Test Connection Failed: ${e.message}", e)
+            }
+        }
     }
 
     private fun performLogin(email: String, password: String) {
         val json = """
             {
-                "email": "$email",
+                "username": "$email",
                 "password": "$password"
             }
         """.trimIndent()
@@ -63,6 +84,10 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val response = client.newCall(request).execute()
                 val responseBody = response.body?.string() ?: ""
+
+                Log.d("LoginActivity", "Response Code: ${response.code}")
+                Log.d("LoginActivity", "Response Body: $responseBody")
+
                 val jsonResponse = JSONObject(responseBody)
                 val success = jsonResponse.getBoolean("success")
 
@@ -71,15 +96,14 @@ class LoginActivity : AppCompatActivity() {
                         val user = jsonResponse.getJSONObject("user")
 
                         getSharedPreferences("user_session", MODE_PRIVATE).edit {
-                            putInt("user_id", user.getInt("id"))
+                            putInt("user_id", user.getInt("person_ID"))
                             putString("username", user.getString("username"))
-                            putString("first_name", user.getString("first_name"))
-                            putString("last_name", user.getString("last_name"))
+                            putString("full_name", user.getString("name"))
                             putString("account_type", user.getString("account_type"))
                             putBoolean("is_logged_in", true)
                         }
 
-                        Toast.makeText(this@LoginActivity, "Welcome, ${user.getString("first_name")}!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity, "Welcome, ${user.getString("name")}!", Toast.LENGTH_LONG).show()
 
                         val intent = when (user.getString("account_type").lowercase()) {
                             "admin" -> Intent(this@LoginActivity, AdminDashboardActivity::class.java)
@@ -93,6 +117,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    Log.e("LoginActivity", "Connection error: ${e.message}", e)
                     Toast.makeText(this@LoginActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
