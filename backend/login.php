@@ -31,10 +31,10 @@ if (empty($username) || empty($password)) {
 // Query to get user with account type
 $query = "SELECT p.person_ID, p.person_username, p.person_password, 
                  p.account_ID, a.account_name, 
-                 n.name_first, n.name_middle, n.name_last, n.name_suffix
-          FROM person p
-          JOIN account_type a ON p.account_ID = a.account_ID
-          LEFT JOIN name n ON p.name_ID = n.name_ID
+                 n.name_first, n.name_second, n.name_middle, n.name_last, n.name_suffix
+          FROM Person p
+          JOIN Account_Type a ON p.account_ID = a.account_ID
+          LEFT JOIN Name n ON p.name_ID = n.name_ID
           WHERE p.person_username = ?";
 
 $stmt = $conn->prepare($query);
@@ -67,6 +67,7 @@ if ($password !== $user['person_password']) {
 // Build full name from name parts
 $nameParts = [];
 if (!empty($user['name_first'])) $nameParts[] = $user['name_first'];
+if (!empty($user['name_second'])) $nameParts[] = $user['name_second'];
 if (!empty($user['name_middle'])) $nameParts[] = $user['name_middle'];
 if (!empty($user['name_last'])) $nameParts[] = $user['name_last'];
 if (!empty($user['name_suffix'])) $nameParts[] = $user['name_suffix'];

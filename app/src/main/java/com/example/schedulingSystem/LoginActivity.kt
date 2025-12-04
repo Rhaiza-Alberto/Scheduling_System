@@ -14,18 +14,31 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import androidx.core.content.edit
+import java.util.concurrent.TimeUnit // Import the necessary TimeUnit
 
 class LoginActivity : AppCompatActivity() {
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS) // Set connection timeout
+        .readTimeout(10, TimeUnit.SECONDS)    // Set read timeout
+        .build()
 
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPassword: TextInputEditText
     private lateinit var btnSignIn: MaterialButton
 
+    companion object {
+        // UPDATE THIS IP ADDRESS TO YOUR PC IP (from ipconfig)
+        // Example: "192.168.1.100" or "10.0.2.2"
+        private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
+        
+        // If 10.0.2.2 doesn't work, try your PC IP instead:
+        // private const val BACKEND_URL = "http://192.168.1.103/scheduling-api"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)  // ← This works!
+        setContentView(R.layout.activity_login)
 
         // Find views manually
         etEmail = findViewById(R.id.etEmail)
@@ -51,16 +64,43 @@ class LoginActivity : AppCompatActivity() {
     private fun testConnectivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                Log.d("LoginActivity", "→ Testing connectivity to $BACKEND_URL/test.php")
                 val request = Request.Builder()
-                    .url("http://10.0.2.2:80/scheduling-api/test.php")
+                    .url("$BACKEND_URL/test.php")
                     .get()
                     .build()
 
                 val response = client.newCall(request).execute()
                 val responseBody = response.body?.string() ?: ""
-                Log.d("LoginActivity", "Test Connection - Code: ${response.code}, Body: $responseBody")
+                Log.d("LoginActivity", "✓ Test Connection - Code: ${response.code}")
+                Log.d("LoginActivity", "✓ Response: $responseBody")
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LoginActivity, "✓ Backend connected!", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: Exception) {
-                Log.e("LoginActivity", "Test Connection Failed: ${e.message}", e)
+                val errorMsg = e.message ?: "Unknown error"
+                Log.e("LoginActivity", "✗ Test Connection Failed: $errorMsg")
+                Log.e("LoginActivity", "✗ Exception type: ${e.javaClass.simpleName}")
+                
+                // Log the root cause
+                var cause = e.cause
+                var depth = 0
+                while (cause != null && depth < 3) {
+                    Log.e("LoginActivity", "✗ Caused by (${depth + 1}): ${cause.message}")
+                    cause = cause.cause
+                    depth++
+                }
+                
+                withContext(Dispatchers.Main) {
+                    val displayMsg = when {
+                        errorMsg.contains("ENETUNREACH") -> "Network unreachable - Check emulator network settings"
+                        errorMsg.contains("Connection refused") -> "Connection refused - XAMPP not running?"
+                        errorMsg.contains("Network is unreachable") -> "Network unreachable - Emulator can't reach host"
+                        else -> "Backend unreachable: $errorMsg"
+                    }
+                    Toast.makeText(this@LoginActivity, displayMsg, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -76,17 +116,25 @@ class LoginActivity : AppCompatActivity() {
         val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:80/scheduling-api/login.php")
+            .url("$BACKEND_URL/login.php")
             .post(body)
             .build()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                Log.d("LoginActivity", "→ Sending login request for: $email")
                 val response = client.newCall(request).execute()
                 val responseBody = response.body?.string() ?: ""
 
-                Log.d("LoginActivity", "Response Code: ${response.code}")
-                Log.d("LoginActivity", "Response Body: $responseBody")
+                Log.d("LoginActivity", "← Response Code: ${response.code}")
+                Log.d("LoginActivity", "← Response Body: $responseBody")
+
+                if (responseBody.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@LoginActivity, "Empty response from server", Toast.LENGTH_LONG).show()
+                    }
+                    return@launch
+                }
 
                 val jsonResponse = JSONObject(responseBody)
                 val success = jsonResponse.getBoolean("success")
@@ -117,8 +165,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e("LoginActivity", "Connection error: ${e.message}", e)
-                    Log.e("LoginActivity", "Full error: ", e)
+                    Log.e("LoginActivity", "✗ Connection error: ${e.message}", e)
                     Toast.makeText(this@LoginActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
