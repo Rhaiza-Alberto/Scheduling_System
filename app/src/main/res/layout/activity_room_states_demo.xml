@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:theme="@style/Theme.RoomBooking">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: Available"
+            android:text="@string/status_available"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
@@ -45,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Lecture Room 2"
+                    android:text="@string/lecture_room_2"
                     android:textColor="#212121"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -59,7 +60,7 @@
                     android:background="#E8F5E9"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:text="Available until 2:00 PM"
+                    android:text="@string/available_until_2_00_pm"
                     android:textColor="#2E7D32"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -68,8 +69,9 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="Request"
+                    android:layout_height="48dp"
+                    android:text="@string/request"
+                    android:textColor="#263238"
                     android:textSize="12sp"
                     app:backgroundTint="#4CAF50"
                     app:cornerRadius="20dp"
@@ -84,7 +86,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: Occupied (Class in Session)"
+            android:text="@string/status_occupied_class_in_session"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
@@ -115,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Laboratory 1"
+                    android:text="@string/laboratory_1"
                     android:textColor="#212121"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -129,7 +131,7 @@
                     android:background="#FFEBEE"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:text="Occupied: MAD 121"
+                    android:text="@string/occupied_mad_121"
                     android:textColor="#C62828"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -138,11 +140,11 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="Busy"
+                    android:layout_height="48dp"
+                    android:enabled="false"
+                    android:text="@string/busy"
                     android:textColor="#9E9E9E"
                     android:textSize="12sp"
-                    android:enabled="false"
                     app:backgroundTint="#EEEEEE"
                     app:cornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +158,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: Reserved (Another Prof)"
+            android:text="@string/status_reserved_another_prof"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
@@ -187,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Conference Room B"
+                    android:text="@string/conference_room_b"
                     android:textColor="#212121"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -201,8 +203,8 @@
                     android:background="#FFFDE7"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:text="Reserved by Prof. Jaydee"
-                    android:textColor="#F57F17"
+                    android:text="@string/reserved_by_prof_jaydee"
+                    android:textColor="#DD2C00"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/room3"
@@ -210,18 +212,18 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="Details"
-                    android:textColor="#FBC02D"
+                    android:layout_height="48dp"
+                    android:text="@string/details"
+                    android:textColor="#B71C1C"
                     android:textSize="12sp"
                     app:backgroundTint="#FFFFFF"
-                    app:strokeColor="#FBC02D"
-                    app:strokeWidth="1dp"
                     app:cornerRadius="20dp"
                     app:elevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="#FBC02D"
+                    app:strokeWidth="1dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

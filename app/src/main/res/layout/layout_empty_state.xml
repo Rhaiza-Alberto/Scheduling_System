@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:theme="@style/Theme.RoomBooking">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="120dp"
@@ -20,19 +22,21 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:contentDescription="@string/todo"
             android:src="@drawable/ic_calendar_schedule"
-            app:tint="#BDBDBD"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BDBDBD"
+            tools:ignore="ImageContrastCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="No Pending Requests"
+        android:text="@string/no_pending_requests"
         android:textColor="#212121"
         android:textSize="18sp"
         android:textStyle="bold"/>
@@ -41,22 +45,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="You're all caught up! There are no requests waiting for approval right now."
-        android:textColor="#9E9E9E"
-        android:textSize="14sp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="@string/you_re_all_caught_up_there_are_no_requests_waiting_for_approval_right_now"
+        android:textColor="#546E7A"
+        android:textSize="14sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRefresh"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Refresh List"
-        android:textColor="#4CAF50"
+        android:text="@string/refresh_list"
+        android:textColor="#33691E"
         app:backgroundTint="#FFFFFF"
-        app:strokeColor="#4CAF50"
-        app:strokeWidth="1dp"
         app:cornerRadius="20dp"
-        app:elevation="0dp"/>
+        app:elevation="0dp"
+        app:strokeColor="#4CAF50"
+        app:strokeWidth="1dp" />
 
 </LinearLayout>
