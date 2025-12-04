@@ -34,7 +34,7 @@ $query = "SELECT p.person_ID, p.person_username, p.person_password,
                  n.name_first, n.name_middle, n.name_last, n.name_suffix
           FROM person p
           JOIN account_type a ON p.account_ID = a.account_ID
-          JOIN name n ON p.name_ID = n.name_ID
+          LEFT JOIN name n ON p.name_ID = n.name_ID
           WHERE p.person_username = ?";
 
 $stmt = $conn->prepare($query);
@@ -64,6 +64,15 @@ if ($password !== $user['person_password']) {
     exit();
 }
 
+// Build full name from name parts
+$nameParts = [];
+if (!empty($user['name_first'])) $nameParts[] = $user['name_first'];
+if (!empty($user['name_middle'])) $nameParts[] = $user['name_middle'];
+if (!empty($user['name_last'])) $nameParts[] = $user['name_last'];
+if (!empty($user['name_suffix'])) $nameParts[] = $user['name_suffix'];
+
+$fullName = !empty($nameParts) ? implode(' ', $nameParts) : $user['person_username'];
+
 // Successful login
 $response = [
     'success' => true,
@@ -73,7 +82,7 @@ $response = [
         'username' => $user['person_username'],
         'account_type' => $user['account_name'],
         'account_ID' => $user['account_ID'],
-        'name' => trim($user['name_first'] . ' ' . ($user['name_middle'] ? $user['name_middle'] . ' ' : '') . $user['name_last'] . ($user['name_suffix'] ? ' ' . $user['name_suffix'] : ''))
+        'name' => $fullName
     ]
 ];
 

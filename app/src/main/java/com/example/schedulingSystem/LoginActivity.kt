@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val request = Request.Builder()
-                    .url("http://10.0.2.2:80/scheduling-api/login.php")
+                    .url("http://10.0.2.2:80/scheduling-api/test.php")
                     .get()
                     .build()
 
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
 
         val request = Request.Builder()
-            .url("http://10.0.2.2/scheduling-api/login.php")
+            .url("http://10.0.2.2:80/scheduling-api/login.php")
             .post(body)
             .build()
 
@@ -118,7 +118,8 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Log.e("LoginActivity", "Connection error: ${e.message}", e)
-                    Toast.makeText(this@LoginActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    Log.e("LoginActivity", "Full error: ", e)
+                    Toast.makeText(this@LoginActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
