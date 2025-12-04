@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.RoomBooking"
-    tools:context=".ProfessorDashboardActivity">
+    tools:context=".TeacherDashboardActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -152,7 +152,7 @@
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvListHeader"
-            tools:listitem="@layout/item_professor_room" />
+            tools:listitem="@layout/item_teacher_if_room_available" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

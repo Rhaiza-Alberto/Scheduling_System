@@ -1,10 +1,12 @@
 package com.example.schedulingSystem
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.schedulingSystem.ScheduleItem
 
 class ScheduleAdapter(private val list: List<ScheduleItem>) :
     RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
@@ -27,11 +29,11 @@ class ScheduleAdapter(private val list: List<ScheduleItem>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
 
-        holder.txtDay.text = item.day_name
-        holder.txtTime.text = "${item.time_start} - ${item.time_end}"
-        holder.txtSubject.text = "${item.subject_code} - ${item.subject_name}"
-        holder.txtSection.text = item.section_name
-        holder.txtRoom.text = item.room_name
+        holder.txtDay.text = item.dayName
+        holder.txtTime.text = "${item.timeStart} - ${item.timeEnd}"
+        holder.txtSubject.text = "${item.subjectCode} - ${item.subjectName}"
+        holder.txtSection.text = item.sectionName
+        holder.txtRoom.text = item.roomName
         holder.txtTeacher.text = item.teacherFullName
     }
 

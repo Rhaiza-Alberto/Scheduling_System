@@ -6,8 +6,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
+
+    private val client = OkHttpClient()
 
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPassword: TextInputEditText
@@ -15,58 +24,77 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login)  // ← This works!
 
-        // Initialize views
+        // Find views manually
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
         btnSignIn = findViewById(R.id.btnSignIn)
 
-        // Set up click listener for sign in button
         btnSignIn.setOnClickListener {
-            handleLogin()
-        }
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-        // Optional: Forgot password click listener
-        findViewById<android.widget.TextView>(R.id.tvForgotPassword)?.setOnClickListener {
-            Toast.makeText(this, "Password reset feature coming soon", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            performLogin(email, password)
         }
     }
 
-    private fun handleLogin() {
-        val email = etEmail.text.toString().trim()
-        val password = etPassword.text.toString().trim()
-
-        // Validate inputs
-        if (email.isEmpty()) {
-            etEmail.error = "Email is required"
-            etEmail.requestFocus()
-            return
-        }
-
-        if (password.isEmpty()) {
-            etPassword.error = "Password is required"
-            etPassword.requestFocus()
-            return
-        }
-
-        // Simple hardcoded authentication for testing
-        when {
-            // Admin login
-            email == "admin@wmsu.edu.ph" && password == "admin123" -> {
-                Toast.makeText(this, "Welcome Admin!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AdminDashboardActivity::class.java))
-                finish()
+    private fun performLogin(email: String, password: String) {
+        val json = """
+            {
+                "email": "$email",
+                "password": "$password"
             }
-            // Professor login
-            email == "professor@wmsu.edu.ph" && password == "prof123" -> {
-                Toast.makeText(this, "Welcome Professor!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, ProfessorDashboardActivity::class.java))
-                finish()
-            }
-            // Invalid credentials
-            else -> {
-                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
+        """.trimIndent()
+
+        val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
+
+        val request = Request.Builder()
+            .url("http://10.0.2.2/scheduling-api/login.php")
+            .post(body)
+            .build()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string() ?: ""
+                val jsonResponse = JSONObject(responseBody)
+                val success = jsonResponse.getBoolean("success")
+
+                withContext(Dispatchers.Main) {
+                    if (success) {
+                        val user = jsonResponse.getJSONObject("user")
+
+                        getSharedPreferences("user_session", MODE_PRIVATE).edit {
+                            putInt("user_id", user.getInt("id"))
+                            putString("username", user.getString("username"))
+                            putString("first_name", user.getString("first_name"))
+                            putString("last_name", user.getString("last_name"))
+                            putString("account_type", user.getString("account_type"))
+                            putBoolean("is_logged_in", true)
+                        }
+
+                        Toast.makeText(this@LoginActivity, "Welcome, ${user.getString("first_name")}!", Toast.LENGTH_LONG).show()
+
+                        val intent = when (user.getString("account_type").lowercase()) {
+                            "admin" -> Intent(this@LoginActivity, AdminDashboardActivity::class.java)
+                            else -> Intent(this@LoginActivity, TeacherDashboardActivity::class.java)
+                        }
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, jsonResponse.optString("message", "Login failed"), Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LoginActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

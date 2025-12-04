@@ -22,7 +22,6 @@
     <string name="dashboard">Dashboard</string>
     <string name="settings">Settings</string>
 
-    <string name="pending_approvals">Pending Approvals</string>
     <string name="professors_waiting">3 Professors waiting</string>
     <string name="review">Review</string>
     <string name="notifications_icon">Notifications icon</string>
@@ -48,11 +47,10 @@
     <string name="hint_capacity">Capacity</string>
     <string name="switch_room_active">Room is currently active</string>
     <string name="save_room">Save Room</string>
-    <string name="nav_open_drawer" />
     <string name="user_profile_image" />
-    <string name="default_prof_name" />
-    <string name="default_request_count" />
-    <string name="all_rooms">All Rooms</string>
+
+
+
     <string name="todo">TODO</string>
     <string name="status_pending_review">Status: Pending Review</string>
     <string name="request_details">Request Details</string>
@@ -62,7 +60,7 @@
     <string name="date">DATE</string>
     <string name="oct_24_2023">Oct 24, 2023</string>
     <string name="time">TIME</string>
-    <string name="_10_00_11_30_am">10:00 - 11:30 AM</string>
+    <string name="_10_00_11_30_am">10:00 – 11:30 AM</string>
     <string name="request_information">Request Information</string>
     <string name="prof_sherard_chris">Prof. Sherard Chris</string>
     <string name="purpose_class">PURPOSE / CLASS</string>
@@ -107,4 +105,14 @@
     <string name="my_requests">My Requests</string>
     <string name="logout">Logout</string>
     <string name="profile">Profile</string>
+
+    <string name="nav_open_drawer">Open navigation drawer</string>
+    <string name="nav_close_drawer">Close navigation drawer</string>
+    <string name="default_prof_name">Prof. Name</string>
+    <string name="pending_approvals">Pending Approvals</string>
+    <string name="default_request_count">3 requests</string>
+    <string name="all_rooms">All Rooms &amp; Labs</string>
+
+    <string name="person_id_format">ID: %d</string>
+
 </resources>

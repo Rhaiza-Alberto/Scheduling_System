@@ -38,6 +38,7 @@ android {
         compose = true
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -69,6 +70,7 @@ dependencies {
 
     // JSON parsing
     implementation(libs.gson)
+    implementation(libs.androidx.room.common.jvm)
 
     // Testing
     testImplementation(libs.junit)

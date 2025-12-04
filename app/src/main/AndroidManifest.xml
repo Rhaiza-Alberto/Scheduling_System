@@ -17,7 +17,6 @@
         android:theme="@style/Theme.SchedulingSystem"
         tools:targetApi="31">
 
-        <!-- Login Activity (Launcher) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -37,16 +36,12 @@
 
         <!-- Professor Dashboard Activity -->
         <activity
-            android:name=".ProfessorDashboardActivity"
+            android:name=".TeacherDashboardActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            android:label="Professor Dashboard" />
+            android:label="Teacher Dashboard" />
 
-        <!-- Main Activity (for testing schedules) -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SchedulingSystem" />
+
 
     </application>
 
