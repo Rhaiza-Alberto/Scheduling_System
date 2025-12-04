@@ -115,5 +115,22 @@
     <string name="all_rooms">All Rooms &amp; Labs</string>
 
     <string name="person_id_format">ID: %d</string>
+    <string name="manage_schedule">Manage Schedule</string>
+    <string name="day_mon">Day: Mon</string>
+    <string name="room_all">Room: All</string>
+    <string name="add_schedule">Add Schedule</string>
+    <string name="manage_users" />
+    <string name="add_user" />
+    <string name="search_professor_or_admin" />
+    <string name="capacity_40">Capacity: 40</string>
+    <string name="delete_schedule">Delete Schedule</string>
+    <string name="edit_schedule">Edit Schedule</string>
+    <string name="it_101_intro_to_computing">IT 101 - Intro to Computing</string>
+    <string name="_08_00_10_00">08:00 - 10:00</string>
+    <string name="bsit_1a_lab_1">BSIT-1A • Lab 1</string>
+    <string name="sherard_chris">Sherard Chris</string>
+    <string name="professor">Professor</string>
+    <string name="edit_user">Edit User</string>
+    <string name="delete_user">Delete User</string>
 
 </resources>
