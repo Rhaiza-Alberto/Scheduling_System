@@ -138,6 +138,8 @@
 
     <string name="my_schedule">My Schedule</string>
     <string name="room_schedules">Room Schedules</string>
+    <string name="teacher_portal">TEACHER PORTAL</string>
+    <string name="view_all">View All</string>
 
     <!-- res/values/strings.xml -->
     <string name="room_capacity_format">%1$s • %2$d seats</string>

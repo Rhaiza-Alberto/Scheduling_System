@@ -16,62 +16,59 @@
         android:background="@color/primary_green"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Settings Button (Logout) -->
-    <ImageView
-        android:id="@+id/btnSettings"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp"
-        android:contentDescription="@string/settings"
-        android:src="@drawable/ic_menu_hamburger"
-        app:tint="@color/white"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- Teacher Portal Label -->
+    <TextView
+        android:id="@+id/tvTeacherTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/teacher_portal"
+        android:textColor="#CCFFFFFF"
+        android:textSize="12sp"
+        android:letterSpacing="0.1"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Profile Image -->
-    <androidx.cardview.widget.CardView
+    <!-- Settings Button -->
+    <ImageButton
+        android:id="@+id/btnSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTeacherTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/user_profile_image"
-            android:src="@drawable/ic_person_placeholder"
-            android:scaleType="centerCrop"/>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="@+id/tvTeacherTitle"
+        app:tint="@color/white"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <!-- Greeting Text -->
     <TextView
         android:id="@+id/tvGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/welcome"
         android:textColor="#E8F5E9"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSettings" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tvTeacherTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTeacherTitle" />
 
     <!-- Professor Name -->
     <TextView
         android:id="@+id/tvProfName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:text="@string/default_prof_name"
         android:textColor="@color/white"
-        android:textSize="26sp"
+        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvGreeting"
         app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
 
     <!-- Navigation Tabs -->
@@ -81,8 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:clipToPadding="false"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@+id/tvProfName">
 
@@ -123,82 +120,110 @@
         android:id="@+id/statusCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@+id/navTabs">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <View
+                android:id="@+id/indicator"
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:background="@color/icon_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvStatusTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/pending_approvals"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/btnViewAll"
+                app:layout_constraintStart_toEndOf="@+id/indicator"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvRequestCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/default_request_count"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/btnViewAll"
+                app:layout_constraintStart_toStartOf="@+id/tvStatusTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvStatusTitle" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewAll"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/view_all"
+                android:textColor="#B71C1C"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFF3E0"
+                app:cornerRadius="20dp"
+                app:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusCard">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
 
-            <ImageView
-                android:id="@+id/iconAlert"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_circle_light_orange"
-                android:contentDescription="@string/notifications_icon"
-                android:padding="8dp"
-                android:src="@drawable/ic_notifications"
-                app:tint="@color/icon_orange"
-                tools:ignore="ImageContrastCheck" />
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <!-- List Header -->
+            <TextView
+                android:id="@+id/tvListHeader"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="12dp"
+                android:text="@string/all_rooms"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pending_approvals"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary"/>
+            <!-- Rooms RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_teacher_if_room_available" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_request_count"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"/>
-            </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- List Header -->
-    <TextView
-        android:id="@+id/tvListHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/all_rooms"
-        android:textColor="@color/text_primary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusCard" />
-
-    <!-- Rooms RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRooms"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:clipToPadding="false"
-        android:paddingBottom="24dp"
-        android:paddingHorizontal="16dp"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvListHeader"
-        tools:listitem="@layout/item_teacher_if_room_available" />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
