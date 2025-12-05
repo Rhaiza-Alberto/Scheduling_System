@@ -125,5 +125,10 @@
     <string name="crop">Crop</string>
     <string name="save_changes">Save Changes</string>
     <string name="rotate">Rotate</string>
+    <string name="edit_room_details">Edit Room Details</string>
+    <string name="_40">40</string>
+    <string name="mark_as_available">Mark as Available</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
