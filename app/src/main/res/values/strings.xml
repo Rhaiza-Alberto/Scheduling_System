@@ -115,5 +115,11 @@
     <string name="all_rooms">All Rooms &amp; Labs</string>
 
     <string name="person_id_format">ID: %d</string>
+    <string name="add_user" />
+    <string name="add_room" />
+    <string name="schedules">Schedules</string>
+    <string name="rooms">Rooms</string>
+    <string name="users">Users</string>
+    <string name="add_schedule" />
 
 </resources>
