@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
@@ -38,43 +39,37 @@ class TeacherDashboardActivity : AppCompatActivity(), NavigationView.OnNavigatio
     private val roomAdapter = TeacherRoomAdapter()
 
     companion object {
-        private const val TAG = "TeacherDashboard"
+        private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d(TAG, "onCreate started")
 
         // Check if user is logged in
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
         val isLoggedIn = prefs.getBoolean("is_logged_in", false)
 
         if (!isLoggedIn) {
-            Log.w(TAG, "User not logged in, redirecting")
+            Log.w("TeacherDashboard", "User not logged in, redirecting to login")
             redirectToLogin()
             return
         }
 
         try {
             setContentView(R.layout.activity_teacher_dashboard)
-            Log.d(TAG, "Layout inflated successfully")
+
+            initViews()
+            setupDrawer()
+            setupBackPressHandler()
+            updateUserName()
+            setupRecyclerView()
+            loadRoomsFromApi()
+
         } catch (e: Exception) {
-            Log.e(TAG, "Error inflating layout", e)
+            Log.e("TeacherDashboard", "Error in onCreate: ${e.message}", e)
             Toast.makeText(this, "Error loading dashboard: ${e.message}", Toast.LENGTH_LONG).show()
             redirectToLogin()
-            return
         }
-
-        initViews()
-        setupDrawer()
-        updateUserName()
-        setupRecyclerView()
-        displayUserInfo()
-
-        // Load rooms with mock data first, then try API
-        loadMockRooms()
-        loadRoomsFromApi()
     }
 
     private fun initViews() {
@@ -85,10 +80,10 @@ class TeacherDashboardActivity : AppCompatActivity(), NavigationView.OnNavigatio
             tvProfName = findViewById(R.id.tvProfName)
             tvGreeting = findViewById(R.id.tvGreeting)
             btnOpenDrawer = findViewById(R.id.btnOpenDrawer)
-            Log.d(TAG, "All views initialized successfully")
+
+            Log.d("TeacherDashboard", "✓ All views initialized successfully")
         } catch (e: Exception) {
-            Log.e(TAG, "Error initializing views", e)
-            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            Log.e("TeacherDashboard", "✗ Error initializing views: ${e.message}", e)
             throw e
         }
     }
@@ -98,7 +93,24 @@ class TeacherDashboardActivity : AppCompatActivity(), NavigationView.OnNavigatio
             drawerLayout.openDrawer(GravityCompat.START)
         }
         navView.setNavigationItemSelectedListener(this)
-        Log.d(TAG, "Drawer setup complete")
+
+        // Update drawer header with user info
+        updateDrawerHeader()
+    }
+
+    private fun setupBackPressHandler() {
+        // Modern way to handle back press - NO WARNING
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    // Let the system handle back press (will close the activity)
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     @SuppressLint("SetTextI18n")
@@ -106,95 +118,109 @@ class TeacherDashboardActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
         val fullName = prefs.getString("full_name", "Teacher") ?: "Teacher"
 
+        Log.d("TeacherDashboard", "Loading user: $fullName")
+
         tvGreeting.text = "Welcome back,"
         tvProfName.text = fullName
 
-        // Update Navigation Drawer header
+        Toast.makeText(this, "Welcome, $fullName!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateDrawerHeader() {
+        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+        val fullName = prefs.getString("full_name", "Teacher") ?: "Teacher"
+        val username = prefs.getString("username", "") ?: ""
+
         try {
             val headerView = navView.getHeaderView(0)
             headerView.findViewById<TextView>(R.id.tvNavName)?.text = fullName
-            headerView.findViewById<TextView>(R.id.tvNavEmail)?.text = prefs.getString("username", "")
-            Log.d(TAG, "User info updated: $fullName")
+            headerView.findViewById<TextView>(R.id.tvNavEmail)?.text = username
         } catch (e: Exception) {
-            Log.e(TAG, "Error updating nav header", e)
+            Log.e("TeacherDashboard", "Error updating drawer header: ${e.message}")
         }
-    }
-
-    private fun displayUserInfo() {
-        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
-        val fullName = prefs.getString("full_name", "Teacher") ?: "Teacher"
-        val accountType = prefs.getString("account_type", "Unknown")
-
-        Log.d(TAG, "Teacher logged in: $fullName (Type: $accountType)")
-        Toast.makeText(this, "Welcome, $fullName", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupRecyclerView() {
         rvRooms.layoutManager = LinearLayoutManager(this)
         rvRooms.adapter = roomAdapter
-        Log.d(TAG, "RecyclerView setup complete")
-    }
-
-    private fun loadMockRooms() {
-        val mockRooms = listOf(
-            RoomItem(1, "Computer Lab 1", 40, "Available", true),
-            RoomItem(2, "Lecture Hall A", 100, "Occupied", false),
-            RoomItem(3, "Science Lab", 30, "Available", true)
-        )
-        roomAdapter.submitList(mockRooms)
-        Log.d(TAG, "Mock rooms loaded")
     }
 
     private fun loadRoomsFromApi() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                Log.d(TAG, "→ Fetching rooms from API")
+                Log.d("TeacherDashboard", "→ Fetching rooms data")
 
                 val request = Request.Builder()
-                    .url("http://10.0.2.2/scheduling-api/get_rooms.php")
+                    .url("$BACKEND_URL/get_rooms.php")
                     .build()
 
                 val response = client.newCall(request).execute()
                 val jsonData = response.body?.string() ?: ""
 
-                Log.d(TAG, "← API Response: ${response.code}")
+                Log.d("TeacherDashboard", "← Response Code: ${response.code}")
+                Log.d("TeacherDashboard", "← Response Body: $jsonData")
 
-                if (response.isSuccessful && jsonData.isNotEmpty()) {
-                    val json = JSONObject(jsonData)
-                    val success = json.optBoolean("success", false)
+                if (jsonData.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@TeacherDashboardActivity,
+                            "Empty response from server",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    return@launch
+                }
 
-                    if (success) {
-                        val roomsArray = json.getJSONArray("rooms")
-                        val roomList = mutableListOf<RoomItem>()
+                val json = JSONObject(jsonData)
+                val success = json.getBoolean("success")
 
-                        for (i in 0 until roomsArray.length()) {
-                            val obj = roomsArray.getJSONObject(i)
-                            roomList.add(
-                                RoomItem(
-                                    id = obj.getInt("id"),
-                                    name = obj.getString("name"),
-                                    capacity = obj.getInt("capacity"),
-                                    status = obj.getString("status"),
-                                    isAvailable = obj.getBoolean("isAvailable")
-                                )
+                if (success) {
+                    val roomsArray = json.getJSONArray("rooms")
+                    val roomList = mutableListOf<RoomAvailability>()
+
+                    for (i in 0 until roomsArray.length()) {
+                        val obj = roomsArray.getJSONObject(i)
+                        roomList.add(
+                            RoomAvailability(
+                                roomId = obj.getInt("room_ID"),
+                                roomName = obj.getString("room_name"),
+                                roomCapacity = obj.getInt("room_capacity"),
+                                status = obj.optString("status", "Available"),
+                                isAvailable = obj.optBoolean("isAvailable", true)
                             )
-                        }
+                        )
+                    }
 
-                        withContext(Dispatchers.Main) {
-                            roomAdapter.submitList(roomList)
-                            Log.d(TAG, "✓ Loaded ${roomList.size} rooms from API")
-                        }
-                    } else {
-                        Log.w(TAG, "API returned success=false")
+                    Log.d("TeacherDashboard", "✓ Loaded ${roomList.size} rooms")
+
+                    withContext(Dispatchers.Main) {
+                        roomAdapter.submitList(roomList)
+                        Toast.makeText(
+                            this@TeacherDashboardActivity,
+                            "Loaded ${roomList.size} rooms",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    val message = json.optString("message", "Failed to load rooms")
+                    Log.e("TeacherDashboard", "✗ API error: $message")
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@TeacherDashboardActivity,
+                            "Error: $message",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error loading rooms from API", e)
+                Log.e("TeacherDashboard", "✗ Error loading rooms: ${e.message}", e)
+
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         this@TeacherDashboardActivity,
-                        "Using offline data",
-                        Toast.LENGTH_SHORT
+                        "Network error: ${e.message}",
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             }
@@ -239,13 +265,15 @@ class TeacherDashboardActivity : AppCompatActivity(), NavigationView.OnNavigatio
         startActivity(intent)
         finish()
     }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
 }
+
+/**
+ * Data class for room availability - specific to TeacherDashboard
+ */
+data class RoomAvailability(
+    val roomId: Int,
+    val roomName: String,
+    val roomCapacity: Int,
+    val status: String,
+    val isAvailable: Boolean
+)

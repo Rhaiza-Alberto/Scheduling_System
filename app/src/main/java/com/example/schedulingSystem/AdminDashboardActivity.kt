@@ -74,6 +74,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.btnDelete1).setOnClickListener {
             Toast.makeText(this, "Delete Lab 101 - Coming soon", Toast.LENGTH_SHORT).show()
         }
+        // REMOVE THE EXTRA '}' THAT WAS HERE
 
         // Room 2 actions
         findViewById<ImageButton>(R.id.btnEdit2).setOnClickListener {
@@ -84,11 +85,12 @@ class AdminDashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Delete Lecture Hall A - Coming soon", Toast.LENGTH_SHORT).show()
         }
 
-        // FAB - Add room
-        findViewById<FloatingActionButton>(R.id.fabAddRoom).setOnClickListener {
+        // FAB - Main action button
+        findViewById<FloatingActionButton>(R.id.fabMain).setOnClickListener {
             Toast.makeText(this, "Add new room - Coming soon", Toast.LENGTH_SHORT).show()
         }
-    }
+    } // This is the correct closing brace for the function
+
 
     private fun displayUserInfo() {
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
