@@ -3,20 +3,24 @@ package com.example.schedulingSystem
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.schedulingSystem.adapters.AdminRoomAdapter
+import com.example.schedulingSystem.models.RoomItem
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+// import com.google.android.material.floatingactionbutton.FloatingActionButton  // ← Commented out
+// import android.widget.LinearLayout                                      // ← Still needed elsewhere
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
-import androidx.core.content.edit
 import java.util.concurrent.TimeUnit
-import android.view.View
-import android.widget.LinearLayout
 
 class AdminDashboardActivity : AppCompatActivity() {
 
@@ -29,22 +33,22 @@ class AdminDashboardActivity : AppCompatActivity() {
         private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
     }
 
+    // UI References
+    private lateinit var roomAdapter: AdminRoomAdapter
+    private lateinit var rvRooms: RecyclerView
+
+    // private var isFabMenuOpen = false   // ← FAB removed
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check if user is logged in and is admin
+        // === Security Check ===
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
         val isLoggedIn = prefs.getBoolean("is_logged_in", false)
         val accountType = prefs.getString("account_type", "")
 
-        if (!isLoggedIn) {
-            Log.w("AdminDashboard", "User not logged in, redirecting to login")
-            redirectToLogin()
-            return
-        }
-
-        if (accountType?.lowercase() != "admin") {
-            Log.w("AdminDashboard", "User is not admin (type: $accountType), redirecting to login")
+        if (!isLoggedIn || accountType?.lowercase() != "admin") {
+            Log.w("AdminDashboard", "Access denied or not logged in")
             Toast.makeText(this, "Access denied: Admin only", Toast.LENGTH_LONG).show()
             redirectToLogin()
             return
@@ -52,191 +56,141 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_admin_dashboard)
 
-        setupClickListeners()
+        // Initialize RecyclerView (this is the important part!)
+        rvRooms = findViewById(R.id.containerRooms)
+        roomAdapter = AdminRoomAdapter()
+        rvRooms.apply {
+            layoutManager = LinearLayoutManager(this@AdminDashboardActivity)
+            adapter = roomAdapter
+        }
+
+        setupClickListeners()      // ← only settings + review button now
         displayUserInfo()
         loadDashboardData()
+        loadRoomsFromApi()         // ← This will show your real rooms!
     }
 
-    private var isFabMenuOpen = false
-
     private fun setupClickListeners() {
-        // Settings button (logout)
-        findViewById<ImageButton>(R.id.btnSettings).setOnClickListener {
-            performLogout()
-        }
+        // Settings → Logout
+        findViewById<ImageButton>(R.id.btnSettings).setOnClickListener { performLogout() }
 
         // Review button
         findViewById<MaterialButton>(R.id.btnReview).setOnClickListener {
             Toast.makeText(this, "Review pending approvals - Coming soon", Toast.LENGTH_SHORT).show()
         }
 
-        // Main FAB - Toggle menu
-        val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
-        val layoutAddUser = findViewById<LinearLayout>(R.id.layoutAddUser)
-        val layoutAddRoom = findViewById<LinearLayout>(R.id.layoutAddRoom)
-        val layoutAddSchedule = findViewById<LinearLayout>(R.id.layoutAddSchedule)
-        val fabOverlay = findViewById<View>(R.id.fabOverlay)
-
-        val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
-        val fabAddRoom = findViewById<FloatingActionButton>(R.id.fabAddRoomOption)
-        val fabAddSchedule = findViewById<FloatingActionButton>(R.id.fabAddSchedule)
-
-        fabMain.setOnClickListener {
-            if (isFabMenuOpen) {
-                closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-            } else {
-                openFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-            }
-        }
-
-        // Overlay click = close menu
-        fabOverlay.setOnClickListener {
-            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-        }
-
-        // Individual FAB actions
-        fabAddUser.setOnClickListener {
-            Toast.makeText(this, "Add User - Coming soon", Toast.LENGTH_SHORT).show()
-            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-        }
-
-        fabAddRoom.setOnClickListener {
-            Toast.makeText(this, "Add Room - Coming soon", Toast.LENGTH_SHORT).show()
-            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-        }
-
-        fabAddSchedule.setOnClickListener {
-            Toast.makeText(this, "Add Schedule - Coming soon", Toast.LENGTH_SHORT).show()
-            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-        }
+        // ==================== FAB MENU COMPLETELY COMMENTED OUT ====================
+//        val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
+//        val layoutAddUser = findViewById<LinearLayout>(R.id.layoutAddUser)
+//        val layoutAddRoom = findViewById<LinearLayout>(R.id.layoutAddRoom)
+//        val layoutAddSchedule = findViewById<LinearLayout>(R.id.layoutAddSchedule)
+//        val fabOverlay = findViewById<View>(R.id.fabOverlay)
+//
+//        val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
+//        val fabAddRoom = findViewById<FloatingActionButton>(R.id.fabAddRoomOption)
+//        val fabAddSchedule = findViewById<FloatingActionButton>(R.id.fabAddSchedule)
+//
+//        fabMain.setOnClickListener {
+//            if (isFabMenuOpen) closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
+//            else openFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
+//        }
+//
+//        fabOverlay.setOnClickListener { closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain) }
+//
+//        fabAddUser.setOnClickListener { ... }
+//        fabAddRoom.setOnClickListener { ... }
+//        fabAddSchedule.setOnClickListener { ... }
+        // ============================================================================
     }
 
-    private fun openFabMenu(
-        layoutAddUser: LinearLayout,
-        layoutAddRoom: LinearLayout,
-        layoutAddSchedule: LinearLayout,
-        overlay: View,
-        fabMain: FloatingActionButton ) {
-        isFabMenuOpen = true
-
-        overlay.visibility = View.VISIBLE
-        layoutAddSchedule.visibility = View.VISIBLE
-        layoutAddRoom.visibility = View.VISIBLE
-        layoutAddUser.visibility = View.VISIBLE
-
-        // Rotate main FAB to "X"
-        fabMain.rotation = 0f
-        fabMain.animate().rotation(135f).setDuration(300).start()
-
-        // Animate options in
-        layoutAddSchedule.translationY = 200f
-        layoutAddRoom.translationY = 200f
-        layoutAddUser.translationY = 200f
-
-        layoutAddSchedule.alpha = 0f
-        layoutAddRoom.alpha = 0f
-        layoutAddUser.alpha = 0f
-
-        layoutAddSchedule.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(50).start()
-        layoutAddRoom.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(100).start()
-        layoutAddUser.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(150).start()
-
-        overlay.animate().alpha(0.6f).setDuration(300).start()
-    }
-
-    private fun closeFabMenu(
-        layoutAddUser: LinearLayout,
-        layoutAddRoom: LinearLayout,
-        layoutAddSchedule: LinearLayout,
-        overlay: View,
-        fabMain: FloatingActionButton ) {
-        isFabMenuOpen = false
-
-        fabMain.animate().rotation(0f).setDuration(300).start()
-
-        layoutAddSchedule.animate()
-            .translationY(200f)
-            .alpha(0f)
-            .setDuration(250)
-            .withEndAction { layoutAddSchedule.visibility = View.GONE }
-            .start()
-
-        layoutAddRoom.animate()
-            .translationY(200f)
-            .alpha(0f)
-            .setDuration(250)
-            .withEndAction { layoutAddRoom.visibility = View.GONE }
-            .start()
-
-        layoutAddUser.animate()
-            .translationY(200f)
-            .alpha(0f)
-            .setDuration(250)
-            .withEndAction { layoutAddUser.visibility = View.GONE }
-            .start()
-
-        overlay.animate().alpha(0f).setDuration(300).withEndAction {
-            overlay.visibility = View.GONE
-        }.start()
-    }
+    // FAB open/close functions also commented out
+//    private fun openFabMenu(...) { ... }
+//    private fun closeFabMenu(...) { ... }
 
     private fun displayUserInfo() {
-        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
-        val fullName = prefs.getString("full_name", "Admin") ?: "Admin"
-
-        Log.d("AdminDashboard", "Admin user: $fullName")
+        val fullName = getSharedPreferences("user_session", MODE_PRIVATE)
+            .getString("full_name", "Admin") ?: "Admin"
         Toast.makeText(this, "Welcome, $fullName", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadDashboardData() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                Log.d("AdminDashboard", "→ Fetching dashboard data")
-
-                val request = Request.Builder()
-                    .url("$BACKEND_URL/get_admin_dashboard_details.php")
-                    .build()
-
-                val response = client.newCall(request).execute()
-                val jsonData = response.body?.string() ?: ""
-
-                Log.d("AdminDashboard", "← Response Code: ${response.code}")
-                Log.d("AdminDashboard", "← Response Body: $jsonData")
-
-                val json = JSONObject(jsonData)
-                val success = json.getBoolean("success")
-
-                if (success) {
+                val response = client.newCall(Request.Builder()
+                    .url("$BACKEND_URL/get_admin_dashboard_details.php").build()).execute()
+                val json = JSONObject(response.body?.string() ?: "")
+                if (json.getBoolean("success")) {
                     val stats = json.getJSONObject("stats")
-                    val totalTeachers = stats.getInt("total_teachers")
-                    val totalRooms = stats.getInt("total_rooms")
-                    val totalSchedules = stats.getInt("total_schedules")
-
-                    Log.d("AdminDashboard", "✓ Stats - Teachers: $totalTeachers, Rooms: $totalRooms, Schedules: $totalSchedules")
-
                     withContext(Dispatchers.Main) {
-                        // Update UI with stats
                         findViewById<TextView>(R.id.tvPendingCount)?.text =
-                            "$totalSchedules schedules in system"
-
-                        Toast.makeText(this@AdminDashboardActivity,
-                            "Dashboard loaded successfully", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    val message = json.optString("message", "Failed to load dashboard")
-                    Log.e("AdminDashboard", "✗ API error: $message")
-
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@AdminDashboardActivity,
-                            "Error: $message", Toast.LENGTH_SHORT).show()
+                            "${stats.getInt("total_schedules")} schedules in system"
                     }
                 }
             } catch (e: Exception) {
-                Log.e("AdminDashboard", "✗ Error loading dashboard: ${e.message}", e)
-
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@AdminDashboardActivity,
-                        "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@AdminDashboardActivity, "Stats error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun loadRoomsFromApi() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                Log.d("AdminDashboard", "Fetching rooms from API...")
+                val response = client.newCall(
+                    Request.Builder()
+                        .url("$BACKEND_URL/get_rooms.php")
+                        .build()
+                ).execute()
+
+                val jsonData = response.body?.string() ?: ""
+                Log.d("AdminDashboard", "Response: $jsonData")
+
+                val json = JSONObject(jsonData)
+                if (json.getBoolean("success")) {
+                    val roomsArray = json.getJSONArray("rooms")
+                    val roomList = mutableListOf<RoomItem>()
+
+                    for (i in 0 until roomsArray.length()) {
+                        val obj = roomsArray.getJSONObject(i)
+
+                        roomList.add(
+                            RoomItem(
+                                roomId = obj.getInt("id"),           // matches "id"
+                                roomName = obj.getString("name"),    // matches "name"
+                                roomCapacity = obj.getInt("capacity"), // matches "capacity"
+                                status = "Available",                // default (optional)
+                                isAvailable = true                   // default (optional)
+                            )
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        roomAdapter.submitList(roomList)
+                        Toast.makeText(
+                            this@AdminDashboardActivity,
+                            "Loaded ${roomList.size} rooms",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@AdminDashboardActivity,
+                            "API Error: ${json.optString("message", "Unknown error")}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("AdminDashboard", "Room load error", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@AdminDashboardActivity,
+                        "Network error: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -256,9 +210,9 @@ class AdminDashboardActivity : AppCompatActivity() {
     }
 
     private fun redirectToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        startActivity(Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
         finish()
     }
 }

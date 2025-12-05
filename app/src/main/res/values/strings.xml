@@ -139,4 +139,8 @@
     <string name="my_schedule">My Schedule</string>
     <string name="room_schedules">Room Schedules</string>
 
+    <!-- res/values/strings.xml -->
+    <string name="room_capacity_format">%1$s • %2$d seats</string>
+    <string name="room_capacity_format_one">%1$s • %2$d seat</string> <!-- optional: for 1 seat -->
+
 </resources>

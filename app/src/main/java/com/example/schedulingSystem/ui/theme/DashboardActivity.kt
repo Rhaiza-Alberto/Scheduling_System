@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.adapters.RoomAdapter
-import com.example.schedulingSystem.models.Room
+import com.example.schedulingSystem.models.RoomSchedule
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -15,8 +15,8 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         val sampleRooms = listOf(
-            Room("Monday", "08:00 - 10:00", "IT101", "BSIT-1A", "Prof. Cruz", "G301"),
-            Room("Wednesday", "10:00 - 12:00", "CS201", "BSCS-2B", "Prof. Reyes", "F204")
+            RoomSchedule("Monday", "08:00 - 10:00", "IT101", "BSIT-1A", "Prof. Cruz", "G301"),
+            RoomSchedule("Wednesday", "10:00 - 12:00", "CS201", "BSCS-2B", "Prof. Reyes", "F204")
         )
 
         val recycler = findViewById<RecyclerView>(R.id.recyclerRooms)

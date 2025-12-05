@@ -23,4 +23,10 @@
     <color name="icon_orange">#F57F17</color>
     <color name="icon_orange_dark">#E65100</color>
 
+    <color name="red_occupied">#C62828</color>
+    <color name="green_available">#1B5E20</color>
+    <color name="divider">#808080</color>
+
+
+
 </resources>
