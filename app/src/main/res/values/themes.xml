@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SchedulingSystem" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.SchedulingSystem" parent="Theme.RoomBooking" />
 
     <!-- Base application theme -->
     <style name="Theme.RoomBooking" parent="Theme.MaterialComponents.Light.NoActionBar">
