@@ -172,7 +172,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
+        app:headerLayout="@layout/nav_header_teacher"
         app:menu="@menu/nav_menu"
         app:itemIconTint="@color/primary_green"
         app:itemTextColor="@color/text_primary"
