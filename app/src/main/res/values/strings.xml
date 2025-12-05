@@ -138,5 +138,20 @@
 
     <string name="my_schedule">My Schedule</string>
     <string name="room_schedules">Room Schedules</string>
+    <string name="oct_24">Oct 24</string>
+    <string name="makeup_class_cs_302">Makeup Class: CS-302</string>
+    <string name="_10_00_am_11_30_am">10:00 AM - 11:30 AM</string>
+    <string name="pending_approval">Pending Approval</string>
+    <string name="viewing_schedule">Viewing Schedule</string>
+    <string name="schedule_icon">Schedule Icon</string>
+    <string name="status">Status</string>
+    <string name="capacity_40_students">Capacity: 40 Students</string>
+    <string name="upcoming_classes">Upcoming Classes</string>
+    <string name="no_classes_scheduled_for_this_room">No classes scheduled for this room.</string>
+    <string name="track_your_booking_status">Track your booking status</string>
+    <string name="all">All</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="rejected">Rejected</string>
 
 </resources>
