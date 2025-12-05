@@ -28,13 +28,15 @@ if (empty($username) || empty($password)) {
     exit();
 }
 
-// Query to get user with account type
-$query = "SELECT p.person_ID, p.person_username, p.person_password, 
-                 p.account_ID, a.account_name, 
-                 n.name_first, n.name_second, n.name_middle, n.name_last, n.name_suffix
+// Query to get user with account type and teacher_ID if applicable
+$query = "SELECT p.person_ID, p.person_username, p.person_password,
+                 p.account_ID, a.account_name,
+                 n.name_first, n.name_second, n.name_middle, n.name_last, n.name_suffix,
+                 t.teacher_ID
           FROM Person p
           JOIN Account_Type a ON p.account_ID = a.account_ID
           LEFT JOIN Name n ON p.name_ID = n.name_ID
+          LEFT JOIN Teacher t ON p.person_ID = t.person_ID
           WHERE p.person_username = ?";
 
 $stmt = $conn->prepare($query);
@@ -79,13 +81,18 @@ $response = [
     'success' => true,
     'message' => 'Login successful',
     'user' => [
-        'person_ID' => $user['person_ID'],
+        'person_ID' => (int)$user['person_ID'],
         'username' => $user['person_username'],
         'account_type' => $user['account_name'],
-        'account_ID' => $user['account_ID'],
+        'account_ID' => (int)$user['account_ID'],
         'name' => $fullName
     ]
 ];
+
+// Add teacher_ID if user is a teacher
+if ($user['teacher_ID'] !== null) {
+    $response['user']['teacher_ID'] = (int)$user['teacher_ID'];
+}
 
 http_response_code(200);
 echo json_encode($response);
