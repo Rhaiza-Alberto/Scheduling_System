@@ -5,33 +5,24 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-// import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-class TeacherDashboardActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
+class TeacherDashboardActivity : AppCompatActivity() {
 
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
     private lateinit var rvRooms: RecyclerView
     private lateinit var tvProfName: TextView
     private lateinit var tvGreeting: TextView
-    private lateinit var btnOpenDrawer: ImageView
+    private lateinit var btnSettings: ImageView
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -67,41 +58,23 @@ class TeacherDashboardActivity : AppCompatActivity(),
         setContentView(R.layout.activity_teacher_dashboard)
 
         initViews()
-        setupDrawer()
-        setupBackPressHandler()
+        setupClickListeners()
         updateUserName()
         setupRecyclerView()
         loadRoomsFromApi()
     }
 
     private fun initViews() {
-        drawerLayout = findViewById(R.id.drawerLayout)
-        navView = findViewById(R.id.navView)
         rvRooms = findViewById(R.id.rvRooms)
         tvProfName = findViewById(R.id.tvProfName)
         tvGreeting = findViewById(R.id.tvGreeting)
-        btnOpenDrawer = findViewById(R.id.btnOpenDrawer)
+        btnSettings = findViewById(R.id.btnSettings)
     }
 
-    private fun setupDrawer() {
-        btnOpenDrawer.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
+    private fun setupClickListeners() {
+        btnSettings.setOnClickListener {
+            performLogout()
         }
-        navView.setNavigationItemSelectedListener(this)
-        updateDrawerHeader()
-    }
-
-    private fun setupBackPressHandler() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                }
-            }
-        })
     }
 
     @SuppressLint("SetTextI18n")
@@ -112,15 +85,6 @@ class TeacherDashboardActivity : AppCompatActivity(),
         tvProfName.text = fullName
     }
 
-    private fun updateDrawerHeader() {
-        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
-        val fullName = prefs.getString("full_name", "Teacher") ?: "Teacher"
-        val username = prefs.getString("username", "") ?: ""
-
-        val headerView = navView.getHeaderView(0)
-        headerView.findViewById<TextView>(R.id.tvNavName).text = fullName
-        headerView.findViewById<TextView>(R.id.tvNavEmail).text = username
-    }
 
     private fun setupRecyclerView() {
         rvRooms.layoutManager = LinearLayoutManager(this)
@@ -182,17 +146,6 @@ class TeacherDashboardActivity : AppCompatActivity(),
                 Log.e("TeacherDashboard", "✗ Error loading rooms: ${e.message}", e)
             }
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_home -> { }
-            R.id.nav_my_requests -> { }
-            R.id.nav_profile -> { }
-            R.id.nav_logout -> performLogout()
-        }
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     private fun performLogout() {

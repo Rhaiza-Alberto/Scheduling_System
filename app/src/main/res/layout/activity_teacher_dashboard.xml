@@ -1,181 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.RoomBooking"
+    android:background="@color/app_background"
     tools:context=".TeacherDashboardActivity">
 
-    <!-- Main Content -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- Header Background -->
+    <View
+        android:id="@+id/headerBg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/app_background">
+        android:layout_height="160dp"
+        android:background="@color/primary_green"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Header Background -->
-        <View
-            android:id="@+id/headerBg"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@color/primary_green"
-            app:layout_constraintTop_toTopOf="parent" />
+    <!-- Settings Button (Logout) -->
+    <ImageView
+        android:id="@+id/btnSettings"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/ic_menu_hamburger"
+        app:tint="@color/white"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Menu Button -->
+    <!-- Profile Image -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
-            android:id="@+id/btnOpenDrawer"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:contentDescription="@string/nav_open_drawer"
-            android:src="@drawable/ic_menu_hamburger"
-            app:tint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/user_profile_image"
+            android:src="@drawable/ic_person_placeholder"
+            android:scaleType="centerCrop"/>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Profile Image -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="20dp"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <!-- Greeting Text -->
+    <TextView
+        android:id="@+id/tvGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/welcome"
+        android:textColor="#E8F5E9"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSettings" />
+
+    <!-- Professor Name -->
+    <TextView
+        android:id="@+id/tvProfName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/default_prof_name"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
+
+    <!-- Status Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/statusCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvProfName">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/user_profile_image"
-                android:src="@drawable/ic_person_placeholder"
-                android:scaleType="centerCrop"/>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Greeting Text -->
-        <TextView
-            android:id="@+id/tvGreeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/welcome"
-            android:textColor="#E8F5E9"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnOpenDrawer" />
-
-        <!-- Professor Name -->
-        <TextView
-            android:id="@+id/tvProfName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="@string/default_prof_name"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
-
-        <!-- Status Card -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/statusCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/tvProfName">
+                android:id="@+id/iconAlert"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle_light_orange"
+                android:contentDescription="@string/notifications_icon"
+                android:padding="8dp"
+                android:src="@drawable/ic_notifications"
+                app:tint="@color/icon_orange"
+                tools:ignore="ImageContrastCheck" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iconAlert"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_light_orange"
-                    android:contentDescription="@string/notifications_icon"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_notifications"
-                    app:tint="@color/icon_orange"
-                    tools:ignore="ImageContrastCheck" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
-                    android:orientation="vertical">
+                    android:text="@string/pending_approvals"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pending_approvals"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_secondary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_request_count"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"/>
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_request_count"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- List Header -->
-        <TextView
-            android:id="@+id/tvListHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/all_rooms"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/statusCard" />
-
-        <!-- Rooms RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRooms"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:clipToPadding="false"
-            android:paddingBottom="24dp"
-            android:paddingHorizontal="16dp"
-            android:scrollbars="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvListHeader"
-            tools:listitem="@layout/item_teacher_if_room_available" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
+    <!-- List Header -->
+    <TextView
+        android:id="@+id/tvListHeader"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_teacher"
-        app:menu="@menu/nav_menu"
-        app:itemIconTint="@color/primary_green"
-        app:itemTextColor="@color/text_primary"
-        tools:ignore="VisualLintBounds" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/all_rooms"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusCard" />
 
-</androidx.drawerlayout.widget.DrawerLayout>
+    <!-- Rooms RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRooms"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
+        android:paddingHorizontal="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvListHeader"
+        tools:listitem="@layout/item_teacher_if_room_available" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
