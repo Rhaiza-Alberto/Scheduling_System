@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Scheduling System</string>
     <string name="professor_login">Professor Login</string>
@@ -135,6 +136,7 @@
     <string name="teacher_status_available">Available • Capacity: %1$d</string>
     <string name="teacher_dashboard">Teacher Dashboard</string>
 
-
+    <string name="my_schedule">My Schedule</string>
+    <string name="room_schedules">Room Schedules</string>
 
 </resources>
