@@ -9,11 +9,13 @@
     android:theme="@style/Theme.RoomBooking"
     tools:context=".TeacherDashboardActivity">
 
+    <!-- Main Content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_background">
 
+        <!-- Header Background -->
         <View
             android:id="@+id/headerBg"
             android:layout_width="match_parent"
@@ -21,6 +23,7 @@
             android:background="@color/primary_green"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Menu Button -->
         <ImageView
             android:id="@+id/btnOpenDrawer"
             android:layout_width="32dp"
@@ -33,6 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Profile Image -->
         <androidx.cardview.widget.CardView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -50,6 +54,7 @@
                 android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
 
+        <!-- Greeting Text -->
         <TextView
             android:id="@+id/tvGreeting"
             android:layout_width="wrap_content"
@@ -62,6 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnOpenDrawer" />
 
+        <!-- Professor Name -->
         <TextView
             android:id="@+id/tvProfName"
             android:layout_width="wrap_content"
@@ -74,6 +80,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
 
+        <!-- Status Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/statusCard"
             android:layout_width="match_parent"
@@ -128,6 +135,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- List Header -->
         <TextView
             android:id="@+id/tvListHeader"
             android:layout_width="wrap_content"
@@ -141,6 +149,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/statusCard" />
 
+        <!-- Rooms RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRooms"
             android:layout_width="match_parent"
@@ -156,6 +165,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
         android:layout_width="wrap_content"
