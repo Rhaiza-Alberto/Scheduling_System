@@ -24,6 +24,7 @@ class TeacherRoomAdapter : ListAdapter<RoomAvailability, TeacherRoomAdapter.View
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvRoomName: TextView = itemView.findViewById(R.id.tvRoomName)
         private val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
+        private val tvSchedule: TextView = itemView.findViewById(R.id.tvSchedule)
 
         fun bind(room: RoomAvailability) {
             tvRoomName.text = room.roomName
@@ -35,9 +36,11 @@ class TeacherRoomAdapter : ListAdapter<RoomAvailability, TeacherRoomAdapter.View
                     room.roomCapacity
                 )
                 tvStatus.setTextColor(itemView.context.getColor(R.color.primary_dark_green))
+                tvSchedule.text = "Available for booking"
             } else {
                 tvStatus.text = room.status
                 tvStatus.setTextColor(itemView.context.getColor(R.color.status_red_text))
+                tvSchedule.text = "Not available"
             }
 
         }
