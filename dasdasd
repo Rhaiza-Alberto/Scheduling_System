@@ -1,0 +1,361 @@
+[33mcommit 5978163b12c6588eb268ca84c63cc02b2090814c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 03:34:58 2025 +0800
+
+    fix: removed DrawerLayout: NavigationView
+
+[33mcommit b0e2c96dfe66b5a00e6117aa5f70e819bd00ce5c[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 03:27:02 2025 +0800
+
+    fix: Error in activityteacherdashboard 175
+
+[33mcommit e0c076af846a9ee29067fe3fbfec3812faee9684[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 03:20:51 2025 +0800
+
+    update: validation respond in TeacherDashboard
+
+[33mcommit aab1e542f0f5ddbad8071087a93d732412f1f26c[m
+Merge: 4589fae 0c14e7a
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 03:09:09 2025 +0800
+
+    Merge branch 'master' of https://github.com/Rhaiza-Alberto/Scheduling_System
+
+[33mcommit 4589faea5b54134a557494867072f4d5f4f8b7d8[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 03:07:59 2025 +0800
+
+    update: TeacherRoomAdapter: missing tvSchedule
+
+[33mcommit 0c14e7a7c14b507c7ab4216bb81028f3a061abdc[m
+Merge: 52f8f7c 4556428
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 02:52:31 2025 +0800
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 52f8f7cbcc2fa3ff86197d7641bb5963f20eed84[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 02:52:20 2025 +0800
+
+    initial commit
+
+[33mcommit 4556428c078777aa08ce0346d9f1d04a4e6f9373[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 02:50:12 2025 +0800
+
+    update: fix ID in item_admin_if_room_available.xml
+
+[33mcommit 5c56c008068f2ed283789ca65ce631c5cdbc9077[m
+Merge: 2815513 bd448af
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 02:36:54 2025 +0800
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit bd448afc0f8a0cab4d32974f4cfab10385825201[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 02:34:47 2025 +0800
+
+    update: Android Manifest and teacher_status convert to string
+
+[33mcommit 2815513e6002fa631cc63501501c13e4ce3d407a[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 02:16:15 2025 +0800
+
+    initial commit
+
+[33mcommit 917035439b99b22098c0870592fff5895ecafbce[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Sat Dec 6 02:04:21 2025 +0800
+
+    feat: fix TeacherDashboardActivity into kotlin class file
+
+[33mcommit 227483ab9a8c109d0c279059dbd0661d5585e402[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 01:25:04 2025 +0800
+
+    initial commit
+
+[33mcommit c22a83c1aa478bd1686cd50f304d2342f54d14cc[m
+Merge: 03d3441 885fe81
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Dec 6 00:32:17 2025 +0800
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 885fe81050052c1f7027c1f9d94b9f076b23c9cc[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Sat Dec 6 00:30:17 2025 +0800
+
+    delete confirm (fixed)
+
+[33mcommit 0d9959327e3aa83e9c75ab5189c79c79a8cacc65[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Sat Dec 6 00:27:36 2025 +0800
+
+    edit room(fixed)
+
+[33mcommit 95aaa9a8d751aa46c7cec341f43fe5376d7de1bb[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Sat Dec 6 00:19:44 2025 +0800
+
+    image editor - for profile (fixed)
+
+[33mcommit 03d3441dafa08107b20a2e8520779646a493b74d[m
+Merge: c40ec20 14f7353
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Fri Dec 5 23:58:16 2025 +0800
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 14f7353d9f65b6ad0b82a88c7824a5adb0b12c68[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Fri Dec 5 23:45:20 2025 +0800
+
+    admin dash (not totally fixed needed backend for the ad thingy to show not ui)
+
+[33mcommit c836f716c4c3a0763df3bc224005afb0c54b160e[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Fri Dec 5 23:11:05 2025 +0800
+
+    occupied, reserved (fixed)
+
+[33mcommit c40ec2003b858f22f1ebb7111851ef62b271a5fe[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Fri Dec 5 20:40:58 2025 +0800
+
+    initial commit
+
+[33mcommit ff130638dbe8f5514d7b37836425bfc29b96c628[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Fri Dec 5 18:49:28 2025 +0800
+
+    initial commit
+
+[33mcommit f5acbff2eef26a71a4bbbf4961e8a0bccf4bc573[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Fri Dec 5 18:26:31 2025 +0800
+
+    git add .
+    git commit -m "fix: Add missing API endpoints for teacher and admin dashboards"
+    git push origin main
+
+[33mcommit 1c7684362a25414d78dc040dbe87c824bbb314c9[m
+Merge: 9e4e66d 4d1b7c4
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Fri Dec 5 07:17:17 2025 +0800
+
+    fix: Login Successfully but the Teacher UI isnt working
+
+[33mcommit 9e4e66da84d94110792c9eb8347ea8df4c6da180[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Fri Dec 5 07:13:13 2025 +0800
+
+    fix: Login Successfully but the Teacher UI isnt working
+
+[33mcommit 4d1b7c472f771766e2f079be00e982f5ef45008a[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Fri Dec 5 06:13:59 2025 +0800
+
+    feat(login): add backend connectivity and validate successful login authentication
+
+[33mcommit cbfd484e690ad807293dba7abc4bb819e2fa5b0d[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Fri Dec 5 01:32:04 2025 +0800
+
+    managestuffsfromadmin(Fixed)
+
+[33mcommit 39d4a8ff08b2a84fd70ded846b093f5abf14076d[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Thu Dec 4 23:01:34 2025 +0800
+
+    bug: still no connection
+
+[33mcommit f398eb9680abd0181fe5d28f37c188050a3bb0ae[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Thu Dec 4 22:46:58 2025 +0800
+
+    bug: Connections still not doing very good
+
+[33mcommit 5578eeb386817a7ef21f2132a4c2c682503273d0[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Thu Dec 4 21:40:06 2025 +0800
+
+    fix: the system and the login is appearing
+
+[33mcommit 42a5908f4931c770d3ca34190055a86bb880f3a1[m
+Merge: 6fd6960 489f487
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Thu Dec 4 15:58:10 2025 +0800
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/src/main/res/values/strings.xml
+
+[33mcommit 489f487bfa562abc5d9f3e6098b4b54ae261f218[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Thu Dec 4 01:06:48 2025 +0800
+
+    menu(Fixed)
+
+[33mcommit 74f063f817c73cc1f5aedcfdc152b37ceb4c3a0e[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Thu Dec 4 01:04:44 2025 +0800
+
+     sheetbook, emptystate, header.(fixed)
+
+[33mcommit 9660f6801207263a1267aee1651d2337e337225c[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Thu Dec 4 00:49:57 2025 +0800
+
+    profroom(fixed)
+
+[33mcommit f13d3ee6d511875317c8ac3e247f6d90ab141670[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Thu Dec 4 00:42:34 2025 +0800
+
+    success(fixed)
+
+[33mcommit 5196821adba5c04e76f5b1e63ec9bf78439dd238[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Thu Dec 4 00:37:54 2025 +0800
+
+    roomstates(fixed)
+
+[33mcommit 6fd69603a8125b640d8583d081710b435ea2de7d[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Wed Dec 3 23:11:47 2025 +0800
+
+    feat: Add scheduling system with admin and professor dashboards
+    
+    - Implement AdminDashboardActivity for system administration
+    - Add ProfessorDashboardActivity with UI theme support
+    - Create ApiService for network communication
+    - Add SessionManager utility for user session handling
+    - Implement LoginActivity with authentication flow
+    - Add example instrumented and unit tests
+    - Configure Android manifest and project resources
+    
+     Note: Gradle build currently failing - requires investigation
+
+[33mcommit 329ffc13dab331c594c22c47f8090191701a07b8[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 22:13:30 2025 +0800
+
+    reqdetails(fixed)
+
+[33mcommit 564a78f4afebb6060658e6511deff3dfe40b32d4[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 22:01:26 2025 +0800
+
+    profdash(fixed) - needed backend
+
+[33mcommit 05bf07baf0198b8982706f5d51e0fb18b5d7eb13[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 21:55:40 2025 +0800
+
+    login(fixed)
+
+[33mcommit d2696e5db40841c4a99f5db3400a63433ca4769f[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 21:40:30 2025 +0800
+
+    admindash(fixed)
+
+[33mcommit 116029256a7984ce6a3e9778877a996c8df754c9[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 21:38:03 2025 +0800
+
+    addroom(fixed)
+
+[33mcommit 27d3856c3f3950304f227abbe82941ebb856fdfb[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 21:27:07 2025 +0800
+
+    not fixed
+
+[33mcommit 4c61ea12be4801ec445101ed15e59bb4f5749c1b[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 20:59:22 2025 +0800
+
+    not fixed
+
+[33mcommit 96e910c37ffb23197529ab81d53aae20b0f9e1d2[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 19:06:01 2025 +0800
+
+    .
+
+[33mcommit d652a2a3ae6739543f723301c5340f50feaf25d5[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 19:00:15 2025 +0800
+
+    prof dash
+
+[33mcommit fc81ef362ff6702e2abf43bb58fa2b68d39fbf15[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 18:44:31 2025 +0800
+
+    the remaining drawables
+
+[33mcommit ed0fb45fbfb18bdaa76b2cb551cd86871cc1676d[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Wed Dec 3 17:55:08 2025 +0800
+
+    Add admin dashboard activity and update app configuration
+    
+    - Implement activity admin dashboard with layout
+    - Update manifest, drawables, and Gradle dependencies
+    - Add new string and theme resources
+
+[33mcommit cc67516e6e79a53618fea588ef9272df82babbf2[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Wed Dec 3 08:27:17 2025 +0800
+
+    update: Convert all names in string values
+
+[33mcommit 7a4ea5240fc28e4d77ed3598df2338da9c680745[m
+Author: unknown <alelybitun.school@gmail.com>
+Date:   Wed Dec 3 08:21:10 2025 +0800
+
+    delete: Delete some missing XML in login layout
+
+[33mcommit a97290ce5d08a5bf26b4ae4fe9352c43c906dc0a[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 01:04:13 2025 +0800
+
+    partial fix
+
+[33mcommit 34de9d38e2c7daf7b8ffecb866c214a729539f7e[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 00:56:42 2025 +0800
+
+    add room - partial
+
+[33mcommit 17adeed9766b759fb26be6e794bae6ec36a8757f[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 00:46:24 2025 +0800
+
+    request
+
+[33mcommit ed526725808ad514abf462cf95bb9604215d20cd[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Wed Dec 3 00:40:31 2025 +0800
+
+    ui (login, prof, admin) - partia;
+
+[33mcommit 8e0be5086f705e0f510ea05512382bdfaf196f10[m
+Author: JyMargaret <jaymiemargaret21@gmail.com>
+Date:   Sat Nov 29 12:14:40 2025 +0800
+
+    login(style)
+
+[33mcommit 138bda278799cdeee02f2888d27f29335f620b64[m[33m ([m[1;31morigin/DB[m[33m)[m
+Author: Rhaiza726 <ae202403480@wmsu.edu.ph>
+Date:   Sat Nov 22 21:12:28 2025 +0800
+
+    Initial commit
