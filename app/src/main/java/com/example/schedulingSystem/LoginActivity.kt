@@ -167,7 +167,7 @@ class LoginActivity : AppCompatActivity() {
                             }
                             else -> {
                                 Log.w("LoginActivity", "Unknown account type: $accountType, defaulting to Teacher Dashboard")
-                                Intent(this@LoginActivity, TeacherDashboardActivity::class.java)
+                                Intent(this@LoginActivity,TeacherDashboardActivity::class.java)
                             }
                         }
 
