@@ -121,5 +121,9 @@
     <string name="rooms">Rooms</string>
     <string name="users">Users</string>
     <string name="add_schedule" />
+    <string name="adjust_image">Adjust Image</string>
+    <string name="crop">Crop</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="rotate">Rotate</string>
 
 </resources>
