@@ -46,6 +46,24 @@ class TeacherDashboardActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if user is logged in and is teacher
+        val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
+        val isLoggedIn = prefs.getBoolean("is_logged_in", false)
+        val accountType = prefs.getString("account_type", "")
+
+        if (!isLoggedIn) {
+            Log.w("TeacherDashboard", "User not logged in, redirecting to login")
+            redirectToLogin()
+            return
+        }
+
+        if (accountType?.lowercase() != "teacher") {
+            Log.w("TeacherDashboard", "User is not teacher (type: $accountType), redirecting to login")
+            redirectToLogin()
+            return
+        }
+
         setContentView(R.layout.activity_teacher_dashboard)
 
         initViews()
@@ -119,32 +137,49 @@ class TeacherDashboardActivity : AppCompatActivity(),
                 val response = client.newCall(request).execute()
                 val jsonData = response.body?.string() ?: ""
 
-                if (jsonData.isEmpty()) return@launch
+                if (jsonData.isEmpty()) {
+                    Log.w("TeacherDashboard", "Empty response from get_rooms.php")
+                    return@launch
+                }
 
                 val json = JSONObject(jsonData)
-                if (json.getBoolean("success")) {
-                    val roomsArray = json.getJSONArray("rooms")
-                    val list = mutableListOf<RoomAvailability>()
+                val success = json.optBoolean("success", false)
 
-                    for (i in 0 until roomsArray.length()) {
-                        val obj = roomsArray.getJSONObject(i)
-                        list.add(
-                            RoomAvailability(
-                                roomId = obj.getInt("room_ID"),
-                                roomName = obj.getString("room_name"),
-                                roomCapacity = obj.getInt("room_capacity"),
-                                status = obj.optString("status", "Available"),
-                                isAvailable = obj.optBoolean("isAvailable", true)
-                            )
-                        )
-                    }
+                if (success) {
+                    val roomsArray = json.optJSONArray("rooms")
+                    if (roomsArray != null) {
+                        val list = mutableListOf<RoomAvailability>()
 
-                    withContext(Dispatchers.Main) {
-                        roomAdapter.submitList(list)
+                        for (i in 0 until roomsArray.length()) {
+                            try {
+                                val obj = roomsArray.getJSONObject(i)
+                                list.add(
+                                    RoomAvailability(
+                                        roomId = obj.getInt("room_ID"),
+                                        roomName = obj.getString("room_name"),
+                                        roomCapacity = obj.getInt("room_capacity"),
+                                        status = obj.optString("status", "Available"),
+                                        isAvailable = obj.optBoolean("isAvailable", true)
+                                    )
+                                )
+                            } catch (e: Exception) {
+                                Log.e("TeacherDashboard", "Error parsing room at index $i: ${e.message}")
+                            }
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            roomAdapter.submitList(list)
+                            Log.d("TeacherDashboard", "✓ Loaded ${list.size} rooms")
+                        }
+                    } else {
+                        Log.w("TeacherDashboard", "No rooms array in response")
                     }
+                } else {
+                    val message = json.optString("message", "Failed to load rooms")
+                    Log.e("TeacherDashboard", "✗ API error: $message")
                 }
             } catch (e: Exception) {
-                Log.e("API", "Error: ${e.message}")
+                Log.e("TeacherDashboard", "✗ Error loading rooms: ${e.message}", e)
             }
         }
     }
@@ -165,6 +200,14 @@ class TeacherDashboardActivity : AppCompatActivity(),
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        finish()
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }
 
