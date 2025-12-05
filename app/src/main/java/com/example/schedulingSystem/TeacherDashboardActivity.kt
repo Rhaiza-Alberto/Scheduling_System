@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+// import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -167,3 +167,4 @@ class TeacherDashboardActivity : AppCompatActivity(),
         startActivity(intent)
     }
 }
+
