@@ -3,6 +3,12 @@
 
     <!-- Makes ShapeableImageView perfectly circular -->
     <style name="CircleImageOverlay">
+        <item name="shapeAppearanceOverlay">
+            @style/CircleShapeAppearance
+        </item>
+    </style>
+
+    <style name="CircleShapeAppearance">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>

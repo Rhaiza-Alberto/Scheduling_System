@@ -163,5 +163,3 @@ class TeacherDashboardActivity : AppCompatActivity() {
         finish()
     }
 }
-
-teacher
