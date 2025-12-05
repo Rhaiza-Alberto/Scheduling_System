@@ -15,6 +15,8 @@ import okhttp3.Request
 import org.json.JSONObject
 import androidx.core.content.edit
 import java.util.concurrent.TimeUnit
+import android.view.View
+import android.widget.LinearLayout
 
 class AdminDashboardActivity : AppCompatActivity() {
 
@@ -55,6 +57,8 @@ class AdminDashboardActivity : AppCompatActivity() {
         loadDashboardData()
     }
 
+    private var isFabMenuOpen = false
+
     private fun setupClickListeners() {
         // Settings button (logout)
         findViewById<ImageButton>(R.id.btnSettings).setOnClickListener {
@@ -66,31 +70,115 @@ class AdminDashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Review pending approvals - Coming soon", Toast.LENGTH_SHORT).show()
         }
 
-        // Room 1 actions
-        findViewById<ImageButton>(R.id.btnEdit1).setOnClickListener {
-            Toast.makeText(this, "Edit Lab 101 - Coming soon", Toast.LENGTH_SHORT).show()
+        // Main FAB - Toggle menu
+        val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
+        val layoutAddUser = findViewById<LinearLayout>(R.id.layoutAddUser)
+        val layoutAddRoom = findViewById<LinearLayout>(R.id.layoutAddRoom)
+        val layoutAddSchedule = findViewById<LinearLayout>(R.id.layoutAddSchedule)
+        val fabOverlay = findViewById<View>(R.id.fabOverlay)
+
+        val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
+        val fabAddRoom = findViewById<FloatingActionButton>(R.id.fabAddRoomOption)
+        val fabAddSchedule = findViewById<FloatingActionButton>(R.id.fabAddSchedule)
+
+        fabMain.setOnClickListener {
+            if (isFabMenuOpen) {
+                closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
+            } else {
+                openFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
+            }
         }
 
-        findViewById<ImageButton>(R.id.btnDelete1).setOnClickListener {
-            Toast.makeText(this, "Delete Lab 101 - Coming soon", Toast.LENGTH_SHORT).show()
-        }
-        // REMOVE THE EXTRA '}' THAT WAS HERE
-
-        // Room 2 actions
-        findViewById<ImageButton>(R.id.btnEdit2).setOnClickListener {
-            Toast.makeText(this, "Edit Lecture Hall A - Coming soon", Toast.LENGTH_SHORT).show()
+        // Overlay click = close menu
+        fabOverlay.setOnClickListener {
+            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
         }
 
-        findViewById<ImageButton>(R.id.btnDelete2).setOnClickListener {
-            Toast.makeText(this, "Delete Lecture Hall A - Coming soon", Toast.LENGTH_SHORT).show()
+        // Individual FAB actions
+        fabAddUser.setOnClickListener {
+            Toast.makeText(this, "Add User - Coming soon", Toast.LENGTH_SHORT).show()
+            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
         }
 
-        // FAB - Main action button
-        findViewById<FloatingActionButton>(R.id.fabMain).setOnClickListener {
-            Toast.makeText(this, "Add new room - Coming soon", Toast.LENGTH_SHORT).show()
+        fabAddRoom.setOnClickListener {
+            Toast.makeText(this, "Add Room - Coming soon", Toast.LENGTH_SHORT).show()
+            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
         }
-    } // This is the correct closing brace for the function
 
+        fabAddSchedule.setOnClickListener {
+            Toast.makeText(this, "Add Schedule - Coming soon", Toast.LENGTH_SHORT).show()
+            closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
+        }
+    }
+
+    private fun openFabMenu(
+        layoutAddUser: LinearLayout,
+        layoutAddRoom: LinearLayout,
+        layoutAddSchedule: LinearLayout,
+        overlay: View,
+        fabMain: FloatingActionButton ) {
+        isFabMenuOpen = true
+
+        overlay.visibility = View.VISIBLE
+        layoutAddSchedule.visibility = View.VISIBLE
+        layoutAddRoom.visibility = View.VISIBLE
+        layoutAddUser.visibility = View.VISIBLE
+
+        // Rotate main FAB to "X"
+        fabMain.rotation = 0f
+        fabMain.animate().rotation(135f).setDuration(300).start()
+
+        // Animate options in
+        layoutAddSchedule.translationY = 200f
+        layoutAddRoom.translationY = 200f
+        layoutAddUser.translationY = 200f
+
+        layoutAddSchedule.alpha = 0f
+        layoutAddRoom.alpha = 0f
+        layoutAddUser.alpha = 0f
+
+        layoutAddSchedule.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(50).start()
+        layoutAddRoom.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(100).start()
+        layoutAddUser.animate().translationY(0f).alpha(1f).setDuration(300).setStartDelay(150).start()
+
+        overlay.animate().alpha(0.6f).setDuration(300).start()
+    }
+
+    private fun closeFabMenu(
+        layoutAddUser: LinearLayout,
+        layoutAddRoom: LinearLayout,
+        layoutAddSchedule: LinearLayout,
+        overlay: View,
+        fabMain: FloatingActionButton ) {
+        isFabMenuOpen = false
+
+        fabMain.animate().rotation(0f).setDuration(300).start()
+
+        layoutAddSchedule.animate()
+            .translationY(200f)
+            .alpha(0f)
+            .setDuration(250)
+            .withEndAction { layoutAddSchedule.visibility = View.GONE }
+            .start()
+
+        layoutAddRoom.animate()
+            .translationY(200f)
+            .alpha(0f)
+            .setDuration(250)
+            .withEndAction { layoutAddRoom.visibility = View.GONE }
+            .start()
+
+        layoutAddUser.animate()
+            .translationY(200f)
+            .alpha(0f)
+            .setDuration(250)
+            .withEndAction { layoutAddUser.visibility = View.GONE }
+            .start()
+
+        overlay.animate().alpha(0f).setDuration(300).withEndAction {
+            overlay.visibility = View.GONE
+        }.start()
+    }
 
     private fun displayUserInfo() {
         val prefs = getSharedPreferences("user_session", MODE_PRIVATE)
@@ -106,7 +194,7 @@ class AdminDashboardActivity : AppCompatActivity() {
                 Log.d("AdminDashboard", "→ Fetching dashboard data")
 
                 val request = Request.Builder()
-                    .url("$BACKEND_URL/get_admin_dashboard.php")
+                    .url("$BACKEND_URL/get_admin_dashboard_details.php")
                     .build()
 
                 val response = client.newCall(request).execute()

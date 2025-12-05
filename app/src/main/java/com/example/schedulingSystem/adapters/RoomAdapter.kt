@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
-import com.example.schedulingSystem.models.Room
+import com.example.schedulingSystem.models.RoomSchedule
 
 class RoomAdapter(
-    private val rooms: List<Room>
+    private val rooms: List<RoomSchedule>
 ) : RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
 
     class RoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
