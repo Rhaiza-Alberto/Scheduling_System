@@ -1,5 +1,6 @@
 package com.example.schedulingSystem
 
+import com.example.schedulingSystem.models.RoomAvailability
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,16 +30,16 @@ class TeacherRoomAdapter : ListAdapter<RoomAvailability, TeacherRoomAdapter.View
 
             // Update status text and color based on availability
             if (room.isAvailable) {
-                tvStatus.text = "Available • Capacity: ${room.roomCapacity}"
-                tvStatus.setTextColor(
-                    itemView.context.getColor(R.color.primary_dark_green)
+                tvStatus.text = itemView.context.getString(
+                    R.string.teacher_status_available,
+                    room.roomCapacity
                 )
+                tvStatus.setTextColor(itemView.context.getColor(R.color.primary_dark_green))
             } else {
                 tvStatus.text = room.status
-                tvStatus.setTextColor(
-                    itemView.context.getColor(R.color.status_red_text)
-                )
+                tvStatus.setTextColor(itemView.context.getColor(R.color.status_red_text))
             }
+
         }
     }
 }
