@@ -145,4 +145,8 @@
     <string name="room_capacity_format">%1$s • %2$d seats</string>
     <string name="room_capacity_format_one">%1$s • %2$d seat</string> <!-- optional: for 1 seat -->
 
+    <string name="schedule_for_today">Schedule For Today</string>
+    <string name="schedule_for_week">Schedule for The Week</string>
+    <string name="day">day</string>
+    <string name="week">week</string>
 </resources>

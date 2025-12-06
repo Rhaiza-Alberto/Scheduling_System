@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class TeacherDashboardActivity : AppCompatActivity() {
@@ -23,6 +26,9 @@ class TeacherDashboardActivity : AppCompatActivity() {
     private lateinit var tvProfName: TextView
     private lateinit var tvGreeting: TextView
     private lateinit var btnSettings: ImageView
+    private lateinit var btnDay: MaterialButton
+    private lateinit var btnWeek: MaterialButton
+    private lateinit var tvListHeader: TextView
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -30,6 +36,7 @@ class TeacherDashboardActivity : AppCompatActivity() {
         .build()
 
     private val roomAdapter = TeacherRoomAdapter()
+    private var currentView = "day" // "day" or "week"
 
     companion object {
         private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
@@ -69,11 +76,56 @@ class TeacherDashboardActivity : AppCompatActivity() {
         tvProfName = findViewById(R.id.tvProfName)
         tvGreeting = findViewById(R.id.tvGreeting)
         btnSettings = findViewById(R.id.btnSettings)
+        btnDay = findViewById(R.id.btnDay)
+        btnWeek = findViewById(R.id.btnWeek)
+        tvListHeader = findViewById(R.id.tvListHeader)
     }
 
     private fun setupClickListeners() {
         btnSettings.setOnClickListener {
             performLogout()
+        }
+
+        btnDay.setOnClickListener {
+            if (currentView != "day") {
+                currentView = "day"
+                updateViewToggle()
+                loadRoomsFromApi()
+            }
+        }
+
+        btnWeek.setOnClickListener {
+            if (currentView != "week") {
+                currentView = "week"
+                updateViewToggle()
+                loadRoomsFromApi()
+            }
+        }
+    }
+
+    private fun updateViewToggle() {
+        if (currentView == "day") {
+            // Day button active
+            btnDay.setBackgroundColor(getColor(R.color.black))
+            btnDay.setTextColor(getColor(R.color.white))
+
+            // Week button inactive
+            btnWeek.setBackgroundColor(getColor(R.color.white))
+            btnWeek.setTextColor(getColor(R.color.text_primary))
+
+            // Update header
+            tvListHeader.text = getString(R.string.schedule_for_today)
+        } else {
+            // Week button active
+            btnWeek.setBackgroundColor(getColor(R.color.black))
+            btnWeek.setTextColor(getColor(R.color.white))
+
+            // Day button inactive
+            btnDay.setBackgroundColor(getColor(R.color.white))
+            btnDay.setTextColor(getColor(R.color.text_primary))
+
+            // Update header
+            tvListHeader.text = getString(R.string.schedule_for_week)
         }
     }
 
@@ -85,7 +137,6 @@ class TeacherDashboardActivity : AppCompatActivity() {
         tvProfName.text = fullName
     }
 
-
     private fun setupRecyclerView() {
         rvRooms.layoutManager = LinearLayoutManager(this)
         rvRooms.adapter = roomAdapter
@@ -94,15 +145,26 @@ class TeacherDashboardActivity : AppCompatActivity() {
     private fun loadRoomsFromApi() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // Get current date
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val currentDate = dateFormat.format(Date())
+
+                // Build URL with view type parameter
+                val url = if (currentView == "day") {
+                    "$BACKEND_URL/get_rooms_schedule.php?view=day&date=$currentDate"
+                } else {
+                    "$BACKEND_URL/get_rooms_schedule.php?view=week&date=$currentDate"
+                }
+
                 val request = Request.Builder()
-                    .url("$BACKEND_URL/get_rooms.php")
+                    .url(url)
                     .build()
 
                 val response = client.newCall(request).execute()
                 val jsonData = response.body?.string() ?: ""
 
                 if (jsonData.isEmpty()) {
-                    Log.w("TeacherDashboard", "Empty response from get_rooms.php")
+                    Log.w("TeacherDashboard", "Empty response from get_rooms_schedule.php")
                     return@launch
                 }
 
@@ -133,7 +195,7 @@ class TeacherDashboardActivity : AppCompatActivity() {
 
                         withContext(Dispatchers.Main) {
                             roomAdapter.submitList(list)
-                            Log.d("TeacherDashboard", "✓ Loaded ${list.size} rooms")
+                            Log.d("TeacherDashboard", "✓ Loaded ${list.size} rooms for $currentView view")
                         }
                     } else {
                         Log.w("TeacherDashboard", "No rooms array in response")

@@ -24,7 +24,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:text="@string/teacher_portal"
-        android:textColor="#CCFFFFFF"
+        android:textColor="@color/white"
         android:textSize="12sp"
         android:letterSpacing="0.1"
         android:textAllCaps="true"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_input_outline"
-                android:backgroundTint="#26FFFFFF"
+                android:backgroundTint="#80FFFFFF"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="8dp"
                 android:text="@string/room_schedules"
@@ -204,16 +204,70 @@
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
 
-            <!-- List Header -->
-            <TextView
-                android:id="@+id/tvListHeader"
-                android:layout_width="wrap_content"
+            <!-- Header with Toggle Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="@string/all_rooms"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- List Header -->
+                <TextView
+                    android:id="@+id/tvListHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/schedule_for_today"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Day/Week Toggle Buttons -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_input_outline"
+                    android:backgroundTint="@color/white"
+                    android:elevation="2dp"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDay"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:backgroundTint="@color/black"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="80dp"
+                        android:paddingHorizontal="24dp"
+                        android:text="@string/day"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        app:elevation="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnWeek"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:backgroundTint="@color/white"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="80dp"
+                        android:paddingHorizontal="24dp"
+                        android:text="@string/week"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        app:elevation="0dp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- Rooms RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
