@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.models.RoomItem
 
-class AdminRoomAdapter : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>() {
+class AdminRoomScheduleAdapter : RecyclerView.Adapter<AdminRoomScheduleAdapter.RoomViewHolder>() {
 
     private var rooms = emptyList<RoomItem>()
 
@@ -19,7 +19,7 @@ class AdminRoomAdapter : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_edit_room, parent, false)
+            .inflate(R.layout.item_admin_room, parent, false)
         return RoomViewHolder(view)
     }
 

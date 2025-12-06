@@ -3,7 +3,7 @@ package com.example.schedulingSystem
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+//import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.schedulingSystem.adapters.AdminRoomAdapter
+import com.example.schedulingSystem.adapters.AdminRoomScheduleAdapter
 import com.example.schedulingSystem.models.RoomItem
 import com.google.android.material.button.MaterialButton
 // import com.google.android.material.floatingactionbutton.FloatingActionButton  // ← Commented out
@@ -21,6 +21,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+import androidx.core.content.ContextCompat
+import com.example.schedulingSystem.AdminManageRoomsActivity
+import com.example.schedulingSystem.AdminManageUsersActivity
 
 class AdminDashboardActivity : AppCompatActivity() {
 
@@ -34,7 +37,7 @@ class AdminDashboardActivity : AppCompatActivity() {
     }
 
     // UI References
-    private lateinit var roomAdapter: AdminRoomAdapter
+    private lateinit var roomAdapter: AdminRoomScheduleAdapter
     private lateinit var rvRooms: RecyclerView
 
     // private var isFabMenuOpen = false   // ← FAB removed
@@ -58,7 +61,7 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         // Initialize RecyclerView (this is the important part!)
         rvRooms = findViewById(R.id.containerRooms)
-        roomAdapter = AdminRoomAdapter()
+        roomAdapter = AdminRoomScheduleAdapter()
         rvRooms.apply {
             layoutManager = LinearLayoutManager(this@AdminDashboardActivity)
             adapter = roomAdapter
@@ -79,28 +82,55 @@ class AdminDashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Review pending approvals - Coming soon", Toast.LENGTH_SHORT).show()
         }
 
-        // ==================== FAB MENU COMPLETELY COMMENTED OUT ====================
-//        val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
-//        val layoutAddUser = findViewById<LinearLayout>(R.id.layoutAddUser)
-//        val layoutAddRoom = findViewById<LinearLayout>(R.id.layoutAddRoom)
-//        val layoutAddSchedule = findViewById<LinearLayout>(R.id.layoutAddSchedule)
-//        val fabOverlay = findViewById<View>(R.id.fabOverlay)
-//
-//        val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
-//        val fabAddRoom = findViewById<FloatingActionButton>(R.id.fabAddRoomOption)
-//        val fabAddSchedule = findViewById<FloatingActionButton>(R.id.fabAddSchedule)
-//
-//        fabMain.setOnClickListener {
-//            if (isFabMenuOpen) closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-//            else openFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain)
-//        }
-//
-//        fabOverlay.setOnClickListener { closeFabMenu(layoutAddUser, layoutAddRoom, layoutAddSchedule, fabOverlay, fabMain) }
-//
-//        fabAddUser.setOnClickListener { ... }
-//        fabAddRoom.setOnClickListener { ... }
-//        fabAddSchedule.setOnClickListener { ... }
-        // ============================================================================
+        // === TAB NAVIGATION ===
+        val tabSchedules = findViewById<TextView>(R.id.tabSchedules)
+        val tabUsers = findViewById<TextView>(R.id.tabUsers)
+        val tabRooms = findViewById<TextView>(R.id.tabRooms)
+
+        // Schedules Tab (Current Dashboard - highlight active)
+        tabSchedules.setOnClickListener {
+            // Already here - just update visual state
+            updateTabSelection(tabSchedules, tabUsers, tabRooms)
+            Toast.makeText(this, "Schedules Dashboard", Toast.LENGTH_SHORT).show()
+        }
+
+        // Users Tab → Go to AdminManageUsersActivity
+        tabUsers.setOnClickListener {
+            updateTabSelection(tabUsers, tabSchedules, tabRooms)
+            startActivity(Intent(this, AdminManageUsersActivity::class.java))
+        }
+
+        // Rooms Tab → Go to AdminManageRoomsActivity
+        tabRooms.setOnClickListener {
+            updateTabSelection(tabRooms, tabSchedules, tabUsers)
+            startActivity(Intent(this, AdminManageRoomsActivity::class.java))
+        }
+
+        // Set Schedules as active by default (we're on dashboard)
+        updateTabSelection(tabSchedules, tabUsers, tabRooms)
+    }
+
+    // Helper: Highlight selected tab
+    private fun updateTabSelection(selected: TextView, vararg others: TextView) {
+        // Selected tab → White background + Green text + Bold
+        selected.apply {
+            setBackgroundResource(R.drawable.bg_input_outline)
+            backgroundTintList = ContextCompat.getColorStateList(this@AdminDashboardActivity, R.color.white)
+            setTextColor(ContextCompat.getColor(this@AdminDashboardActivity, R.color.primary_dark_green))
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            elevation = 4f  // Slight shadow
+        }
+
+        // All other tabs → Transparent + White text + Normal weight
+        others.forEach { tab ->
+            tab.apply {
+                background = null
+                backgroundTintList = null
+                setTextColor(ContextCompat.getColor(this@AdminDashboardActivity, R.color.white))
+                setTypeface(null, android.graphics.Typeface.NORMAL)
+                elevation = 0f
+            }
+        }
     }
 
     // FAB open/close functions also commented out

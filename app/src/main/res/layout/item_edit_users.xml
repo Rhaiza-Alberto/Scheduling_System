@@ -10,7 +10,7 @@
 
     <!-- Full Name (First  Last) -->
     <TextView
-        android:id="@id/tvFullName"
+        android:id="@+id/tvFullName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="John Doe"
@@ -18,25 +18,24 @@
         android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/userActionsLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Role / Account Type -->
     <TextView
-        android:id="@id/tvRole"
+        android:id="@+id/tvRole"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Teacher"
         android:textColor="@color/text_secondary"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/tvFullName"
-        app:layout_constraintEnd_toStartOf="@id/userActionsLayout"
-        app:layout_constraintTop_toBottomOf="@id/tvFullName" />
+        app:layout_constraintStart_toStartOf="@+id/tvFullName"
+        app:layout_constraintEnd_toStartOf="@+id/userActionsLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tvFullName" />
 
     <!-- Edit & Delete Buttons -->
     <LinearLayout
-        android:id="@id/userActionsLayout"
+        android:id="@+id/userActionsLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -45,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
-            android:id="@id/btnEditUser"
+            android:id="@+id/btnEditUser"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -54,7 +53,7 @@
             app:tint="@color/text_grey_light" />
 
         <ImageButton
-            android:id="@id/btnDeleteUser"
+            android:id="@+id/btnDeleteUser"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
@@ -70,7 +69,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="@color/divider"
-        app:layout_constraintTop_toBottomOf="@id/tvRole"
+        app:layout_constraintTop_toBottomOf="@+id/tvRole"
         tools:layout_editor_absoluteX="-4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

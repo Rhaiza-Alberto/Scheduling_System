@@ -27,8 +27,6 @@
     <color name="green_available">#1B5E20</color>
     <color name="divider">#808080</color>
 
-    <color name="light_green_bg">#E8F5E9</color>
-    <color name="light_orange_bg">#FFF3E0</color>
-    <color name="light_gray_bg">#F5F5F5</color>
+    <color name="orange">#F57F17</color>
 
 </resources>
