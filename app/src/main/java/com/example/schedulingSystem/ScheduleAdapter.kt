@@ -1,12 +1,10 @@
 package com.example.schedulingSystem
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.schedulingSystem.ScheduleItem
 
 class ScheduleAdapter(private val list: List<ScheduleItem>) :
     RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
@@ -22,7 +20,7 @@ class ScheduleAdapter(private val list: List<ScheduleItem>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
+            .inflate(R.layout.item_schedule, parent, false)
         return ViewHolder(view)
     }
 
@@ -31,9 +29,24 @@ class ScheduleAdapter(private val list: List<ScheduleItem>) :
 
         holder.txtDay.text = item.dayName
         holder.txtTime.text = "${item.timeStart} - ${item.timeEnd}"
-        holder.txtSubject.text = "${item.subjectCode} - ${item.subjectName}"
-        holder.txtSection.text = item.sectionName
-        holder.txtRoom.text = item.roomName
+
+        // Safely handle nullable subject fields
+        val subjectText = when {
+            item.subjectCode != null && item.subjectName != null ->
+                "${item.subjectCode} - ${item.subjectName}"
+            item.subjectName != null -> item.subjectName
+            item.subjectCode != null -> item.subjectCode
+            else -> "No Subject"
+        }
+        holder.txtSubject.text = subjectText
+
+        // Section
+        holder.txtSection.text = item.sectionName ?: "Unknown Section"
+
+        // Room
+        holder.txtRoom.text = item.roomName ?: "No Room Assigned"
+
+        // Teacher (uses your computed property — perfect!)
         holder.txtTeacher.text = item.teacherFullName
     }
 

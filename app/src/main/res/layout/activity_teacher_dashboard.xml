@@ -23,11 +23,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:letterSpacing="0.1"
         android:text="@string/teacher_portal"
-        android:textAllCaps="true"
-        android:textColor="#E8F5E9"
+        android:textColor="#CCFFFFFF"
         android:textSize="12sp"
+        android:letterSpacing="0.1"
+
+        android:textAllCaps="true"
+
+
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -111,7 +114,7 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="8dp"
                 android:text="@string/room_schedules"
-                android:textColor="#000000" />
+                android:textColor="@color/white" />
         </LinearLayout>
     </HorizontalScrollView>
 

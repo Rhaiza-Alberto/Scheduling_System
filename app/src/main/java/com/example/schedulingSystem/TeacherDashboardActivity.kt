@@ -76,8 +76,8 @@ class TeacherDashboardActivity : AppCompatActivity() {
         tvProfName = findViewById(R.id.tvProfName)
         tvGreeting = findViewById(R.id.tvGreeting)
         btnSettings = findViewById(R.id.btnSettings)
-        btnDay = findViewById(R.id.btnDay)
-        btnWeek = findViewById(R.id.btnWeek)
+//        btnDay = findViewById(R.id.btnDay)
+//        btnWeek = findViewById(R.id.btnWeek)
         tvListHeader = findViewById(R.id.tvListHeader)
     }
 

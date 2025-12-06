@@ -23,7 +23,7 @@ class RoomAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
+            .inflate(R.layout.item_schedule, parent, false)
         return RoomViewHolder(view)
     }
 
