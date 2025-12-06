@@ -147,6 +147,8 @@
 
     <string name="admin_manage_users">Manage Users</string>
     <string name="admin_manage_rooms">Manage Rooms</string>
+    <string name="edit_user">Edit user</string>
+    <string name="delete_user">Delete user</string>
 
     <string name="add_new_user">Add New User</string>
 
