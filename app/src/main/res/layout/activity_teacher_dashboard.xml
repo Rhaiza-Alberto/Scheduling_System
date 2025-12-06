@@ -269,13 +269,37 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Rooms RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRooms"
+            <!-- My Schedule Container -->
+            <LinearLayout
+                android:id="@+id/myScheduleContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_teacher_if_room_available" />
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMySchedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_teacher_schedule" />
+            </LinearLayout>
+
+            <!-- Room Schedule Container -->
+            <LinearLayout
+                android:id="@+id/roomScheduleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_teacher_if_room_available" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
