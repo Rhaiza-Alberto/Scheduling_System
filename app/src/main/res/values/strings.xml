@@ -143,7 +143,14 @@
 
     <!-- res/values/strings.xml -->
     <string name="room_capacity_format">%1$s • %2$d seats</string>
-    <string name="room_capacity_format_one">%1$s • %2$d seat</string> <!-- optional: for 1 seat -->
+    <string name="room_capacity_format_one">%1$s • %2$d seat</string>
+
+    <string name="admin_manage_users">Manage Users</string>
+    <string name="admin_manage_rooms">Manage Rooms</string>
+    <string name="edit_user">Edit user</string>
+    <string name="delete_user">Delete user</string>
+
+    <string name="add_new_user">Add New User</string>
 
     <string name="schedule_for_today">Schedule For Today</string>
     <string name="schedule_for_week">Schedule for The Week</string>
