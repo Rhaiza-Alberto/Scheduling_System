@@ -27,10 +27,7 @@
         android:textColor="#CCFFFFFF"
         android:textSize="12sp"
         android:letterSpacing="0.1"
-
         android:textAllCaps="true"
-
-
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -207,6 +204,45 @@
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
 
+            <!-- View Toggle Buttons (Day/Week) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDay"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/day_view"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/primary_green"
+                    app:cornerRadius="8dp"
+                    app:elevation="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnWeek"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/week_view"
+                    android:textColor="@color/primary_green"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/white"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="@color/primary_green"
+                    app:strokeWidth="2dp"
+                    app:elevation="2dp" />
+
+            </LinearLayout>
+
             <!-- List Header -->
             <TextView
                 android:id="@+id/tvListHeader"
@@ -218,37 +254,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- My Schedule Container -->
-            <LinearLayout
-                android:id="@+id/myScheduleContainer"
+            <!-- Rooms RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvMySchedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/item_teacher_schedule" />
-            </LinearLayout>
-
-            <!-- Room Schedule Container -->
-            <LinearLayout
-                android:id="@+id/roomScheduleContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRooms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/item_teacher_if_room_available" />
-            </LinearLayout>
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_teacher_if_room_available" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

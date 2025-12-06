@@ -171,4 +171,8 @@
     <string name="schedule_for_week">Schedule for The Week</string>
     <string name="day">day</string>
     <string name="week">week</string>
+
+    <!-- Day/Week View Toggle Buttons - NEWLY ADDED -->
+    <string name="day_view">Day</string>
+    <string name="week_view">Week</string>
 </resources>

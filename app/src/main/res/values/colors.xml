@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Material Design Base Colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,25 +9,35 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- App Background -->
     <color name="app_background">#F5F5F5</color>
-    <color name="primary_green">#2E7D32</color>
+    <color name="light_gray_bg">#F5F5F5</color>
+
+    <!-- Primary Green Colors -->
+    <color name="primary_green">#4CAF50</color>
     <color name="primary_dark_green">#1B5E20</color>
     <color name="accent_green">#4CAF50</color>
+    <color name="green_available">#1B5E20</color>
+    <color name="light_green_bg">#E8F5E9</color>
     <color name="text_green_light">#C8E6C9</color>
 
+    <!-- Text Colors -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
     <color name="text_grey_light">#616161</color>
 
+    <!-- Red Colors -->
     <color name="status_red_text">#C62828</color>
-    <color name="icon_red">#D32F2F</color>
-    <color name="icon_orange">#F57F17</color>
-    <color name="icon_orange_dark">#E65100</color>
-
     <color name="red_occupied">#C62828</color>
-    <color name="green_available">#1B5E20</color>
-    <color name="divider">#808080</color>
+    <color name="icon_red">#D32F2F</color>
 
+    <!-- Orange Colors -->
     <color name="orange">#F57F17</color>
+    <color name="icon_orange">#FF9800</color>
+    <color name="icon_orange_dark">#E65100</color>
+    <color name="light_orange_bg">#FFF3E0</color>
+
+    <!-- Other -->
+    <color name="divider">#808080</color>
 
 </resources>
