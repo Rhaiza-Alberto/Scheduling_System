@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.schedulingSystem.adapters.AdminRoomAdapter
+import com.example.schedulingSystem.adapters.AdminRoomScheduleAdapter
 import com.example.schedulingSystem.models.RoomItem
 import com.google.android.material.button.MaterialButton
 // import com.google.android.material.floatingactionbutton.FloatingActionButton  // ← Commented out
@@ -37,7 +37,7 @@ class AdminDashboardActivity : AppCompatActivity() {
     }
 
     // UI References
-    private lateinit var roomAdapter: AdminRoomAdapter
+    private lateinit var roomAdapter: AdminRoomScheduleAdapter
     private lateinit var rvRooms: RecyclerView
 
     // private var isFabMenuOpen = false   // ← FAB removed
@@ -61,7 +61,7 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         // Initialize RecyclerView (this is the important part!)
         rvRooms = findViewById(R.id.containerRooms)
-        roomAdapter = AdminRoomAdapter()
+        roomAdapter = AdminRoomScheduleAdapter()
         rvRooms.apply {
             layoutManager = LinearLayoutManager(this@AdminDashboardActivity)
             adapter = roomAdapter
