@@ -1,12 +1,12 @@
 package com.example.schedulingSystem
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -50,6 +50,15 @@ class AdminManageUsersActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_admin_dashboard) // Reuse same layout (tabs + structure)
+
+        // Handle back press with modern API
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Go back to dashboard instead of closing app
+                startActivity(Intent(this@AdminManageUsersActivity, AdminDashboardActivity::class.java))
+                finish()
+            }
+        })
 
         // Initialize RecyclerView
         rvUsers = findViewById(R.id.containerRooms) // Reusing same ID — will show users now
@@ -209,13 +218,5 @@ class AdminManageUsersActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
         finish()
-    }
-
-    @SuppressLint("GestureBackNavigation")
-    override fun onBackPressed() {
-        super.onBackPressed()
-        // Go back to dashboard instead of closing app
-        startActivity(Intent(this, AdminDashboardActivity::class.java)) // 1. Starts a new Activity
-        finish()                                                       // 3. Called AFTER the Activity is destroyed
     }
 }

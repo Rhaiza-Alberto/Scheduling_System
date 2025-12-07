@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.models.UserItem
+import java.util.Locale
 
 class AdminUserAdapter : ListAdapter<UserItem, AdminUserAdapter.UserViewHolder>(UserDiffCallback()) {
 
@@ -31,7 +32,9 @@ class AdminUserAdapter : ListAdapter<UserItem, AdminUserAdapter.UserViewHolder>(
         fun bind(user: UserItem) {
             tvName.text = user.fullName
             tvEmail.text = user.email
-            tvType.text = user.accountType.capitalize()
+            tvType.text = user.accountType.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            }
             tvStatus.text = user.status
             tvStatus.setTextColor(
                 if (user.status == "Approved")
