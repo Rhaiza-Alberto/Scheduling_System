@@ -85,6 +85,7 @@ class AdminManageUsersActivity : AppCompatActivity() {
 
         tabSchedules.setOnClickListener {
             updateTabSelection(tabSchedules, tabUsers, tabRooms)
+            startActivity(Intent(this, AdminDashboardActivity::class.java))
             finish() // Go back to dashboard
         }
 

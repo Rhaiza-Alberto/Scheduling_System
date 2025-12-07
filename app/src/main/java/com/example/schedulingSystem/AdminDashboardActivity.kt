@@ -94,19 +94,17 @@ class AdminDashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Schedules Dashboard", Toast.LENGTH_SHORT).show()
         }
 
-        // Users Tab → Go to AdminManageUsersActivity
         tabUsers.setOnClickListener {
             updateTabSelection(tabUsers, tabSchedules, tabRooms)
             startActivity(Intent(this, AdminManageUsersActivity::class.java))
+            finish()
         }
-
-        // Rooms Tab → Go to AdminManageRoomsActivity
         tabRooms.setOnClickListener {
             updateTabSelection(tabRooms, tabSchedules, tabUsers)
             startActivity(Intent(this, AdminManageRoomsActivity::class.java))
+            finish()
         }
 
-        // Set Schedules as active by default (we're on dashboard)
         updateTabSelection(tabSchedules, tabUsers, tabRooms)
     }
 

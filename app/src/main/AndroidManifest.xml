@@ -39,6 +39,11 @@
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:label="@string/admin_manage_rooms" />
+        <activity
+            android:name=".AdminManageUsersActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:label="@string/admin_manage_users" />
 
 
         <!-- Professor Dashboard Activity -->

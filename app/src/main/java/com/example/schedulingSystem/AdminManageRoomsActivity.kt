@@ -4,13 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.adapters.AdminRoomAdapter
+import com.example.schedulingSystem.adapters.AdminRoomScheduleAdapter
 import com.example.schedulingSystem.models.RoomItem
+import com.example.schedulingSystem.models.UserItem
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -59,18 +63,31 @@ class AdminManageRoomsActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        // Settings (Logout)
-        findViewById<ImageButton>(R.id.btnSettings).setOnClickListener {
-            androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes") { _, _ ->
-                    getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
-                    Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
-                    redirectToLogin()
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
+        // Settings → Logout
+        findViewById<ImageButton>(R.id.btnSettings).setOnClickListener { performLogout() }
+
+        // Tab Navigation
+        val tabSchedules = findViewById<TextView>(R.id.tabSchedules)
+        val tabUsers = findViewById<TextView>(R.id.tabUsers)
+        val tabRooms = findViewById<TextView>(R.id.tabRooms)
+
+        tabSchedules.setOnClickListener {
+            updateTabSelection(tabSchedules, tabUsers, tabRooms)
+            startActivity(Intent(this, AdminDashboardActivity::class.java))
+            finish() // Go back to dashboard
+        }
+
+        tabUsers.setOnClickListener {
+            updateTabSelection(tabUsers, tabSchedules, tabRooms)
+            startActivity(Intent(this, AdminManageUsersActivity::class.java))
+            finish()
+
+        }
+
+        tabRooms.setOnClickListener {
+            updateTabSelection(tabRooms, tabSchedules, tabUsers)
+            Toast.makeText(this, "Manage Users", Toast.LENGTH_SHORT).show()
+
         }
 
         // Back to Dashboard (optional: you can add a back button later)
@@ -81,6 +98,7 @@ class AdminManageRoomsActivity : AppCompatActivity() {
             Toast.makeText(this, "Add New Room - Coming soon", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun loadRoomsFromApi() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -149,4 +167,39 @@ class AdminManageRoomsActivity : AppCompatActivity() {
         })
         finish()
     }
+    private fun updateTabSelection(selected: TextView, vararg others: TextView) {
+        selected.apply {
+            setBackgroundResource(R.drawable.bg_input_outline)
+            backgroundTintList = ContextCompat.getColorStateList(this@AdminManageRoomsActivity, R.color.white)
+            setTextColor(ContextCompat.getColor(this@AdminManageRoomsActivity, R.color.primary_dark_green))
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            elevation = 4f
+        }
+
+        others.forEach { tab ->
+            tab.apply {
+                background = null
+                backgroundTintList = null
+                setTextColor(ContextCompat.getColor(this@AdminManageRoomsActivity, R.color.white))
+                setTypeface(null, android.graphics.Typeface.NORMAL)
+                elevation = 0f
+            }
+        }
+    }
+
+
+
+    private fun performLogout() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
+                Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                redirectToLogin()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
 }
