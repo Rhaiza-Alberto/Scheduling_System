@@ -242,10 +242,10 @@ data class SchedulesResponse(
 data class ScheduleItemResponse(
     val schedule_ID: Int,
     val day_name: String,
-    val time_start: String,
-    val time_end: String,
-    val raw_start: String,
-    val raw_end: String,
+    val time_start: String,  // 12-hour format (e.g., "7:00 AM", "1:30 PM")
+    val time_end: String,    // 12-hour format
+    val raw_start_time: String? = null,  // Raw time_slot if needed
+    val raw_end_time: String? = null,    // Raw time_slot if needed
     val subject_code: String,
     val subject_name: String,
     val section_name: String,

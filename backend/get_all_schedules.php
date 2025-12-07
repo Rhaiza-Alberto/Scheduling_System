@@ -17,32 +17,58 @@ $room_id = isset($_GET['room_id']) ? intval($_GET['room_id']) : null;
 $section_id = isset($_GET['section_id']) ? intval($_GET['section_id']) : null;
 
 // Build query
-$query = "
-SELECT 
+$query = "SELECT
     s.schedule_ID,
     d.day_name,
-    DATE_FORMAT(t.time_start, '%h:%i %p') AS time_start,
-    DATE_FORMAT(t.time_end, '%h:%i %p') AS time_end,
-    t.time_start AS raw_start,
-    t.time_end AS raw_end,
+    
+    -- Start time in 12-hour format (e.g., "7:00 AM", "1:30 PM")
+    ts.display_name AS time_start,
+    
+    -- End time in 12-hour format
+    te.display_name AS time_end,
+    
+    -- Raw time_slot values if needed
+    ts.time_slot AS raw_start_time,
+    te.time_slot AS raw_end_time,
+    
     sub.subject_code,
     sub.subject_name,
     sec.section_name,
     sec.section_year,
     r.room_name,
     r.room_capacity,
-    CONCAT(n.name_first, ' ', COALESCE(n.name_middle, ''), ' ', n.name_last) AS teacher_name,
+    
+    -- Teacher full name
+    CONCAT(
+        COALESCE(n.name_first, ''),
+        IF(n.name_middle IS NOT NULL AND n.name_middle != '', CONCAT(' ', n.name_middle), ''),
+        ' ', n.name_last
+    ) AS teacher_name,
+    
     s.schedule_status
+
 FROM Schedule s
 JOIN Day d ON s.day_ID = d.day_ID
-JOIN Time t ON s.time_ID = t.time_ID
+
+-- Join Time table twice: once for start, once for end
+JOIN Time ts ON s.time_start_ID = ts.time_ID
+JOIN Time te ON s.time_end_ID = te.time_ID
+
 JOIN Subject sub ON s.subject_ID = sub.subject_ID
 JOIN Section sec ON s.section_ID = sec.section_ID
 JOIN Room r ON s.room_ID = r.room_ID
-JOIN Teacher teach ON s.teacher_ID = teach.teacher_ID
-JOIN Person p ON teach.person_ID = p.person_ID
+
+-- Teacher join
+JOIN Person p ON s.teacher_ID = p.person_ID
 JOIN Name n ON p.name_ID = n.name_ID
-WHERE 1=1
+
+-- Optional: Filter by room, day, etc.
+-- WHERE r.room_name = 'Lab 1'
+--   AND d.day_name = 'Monday'
+
+ORDER BY 
+    FIELD(d.day_name, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'),
+    ts.time_slot;
 ";
 
 // Add filters

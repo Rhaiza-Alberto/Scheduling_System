@@ -128,39 +128,95 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="15dp">
+            android:paddingHorizontal="0dp">
 
-            <!-- Pending Requests Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/requestsCard"
+            <!-- Timetable Header: Days of Week -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-                <!-- Your card content (unchanged) -->
+                android:orientation="horizontal"
+                android:background="@color/primary_dark_green">
 
-            </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    android:text="@string/time"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
-            <!-- Manage Rooms Title -->
-            <TextView
-                android:id="@+id/tvManageTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="@string/room_name"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/monday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/tuesday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/wednesday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/thursday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/friday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/saturday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="60dp"
+                    android:text="@string/sunday"
+                    android:gravity="center"
+                    android:background="@color/primary_dark_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            <!-- NEW: RecyclerView for dynamic rooms -->
+            <!-- RecyclerView for time rows with schedule -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/containerRooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:paddingBottom="16dp"
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
