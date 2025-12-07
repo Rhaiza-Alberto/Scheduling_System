@@ -20,55 +20,34 @@ $section_id = isset($_GET['section_id']) ? intval($_GET['section_id']) : null;
 $query = "SELECT
     s.schedule_ID,
     d.day_name,
-    
-    -- Start time in 12-hour format (e.g., "7:00 AM", "1:30 PM")
     ts.display_name AS time_start,
-    
-    -- End time in 12-hour format
     te.display_name AS time_end,
-    
-    -- Raw time_slot values if needed
     ts.time_slot AS raw_start_time,
     te.time_slot AS raw_end_time,
-    
     sub.subject_code,
     sub.subject_name,
     sec.section_name,
     sec.section_year,
     r.room_name,
     r.room_capacity,
-    
-    -- Teacher full name
     CONCAT(
         COALESCE(n.name_first, ''),
         IF(n.name_middle IS NOT NULL AND n.name_middle != '', CONCAT(' ', n.name_middle), ''),
         ' ', n.name_last
     ) AS teacher_name,
-    
     s.schedule_status
-
 FROM Schedule s
 JOIN Day d ON s.day_ID = d.day_ID
-
--- Join Time table twice: once for start, once for end
 JOIN Time ts ON s.time_start_ID = ts.time_ID
 JOIN Time te ON s.time_end_ID = te.time_ID
-
 JOIN Subject sub ON s.subject_ID = sub.subject_ID
 JOIN Section sec ON s.section_ID = sec.section_ID
 JOIN Room r ON s.room_ID = r.room_ID
-
--- Teacher join
 JOIN Person p ON s.teacher_ID = p.person_ID
 JOIN Name n ON p.name_ID = n.name_ID
-
--- Optional: Filter by room, day, etc.
--- WHERE r.room_name = 'Lab 1'
---   AND d.day_name = 'Monday'
-
 ORDER BY 
     FIELD(d.day_name, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'),
-    ts.time_slot;
+    ts.time_slot
 ";
 
 // Add filters
@@ -93,11 +72,6 @@ if ($section_id) {
     $types .= 'i';
 }
 
-$query .= " ORDER BY 
-    FIELD(d.day_name, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
-    t.time_start
-";
-
 $stmt = $conn->prepare($query);
 
 if (!$stmt) {
@@ -121,8 +95,8 @@ while ($row = $result->fetch_assoc()) {
         'day_name' => $row['day_name'],
         'time_start' => $row['time_start'],
         'time_end' => $row['time_end'],
-        'raw_start' => $row['raw_start'],
-        'raw_end' => $row['raw_end'],
+        'raw_start_time' => $row['raw_start_time'],
+        'raw_end_time' => $row['raw_end_time'],
         'subject_code' => $row['subject_code'],
         'subject_name' => $row['subject_name'],
         'section_name' => $row['section_name'],

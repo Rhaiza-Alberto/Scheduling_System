@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
-import com.example.schedulingSystem.TimeSlotContent
-import com.example.schedulingSystem.TimeSlotData
+import com.example.schedulingSystem.models.TimeSlotData
 
 class TimeSlotAdapter(
     private val timeSlotDataList: List<TimeSlotData>

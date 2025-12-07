@@ -13,18 +13,9 @@ import com.example.schedulingSystem.network.ApiResponse
 import com.example.schedulingSystem.network.ApiService
 import com.example.schedulingSystem.network.ScheduleItemResponse
 import kotlinx.coroutines.launch
+import com.example.schedulingSystem.models.TimeSlotData
+import com.example.schedulingSystem.models.TimeSlotContent
 
-data class TimeSlotData(
-    val timeSlot: String,
-    val daySchedules: Map<String, TimeSlotContent>
-)
-
-data class TimeSlotContent(
-    val subject: String,
-    val section: String,
-    val teacher: String?,
-    val isFree: Boolean = false
-)
 
 class AdminDashboardScheduleRoom : AppCompatActivity() {
 
@@ -90,7 +81,11 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             for (day in days) {
                 // Find if there's a schedule that covers this time slot
                 val matchingSchedule = schedules.find { schedule ->
-                    schedule.day_name == day && isTimeSlotInRange(timeSlot, schedule.time_start, schedule.time_end)
+                    schedule.day_name == day && isTimeSlotInRange(
+                        timeSlot,
+                        schedule.raw_start_time ?: schedule.time_start,
+                        schedule.raw_end_time ?: schedule.time_end
+                    )
                 }
 
                 daySchedules[day] = if (matchingSchedule != null) {
@@ -129,9 +124,11 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
 
     private fun timeToMinutes(time: String): Int {
         return try {
-            val parts = time.trim().split(":")
+            // Handle both "7:00" and "7:00 AM" formats
+            val cleanTime = time.trim().replace(" AM", "").replace(" PM", "").replace(" am", "").replace(" pm", "")
+            val parts = cleanTime.split(":")
             val hours = parts[0].toInt()
-            val minutes = parts[1].toInt()
+            val minutes = if (parts.size > 1) parts[1].toInt() else 0
             hours * 60 + minutes
         } catch (e: Exception) {
             0
