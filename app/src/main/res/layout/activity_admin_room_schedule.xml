@@ -115,112 +115,111 @@
     </HorizontalScrollView>
 
     <!-- Main Scrollable Content -->
-    <androidx.core.widget.NestedScrollView
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="40dp"
         android:clipToPadding="false"
         android:paddingBottom="88dp"
+        android:scrollbars="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/navTabs"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="0dp">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clipToPadding="false">
 
-            <!-- Timetable Header: Days of Week -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/primary_dark_green">
+                android:orientation="vertical"
+                android:paddingHorizontal="0dp">
 
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="60dp"
-                    android:text="@string/time"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                <!-- Timetable Header: Schedule Title + Days of Week -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/primary_dark_green">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/monday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/tuesday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/wednesday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/thursday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/friday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/saturday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="60dp"
-                    android:text="@string/sunday"
-                    android:gravity="center"
-                    android:background="@color/primary_dark_green"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:text="SCHEDULE"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="MONDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="TUESDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="WEDNESDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="THURSDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="FRIDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:text="SATURDAY"
+                        android:gravity="center"
+                        android:background="@color/primary_dark_green"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- RecyclerView for time rows with schedule -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/containerRooms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false" />
+
             </LinearLayout>
-
-            <!-- RecyclerView for time rows with schedule -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/containerRooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </HorizontalScrollView>
 
     <!-- FAB Overlay & Menu (unchanged) -->
     <View

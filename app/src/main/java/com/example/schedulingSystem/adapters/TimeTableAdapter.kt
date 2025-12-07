@@ -37,15 +37,27 @@ class TimeTableAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val time = timeSlots[position]
-        holder.tvTime.text = time
+        
+        // Format time as range (e.g., "7:00 – 8:30")
+        val nextIndex = position + 1
+        val timeRange = if (nextIndex < timeSlots.size) {
+            "${time} – ${timeSlots[nextIndex]}"
+        } else {
+            time
+        }
+        holder.tvTime.text = timeRange
 
         val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
         for (i in days.indices) {
             val key = "${days[i]}_$time"
             val classes = scheduleMap[key] ?: emptyList()
-            holder.cells[i].text = if (classes.isEmpty()) "Free" else classes.joinToString("\n") { "${it.subject}\n${it.section}" }
+            
+            // Format: Subject\nSection\nTeacher
+            holder.cells[i].text = if (classes.isEmpty()) "" else classes.joinToString("\n") { 
+                "${it.subject}\n${it.section}\n${it.teacher}"
+            }
             holder.cells[i].setBackgroundColor(
-                if (classes.isNotEmpty()) 0xFFE3F2FD.toInt() else 0xFFFFFFFF.toInt()
+                if (classes.isNotEmpty()) 0xFFF0F4FF.toInt() else 0xFFFFFFFF.toInt()
             )
         }
     }
