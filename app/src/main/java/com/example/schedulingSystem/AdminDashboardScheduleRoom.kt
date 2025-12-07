@@ -8,22 +8,35 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.schedulingSystem.adapters.TimeTableAdapter
-import com.example.schedulingSystem.fragments.TimeTableScheduleItem
+import com.example.schedulingSystem.adapters.TimeSlotAdapter
 import com.example.schedulingSystem.network.ApiResponse
 import com.example.schedulingSystem.network.ApiService
 import com.example.schedulingSystem.network.ScheduleItemResponse
 import kotlinx.coroutines.launch
 
+data class TimeSlotData(
+    val timeSlot: String,
+    val daySchedules: Map<String, TimeSlotContent>
+)
+
+data class TimeSlotContent(
+    val subject: String,
+    val section: String,
+    val teacher: String?,
+    val isFree: Boolean = false
+)
+
 class AdminDashboardScheduleRoom : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnSettings: ImageButton
-    private val timeSlots = listOf(
-        "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM",
-        "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
-        "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
-        "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM"
+    
+    // All 30-minute time slots
+    private val allTimeSlots = listOf(
+        "7:00", "7:30", "8:00", "8:30", "9:00", "9:30",
+        "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+        "1:00", "1:30", "2:00", "2:30", "3:00", "3:30",
+        "4:00", "4:30", "5:00", "5:30", "6:00", "6:30", "7:00"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,35 +68,73 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             when (val response = getSchedulesFromApi()) {
                 is ApiResponse.Success -> {
                     val schedules = response.data
-                    
-                    // Extract unique time ranges from API data
-                    val uniqueTimeRanges = mutableSetOf<String>()
-                    val map = mutableMapOf<String, MutableList<TimeTableScheduleItem>>()
-
-                    for (s in schedules) {
-                        // Build time range key: "7:00 AM – 8:30 AM"
-                        val timeRange = "${s.time_start} – ${s.time_end}"
-                        uniqueTimeRanges.add(timeRange)
-                        
-                        // Build schedule map key
-                        val key = "${s.day_name}_${timeRange}"
-                        map.getOrPut(key) { mutableListOf() }
-                            .add(TimeTableScheduleItem(
-                                subject = s.subject_name ?: s.subject_code ?: "Unknown",
-                                section = s.section_name ?: "Unknown",
-                                teacher = s.teacher_name
-                            ))
-                    }
-
-                    // Convert to sorted list for display
-                    val sortedTimeRanges = uniqueTimeRanges.sorted()
-                    
-                    recyclerView.adapter = TimeTableAdapter(sortedTimeRanges, map)
+                    val timeSlotDataList = buildTimeSlotGrid(schedules)
+                    recyclerView.adapter = TimeSlotAdapter(timeSlotDataList)
                 }
                 is ApiResponse.Error -> {
                     Toast.makeText(this@AdminDashboardScheduleRoom, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun buildTimeSlotGrid(schedules: List<ScheduleItemResponse>): List<TimeSlotData> {
+        val days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        val result = mutableListOf<TimeSlotData>()
+
+        // For each time slot
+        for (timeSlot in allTimeSlots) {
+            val daySchedules = mutableMapOf<String, TimeSlotContent>()
+
+            // For each day
+            for (day in days) {
+                // Find if there's a schedule that covers this time slot
+                val matchingSchedule = schedules.find { schedule ->
+                    schedule.day_name == day && isTimeSlotInRange(timeSlot, schedule.time_start, schedule.time_end)
+                }
+
+                daySchedules[day] = if (matchingSchedule != null) {
+                    TimeSlotContent(
+                        subject = matchingSchedule.subject_name ?: matchingSchedule.subject_code ?: "Unknown",
+                        section = matchingSchedule.section_name ?: "Unknown",
+                        teacher = matchingSchedule.teacher_name,
+                        isFree = false
+                    )
+                } else {
+                    TimeSlotContent(
+                        subject = "Free",
+                        section = "",
+                        teacher = null,
+                        isFree = true
+                    )
+                }
+            }
+
+            result.add(TimeSlotData(timeSlot, daySchedules))
+        }
+
+        return result
+    }
+
+    private fun isTimeSlotInRange(timeSlot: String, startTime: String, endTime: String): Boolean {
+        return try {
+            val slotMinutes = timeToMinutes(timeSlot)
+            val startMinutes = timeToMinutes(startTime)
+            val endMinutes = timeToMinutes(endTime)
+            slotMinutes >= startMinutes && slotMinutes < endMinutes
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun timeToMinutes(time: String): Int {
+        return try {
+            val parts = time.trim().split(":")
+            val hours = parts[0].toInt()
+            val minutes = parts[1].toInt()
+            hours * 60 + minutes
+        } catch (e: Exception) {
+            0
         }
     }
 
