@@ -15,41 +15,41 @@ $today = date("l");
 try {
     // Get total counts
     $stats = [];
-
+    
     // Total teachers
     $result = $conn->query("SELECT COUNT(*) as count FROM Teacher");
     $stats['total_teachers'] = $result->fetch_assoc()['count'];
-
+    
     // Total subjects
     $result = $conn->query("SELECT COUNT(*) as count FROM Subject");
     $stats['total_subjects'] = $result->fetch_assoc()['count'];
-
+    
     // Total sections
     $result = $conn->query("SELECT COUNT(*) as count FROM Section");
     $stats['total_sections'] = $result->fetch_assoc()['count'];
-
+    
     // Total rooms
     $result = $conn->query("SELECT COUNT(*) as count FROM Room");
     $stats['total_rooms'] = $result->fetch_assoc()['count'];
-
+    
     // Total schedules
     $result = $conn->query("SELECT COUNT(*) as count FROM Schedule");
     $stats['total_schedules'] = $result->fetch_assoc()['count'];
-
+    
     // Schedules by status
     $result = $conn->query("
-        SELECT schedule_status, COUNT(*) as count
-        FROM Schedule
+        SELECT schedule_status, COUNT(*) as count 
+        FROM Schedule 
         GROUP BY schedule_status
     ");
     $stats['schedules_by_status'] = [];
     while ($row = $result->fetch_assoc()) {
         $stats['schedules_by_status'][$row['schedule_status']] = (int)$row['count'];
     }
-
+    
     // Today's schedule
     $query = "
-    SELECT
+    SELECT 
         s.schedule_ID,
         DATE_FORMAT(t.time_start, '%h:%i %p') AS time_start,
         DATE_FORMAT(t.time_end, '%h:%i %p') AS time_end,
@@ -72,7 +72,7 @@ try {
     WHERE d.day_name = '$today'
     ORDER BY t.time_start
     ";
-
+    
     $result = $conn->query($query);
     $today_schedules = [];
     while ($row = $result->fetch_assoc()) {
@@ -89,10 +89,10 @@ try {
             'schedule_status' => $row['schedule_status']
         ];
     }
-
+    
     // Recent schedules (last 10)
     $query = "
-    SELECT
+    SELECT 
         s.schedule_ID,
         d.day_name,
         DATE_FORMAT(t.time_start, '%h:%i %p') AS time_start,
@@ -113,7 +113,7 @@ try {
     ORDER BY s.schedule_ID DESC
     LIMIT 10
     ";
-
+    
     $result = $conn->query($query);
     $recent_schedules = [];
     while ($row = $result->fetch_assoc()) {
@@ -128,7 +128,7 @@ try {
             'teacher_name' => trim($row['teacher_name'])
         ];
     }
-
+    
     http_response_code(200);
     echo json_encode([
         'success' => true,
@@ -137,7 +137,7 @@ try {
         'today_schedules' => $today_schedules,
         'recent_schedules' => $recent_schedules
     ]);
-
+    
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([

@@ -18,7 +18,7 @@ $section_id = isset($_GET['section_id']) ? intval($_GET['section_id']) : null;
 
 // Build query
 $query = "
-SELECT
+SELECT 
     s.schedule_ID,
     d.day_name,
     DATE_FORMAT(t.time_start, '%h:%i %p') AS time_start,
@@ -67,7 +67,7 @@ if ($section_id) {
     $types .= 'i';
 }
 
-$query .= " ORDER BY
+$query .= " ORDER BY 
     FIELD(d.day_name, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
     t.time_start
 ";

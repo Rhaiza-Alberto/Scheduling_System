@@ -23,7 +23,7 @@ $today = date("l"); // Get current day name
 
 // Query to get teacher's schedule
 $query = "
-SELECT
+SELECT 
     s.schedule_ID,
     d.day_name,
     DATE_FORMAT(t.time_start, '%h:%i %p') AS time_start,
@@ -42,7 +42,7 @@ JOIN Subject sub ON s.subject_ID = sub.subject_ID
 JOIN Section sec ON s.section_ID = sec.section_ID
 JOIN Room r ON s.room_ID = r.room_ID
 WHERE s.teacher_ID = ?
-ORDER BY
+ORDER BY 
     FIELD(d.day_name, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
     t.time_start
 ";

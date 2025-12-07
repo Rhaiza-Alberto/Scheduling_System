@@ -9,35 +9,22 @@ if ($conn->connect_error) {
     exit();
 }
 
-// Optional: Later you can filter by teacher, schedule, etc.
-// For now, return ALL rooms with current status
-$sql = "SELECT
+$sql = "SELECT 
             r.room_ID,
             r.room_name,
-            r.room_capacity,
-            COALESCE(b.status, 'Available') AS status
+            r.room_capacity
         FROM Room r
-        LEFT JOIN (
-            SELECT room_ID, 'Occupied' AS status
-            FROM Booking
-            WHERE NOW() BETWEEN booking_start AND booking_end
-              AND booking_status = 'Approved'
-        ) b ON r.room_ID = b.room_ID
         ORDER BY r.room_name";
 
 $result = $conn->query($sql);
 
 $rooms = [];
 while ($row = $result->fetch_assoc()) {
-    $isAvailable = ($row['status'] !== 'Occupied');
-    $statusText = $isAvailable ? "Available" : "Occupied";
-
+    $room_name_with_linebreak = "\n";
     $rooms[] = [
         "id" => (int)$row['room_ID'],
         "name" => $row['room_name'],
-        "capacity" => (int)$row['room_capacity'],
-        "status" => $statusText,
-        "isAvailable" => $isAvailable
+        "capacity" => (int)$row['room_capacity']
     ];
 }
 

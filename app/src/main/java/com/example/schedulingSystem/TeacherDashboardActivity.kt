@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -26,8 +25,6 @@ class TeacherDashboardActivity : AppCompatActivity() {
     private lateinit var tvProfName: TextView
     private lateinit var tvGreeting: TextView
     private lateinit var btnSettings: ImageView
-    private lateinit var btnDay: MaterialButton
-    private lateinit var btnWeek: MaterialButton
     private lateinit var tvListHeader: TextView
 
     private val client = OkHttpClient.Builder()
@@ -76,56 +73,12 @@ class TeacherDashboardActivity : AppCompatActivity() {
         tvProfName = findViewById(R.id.tvProfName)
         tvGreeting = findViewById(R.id.tvGreeting)
         btnSettings = findViewById(R.id.btnSettings)
-//        btnDay = findViewById(R.id.btnDay)
-//        btnWeek = findViewById(R.id.btnWeek)
         tvListHeader = findViewById(R.id.tvListHeader)
     }
 
     private fun setupClickListeners() {
         btnSettings.setOnClickListener {
             performLogout()
-        }
-
-        btnDay.setOnClickListener {
-            if (currentView != "day") {
-                currentView = "day"
-                updateViewToggle()
-                loadRoomsFromApi()
-            }
-        }
-
-        btnWeek.setOnClickListener {
-            if (currentView != "week") {
-                currentView = "week"
-                updateViewToggle()
-                loadRoomsFromApi()
-            }
-        }
-    }
-
-    private fun updateViewToggle() {
-        if (currentView == "day") {
-            // Day button active
-            btnDay.setBackgroundColor(getColor(R.color.black))
-            btnDay.setTextColor(getColor(R.color.white))
-
-            // Week button inactive
-            btnWeek.setBackgroundColor(getColor(R.color.white))
-            btnWeek.setTextColor(getColor(R.color.text_primary))
-
-            // Update header
-            tvListHeader.text = getString(R.string.schedule_for_today)
-        } else {
-            // Week button active
-            btnWeek.setBackgroundColor(getColor(R.color.black))
-            btnWeek.setTextColor(getColor(R.color.white))
-
-            // Day button inactive
-            btnDay.setBackgroundColor(getColor(R.color.white))
-            btnDay.setTextColor(getColor(R.color.text_primary))
-
-            // Update header
-            tvListHeader.text = getString(R.string.schedule_for_week)
         }
     }
 
