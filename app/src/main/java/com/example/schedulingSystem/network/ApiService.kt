@@ -153,6 +153,51 @@ object ApiService {
             }
         }
     }
+
+    /**
+     * Get all schedules with optional filters
+     */
+    suspend fun getAllSchedules(
+        day: String? = null,
+        roomId: Int? = null,
+        sectionId: Int? = null
+    ): ApiResponse<SchedulesResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                var url = "$BASE_URL/get_all_schedules.php"
+                val params = mutableListOf<String>()
+
+                if (day != null) params.add("day=$day")
+                if (roomId != null) params.add("room_id=$roomId")
+                if (sectionId != null) params.add("section_id=$sectionId")
+
+                if (params.isNotEmpty()) {
+                    url += "?" + params.joinToString("&")
+                }
+
+                val request = Request.Builder()
+                    .url(url)
+                    .get()
+                    .build()
+
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string()
+
+                if (response.isSuccessful && responseBody != null) {
+                    val schedulesResponse = gson.fromJson(responseBody, SchedulesResponse::class.java)
+                    if (schedulesResponse.success) {
+                        ApiResponse.Success(schedulesResponse)
+                    } else {
+                        ApiResponse.Error(schedulesResponse.message ?: "Failed to get schedules")
+                    }
+                } else {
+                    ApiResponse.Error("Server error: ${response.code}")
+                }
+            } catch (e: Exception) {
+                ApiResponse.Error("Network error: ${e.message}")
+            }
+        }
+    }
 }
 
 // Response wrapper
@@ -185,6 +230,30 @@ data class AccountTypesResponse(
 data class AccountType(
     val account_ID: Int,
     val account_name: String
+)
+
+data class SchedulesResponse(
+    val success: Boolean,
+    val message: String?,
+    val count: Int?,
+    val schedules: List<ScheduleItemResponse>?
+)
+
+data class ScheduleItemResponse(
+    val schedule_ID: Int,
+    val day_name: String,
+    val time_start: String,
+    val time_end: String,
+    val raw_start: String,
+    val raw_end: String,
+    val subject_code: String,
+    val subject_name: String,
+    val section_name: String,
+    val section_year: Int,
+    val room_name: String,
+    val room_capacity: Int,
+    val teacher_name: String,
+    val schedule_status: String
 )
 
 // ScheduleItem is already defined in Schedule.kt

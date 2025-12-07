@@ -6,19 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
-import com.example.schedulingSystem.ScheduleItem
 
 
 //val ScheduleItem.sectionDisplay: String
 //    get() = "${sectionName ?: "Unknown"} (Year $sectionYear)"
-//
-//val ScheduleItem.subjectDisplay: String
-//    get() = subjectName?.uppercase() ?: "No Subject Name"
 
 
 class TimeTableAdapter(
     private val timeSlots: List<String>, // e.g. "7:00 AM", "7:30 AM"
-    private val scheduleMap: Map<String, List<ScheduleItem>> // day_time → list of classes
+    private val scheduleMap: MutableMap<String, MutableList<com.example.schedulingSystem.fragments.TimeTableScheduleItem>> // day_time → list of classes
 ) : RecyclerView.Adapter<TimeTableAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -47,11 +43,10 @@ class TimeTableAdapter(
         for (i in days.indices) {
             val key = "${days[i]}_$time"
             val classes = scheduleMap[key] ?: emptyList()
-            holder.cells[i].text = if (classes.isEmpty()) "Free" else classes.joinToString("\n") { "${it.subjectName}\n${it.sectionName}" }
+            holder.cells[i].text = if (classes.isEmpty()) "Free" else classes.joinToString("\n") { "${it.subject}\n${it.section}" }
             holder.cells[i].setBackgroundColor(
                 if (classes.isNotEmpty()) 0xFFE3F2FD.toInt() else 0xFFFFFFFF.toInt()
             )
-
         }
     }
 
