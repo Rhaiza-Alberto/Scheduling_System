@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#f9f9f9"
+    android:padding="4dp">
+
+    <!-- Time Label -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:background="#ecf0f1"
+        android:textStyle="bold"
+        android:textColor="#2c3e50"
+        android:textSize="12sp" />
+
+    <!-- 7 Day Cells -->
+    <TextView android:id="@+id/tvMon" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvTue" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvWed" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvThu" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvFri" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvSat" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+    <TextView android:id="@+id/tvSun" android:layout_width="0dp" android:layout_weight="1" android:layout_height="80dp" android:gravity="center" android:padding="4dp" android:textSize="11sp" android:background="#ffffff" android:layout_margin="1dp" />
+
+</LinearLayout>

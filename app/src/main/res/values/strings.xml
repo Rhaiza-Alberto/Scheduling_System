@@ -61,7 +61,6 @@
     <string name="building_a_2nd_floor">Building A, 2nd Floor</string>
     <string name="date">DATE</string>
     <string name="oct_24_2023">Oct 24, 2023</string>
-    <string name="time">TIME</string>
     <string name="_10_00_11_30_am">10:00 – 11:30 AM</string>
     <string name="request_information">Request Information</string>
     <string name="prof_sherard_chris">Prof. Sherard Chris</string>
@@ -160,6 +159,19 @@
     <string name="room_capacity_format">%1$s • %2$d seats</string>
     <string name="room_capacity_format_one">%1$s • %2$d seat</string>
 
+    <!-- Room Schedule || Admin: Dashboard-->
+    <string name="admin_manage_schedule">Manage Schedule</string>
+    <string name="room_name">Room</string>
+    <string name="time">Time</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+
     <string name="admin_manage_users">Manage Users</string>
     <string name="admin_manage_rooms">Manage Rooms</string>
     <string name="edit_user">Edit user</string>
@@ -171,6 +183,9 @@
     <string name="schedule_for_week">Schedule for The Week</string>
     <string name="day">day</string>
     <string name="week">week</string>
+
+
+
 
     <!-- Day/Week View Toggle Buttons - NEWLY ADDED -->
     <string name="day_view">Day</string>

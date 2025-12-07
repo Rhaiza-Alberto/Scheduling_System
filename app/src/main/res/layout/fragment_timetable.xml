@@ -1,0 +1,44 @@
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header: Days -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/primary_dark_green">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:text="@string/time"
+                android:gravity="center"
+                android:background="@color/primary_dark_green"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/monday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/tuesday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/wednesday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/thursday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/friday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/saturday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="@string/sunday" android:gravity="center" android:background="@color/primary_dark_green" android:textColor="@color/white" android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- RecyclerView for time rows -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/containerRooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
