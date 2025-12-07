@@ -55,10 +55,18 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             when (val response = getSchedulesFromApi()) {
                 is ApiResponse.Success -> {
                     val schedules = response.data
+                    
+                    // Extract unique time ranges from API data
+                    val uniqueTimeRanges = mutableSetOf<String>()
                     val map = mutableMapOf<String, MutableList<TimeTableScheduleItem>>()
 
                     for (s in schedules) {
-                        val key = "${s.day_name}_${s.time_start}"
+                        // Build time range key: "7:00 AM – 8:30 AM"
+                        val timeRange = "${s.time_start} – ${s.time_end}"
+                        uniqueTimeRanges.add(timeRange)
+                        
+                        // Build schedule map key
+                        val key = "${s.day_name}_${timeRange}"
                         map.getOrPut(key) { mutableListOf() }
                             .add(TimeTableScheduleItem(
                                 subject = s.subject_name ?: s.subject_code ?: "Unknown",
@@ -67,7 +75,10 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                             ))
                     }
 
-                    recyclerView.adapter = TimeTableAdapter(timeSlots, map)
+                    // Convert to sorted list for display
+                    val sortedTimeRanges = uniqueTimeRanges.sorted()
+                    
+                    recyclerView.adapter = TimeTableAdapter(sortedTimeRanges, map)
                 }
                 is ApiResponse.Error -> {
                     Toast.makeText(this@AdminDashboardScheduleRoom, "Error: ${response.message}", Toast.LENGTH_SHORT).show()

@@ -13,8 +13,8 @@ import com.example.schedulingSystem.R
 
 
 class TimeTableAdapter(
-    private val timeSlots: List<String>, // e.g. "7:00 AM", "7:30 AM"
-    private val scheduleMap: MutableMap<String, MutableList<com.example.schedulingSystem.fragments.TimeTableScheduleItem>> // day_time → list of classes
+    private val timeRanges: List<String>, // e.g. "7:00 AM – 8:30 AM", "8:30 AM – 10:00 AM"
+    private val scheduleMap: MutableMap<String, MutableList<com.example.schedulingSystem.fragments.TimeTableScheduleItem>> // day_timeRange → list of classes
 ) : RecyclerView.Adapter<TimeTableAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -36,20 +36,12 @@ class TimeTableAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val time = timeSlots[position]
-        
-        // Format time as range (e.g., "7:00 – 8:30")
-        val nextIndex = position + 1
-        val timeRange = if (nextIndex < timeSlots.size) {
-            "${time} – ${timeSlots[nextIndex]}"
-        } else {
-            time
-        }
+        val timeRange = timeRanges[position]
         holder.tvTime.text = timeRange
 
         val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
         for (i in days.indices) {
-            val key = "${days[i]}_$time"
+            val key = "${days[i]}_${timeRange}"
             val classes = scheduleMap[key] ?: emptyList()
             
             // Format: Subject\nSection\nTeacher
@@ -62,5 +54,5 @@ class TimeTableAdapter(
         }
     }
 
-    override fun getItemCount() = timeSlots.size
+    override fun getItemCount() = timeRanges.size
 }
