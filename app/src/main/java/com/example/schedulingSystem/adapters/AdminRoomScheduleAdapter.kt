@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.models.RoomItem
 
-class AdminRoomScheduleAdapter : RecyclerView.Adapter<AdminRoomScheduleAdapter.RoomViewHolder>() {
+class AdminRoomScheduleAdapter(
+    private val onRoomClick: ((RoomItem) -> Unit)? = null
+) : RecyclerView.Adapter<AdminRoomScheduleAdapter.RoomViewHolder>() {
 
     private var rooms = emptyList<RoomItem>()
 
@@ -40,6 +42,11 @@ class AdminRoomScheduleAdapter : RecyclerView.Adapter<AdminRoomScheduleAdapter.R
                 room.roomCapacity
             )
             tvRoomName.text = capacityText
+
+            // Add click listener
+            itemView.setOnClickListener {
+                onRoomClick?.invoke(room)
+            }
         }
     }
 }

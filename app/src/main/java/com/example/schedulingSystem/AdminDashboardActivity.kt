@@ -61,7 +61,13 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         // Initialize RecyclerView (this is the important part!)
         rvRooms = findViewById(R.id.containerRooms)
-        roomAdapter = AdminRoomScheduleAdapter()
+        roomAdapter = AdminRoomScheduleAdapter { room ->
+            // Navigate to AdminDashboardScheduleRoom with room ID
+            val intent = Intent(this, AdminDashboardScheduleRoom::class.java)
+            intent.putExtra("room_id", room.roomId)
+            intent.putExtra("room_name", room.roomName)
+            startActivity(intent)
+        }
         rvRooms.apply {
             layoutManager = LinearLayoutManager(this@AdminDashboardActivity)
             adapter = roomAdapter

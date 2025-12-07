@@ -30,6 +30,10 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_room_schedule)
 
+        // Get room info from intent
+        val roomId = intent.getIntExtra("room_id", -1)
+        val roomName = intent.getStringExtra("room_name") ?: "Room"
+
         // Initialize views
         recyclerView = findViewById(R.id.containerRooms)
         btnSettings = findViewById(R.id.btnSettings)
@@ -42,7 +46,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             logout()
         }
 
-        // Load schedule data
+        // Load schedule data for this room
         loadSchedule()
     }
 
