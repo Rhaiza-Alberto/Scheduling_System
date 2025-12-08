@@ -4,11 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.schedulingSystem.fragments.EditRoomDialogFragment
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.models.RoomItem
 
-class AdminRoomAdapter : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>() {
+class AdminRoomAdapter(
+    private val activity: FragmentActivity,
+    private val onRoomUpdated: () -> Unit
+) : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>() {
 
     private var rooms = emptyList<RoomItem>()
 
@@ -40,6 +45,20 @@ class AdminRoomAdapter : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>()
                 room.roomCapacity
             )
             tvRoomName.text = capacityText
+
+            // Long click to edit room
+            itemView.setOnLongClickListener {
+                val dialog = EditRoomDialogFragment.newInstance(
+                    room.roomId,
+                    room.roomName,
+                    room.roomCapacity
+                )
+                dialog.setOnRoomUpdatedListener {
+                    onRoomUpdated()
+                }
+                dialog.show(activity.supportFragmentManager, "EditRoomDialog")
+                true
+            }
         }
     }
 }

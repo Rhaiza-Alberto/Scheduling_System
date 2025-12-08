@@ -52,7 +52,7 @@ class AdminManageRoomsActivity : AppCompatActivity() {
 
         // Setup RecyclerView
         rvRooms = findViewById(R.id.containerRooms)
-        roomAdapter = AdminRoomAdapter()
+        roomAdapter = AdminRoomAdapter(this, ::loadRoomsFromApi)
         rvRooms.apply {
             layoutManager = LinearLayoutManager(this@AdminManageRoomsActivity)
             adapter = roomAdapter
