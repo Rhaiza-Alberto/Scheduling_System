@@ -3,11 +3,12 @@ package com.example.schedulingSystem.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.schedulingSystem.fragments.EditRoomDialogFragment
 import com.example.schedulingSystem.R
+import com.example.schedulingSystem.fragments.EditRoomDialogFragment
 import com.example.schedulingSystem.models.RoomItem
 
 class AdminRoomAdapter(
@@ -36,9 +37,11 @@ class AdminRoomAdapter(
 
     inner class RoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvRoomName: TextView = itemView.findViewById(R.id.tvRoomName)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit1)
+        private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete1) // optional
 
         fun bind(room: RoomItem) {
-            // Only show: "Room Name • 30 seats" - clean and translatable
+            // Show room name + capacity
             val capacityText = itemView.context.getString(
                 R.string.room_capacity_format,
                 room.roomName,
@@ -46,18 +49,26 @@ class AdminRoomAdapter(
             )
             tvRoomName.text = capacityText
 
-            // Long click to edit room
-            itemView.setOnLongClickListener {
+            // EDIT BUTTON CLICK → Open dialog
+            btnEdit.setOnClickListener {
                 val dialog = EditRoomDialogFragment.newInstance(
-                    room.roomId,
-                    room.roomName,
-                    room.roomCapacity
+                    roomId = room.roomId,
+                    roomName = room.roomName,
+                    roomCapacity = room.roomCapacity
                 )
+
+                // Refresh list after update
                 dialog.setOnRoomUpdatedListener {
                     onRoomUpdated()
                 }
+
                 dialog.show(activity.supportFragmentManager, "EditRoomDialog")
-                true
+            }
+
+            // Optional: DELETE BUTTON (you can implement later)
+            btnDelete.setOnClickListener {
+                // TODO: Add delete confirmation + API call
+                // showDeleteConfirmation(room)
             }
         }
     }
