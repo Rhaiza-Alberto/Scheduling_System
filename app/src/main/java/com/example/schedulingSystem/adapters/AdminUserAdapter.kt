@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +21,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import java.util.Locale
 
-class AdminUserAdapter  : ListAdapter<User, AdminUserAdapter.UserViewHolder>(UserDiffCallback()) {
+class AdminUserAdapter(
+    private val activity: FragmentActivity,
+    private val onUserUpdated: () -> Unit
+) : ListAdapter<User, AdminUserAdapter.UserViewHolder>(UserDiffCallback()) {
 
     companion object {
         private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
@@ -38,10 +41,10 @@ class AdminUserAdapter  : ListAdapter<User, AdminUserAdapter.UserViewHolder>(Use
         holder.bind(getItem(position))
     }
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvName = itemView.findViewById<TextView>(R.id.tvUserName)
-        private val tvEmail = itemView.findViewById<TextView>(R.id.tvUserEmail)
-        private val tvType = itemView.findViewById<TextView>(R.id.tvUserType)
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvName: TextView = itemView.findViewById(R.id.tvUserName)
+        private val tvEmail: TextView = itemView.findViewById(R.id.tvUserEmail)
+        private val tvType: TextView = itemView.findViewById(R.id.tvUserType)
         private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit1)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete1)
 
@@ -49,35 +52,35 @@ class AdminUserAdapter  : ListAdapter<User, AdminUserAdapter.UserViewHolder>(Use
             tvName.text = user.fullName
             tvEmail.text = user.email
 
-            // Capitalize account type: "teacher" → "Teacher"
+            // Capitalize role
             tvType.text = user.accountType.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                if (it.isLowerCase()) it.titlecase() else it.toString()
             }
 
-            val context = itemView.context
             val isAdmin = user.accountType.equals("admin", ignoreCase = true)
             tvType.setTextColor(
-                context.getColor(if (isAdmin) R.color.orange else R.color.primary_dark_green)
+                itemView.context.getColor(if (isAdmin) R.color.orange else R.color.primary_dark_green)
             )
+
+            // EDIT BUTTON (you can implement later)
+            btnEdit.setOnClickListener {
+                Toast.makeText(itemView.context, "Edit user - Coming soon", Toast.LENGTH_SHORT).show()
+            }
+
+            // DELETE BUTTON → Soft Delete
             btnDelete.setOnClickListener {
                 androidx.appcompat.app.AlertDialog.Builder(itemView.context)
-                    .setTitle("Remove Person")
-                    .setMessage("Remove \"${user.firstName} ${user.lastName}\" from the list?\n\nYou can restore it later.")
+                    .setTitle("Remove User")
+                    .setMessage("Remove \"${user.fullName}\" from the system?\n\nThis is reversible.")
                     .setPositiveButton("Remove") { _, _ ->
-                        softDeleteRoom(user.personId)
+                        softDeleteUser(user.personId)
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
             }
-
-            // Optional status (you can hide this view if not used)
-//            tvStatus?.let {
-//                it.text = if (isAdmin) "Administrator" else "Active"
-//                it.setTextColor(context.getColor(if (isAdmin) R.color.orange else R.color.primary_dark_green))
-//            }
         }
 
-        private fun softDeleteRoom(personId: Int) {
+        private fun softDeleteUser(personId: Int) {
             val json = JSONObject().apply { put("person_id", personId) }
             val body = json.toString().toRequestBody("application/json".toMediaType())
 
@@ -100,12 +103,16 @@ class AdminUserAdapter  : ListAdapter<User, AdminUserAdapter.UserViewHolder>(Use
                         ).show()
 
                         if (result.getBoolean("success")) {
-                            onRoomUpdated() // Refresh list
+                            onUserUpdated() // Refresh the list
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(itemView.context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            itemView.context,
+                            "Delete failed: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

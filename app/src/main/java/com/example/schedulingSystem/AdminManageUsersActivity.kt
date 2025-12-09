@@ -59,7 +59,7 @@ class AdminManageUsersActivity : AppCompatActivity() {
 
         // Setup RecyclerView
         rvUsers = findViewById(R.id.containerRooms) // Reusing same container
-        userAdapter = AdminUserAdapter()
+        userAdapter = AdminUserAdapter(this, ::loadUsersFromApi)
         rvUsers.apply {
             layoutManager = LinearLayoutManager(this@AdminManageUsersActivity)
             adapter = userAdapter

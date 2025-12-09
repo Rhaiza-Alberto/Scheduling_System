@@ -12,9 +12,7 @@ import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.adapters.AdminRoomAdapter
-import com.example.schedulingSystem.adapters.AdminRoomScheduleAdapter
 import com.example.schedulingSystem.models.RoomItem
-import com.example.schedulingSystem.models.UserItem
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request

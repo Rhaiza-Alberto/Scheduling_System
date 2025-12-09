@@ -7,11 +7,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
-import com.example.schedulingSystem.models.User
+import com.example.schedulingSystem.fragments.EditRoomDialogFragment
+import com.example.schedulingSystem.models.RoomItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,70 +21,77 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-class AdminUserAdapter(
+
+class AdminRoomAdapter(
     private val activity: FragmentActivity,
-    private val onUserUpdated: () -> Unit
-) : ListAdapter<User, AdminUserAdapter.UserViewHolder>(UserDiffCallback()) {
+    private val onRoomUpdated: () -> Unit
+) : RecyclerView.Adapter<AdminRoomAdapter.RoomViewHolder>() {
+
+    private var rooms = emptyList<RoomItem>()
 
     companion object {
         private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+    fun submitList(newRooms: List<RoomItem>) {
+        rooms = newRooms
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_admin_edit_users, parent, false)
-        return UserViewHolder(view)
+            .inflate(R.layout.item_edit_room, parent, false)
+        return RoomViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
+        holder.bind(rooms[position])
     }
 
-    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvName: TextView = itemView.findViewById(R.id.tvUserName)
-        private val tvEmail: TextView = itemView.findViewById(R.id.tvUserEmail)
-        private val tvType: TextView = itemView.findViewById(R.id.tvUserType)
+    override fun getItemCount() = rooms.size
+
+    inner class RoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvRoomName: TextView = itemView.findViewById(R.id.tvRoomName)
         private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit1)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete1)
 
-        fun bind(user: User) {
-            tvName.text = user.fullName
-            tvEmail.text = user.email
-
-            // Capitalize role
-            tvType.text = user.accountType.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase() else it.toString()
-            }
-
-            val isAdmin = user.accountType.equals("admin", ignoreCase = true)
-            tvType.setTextColor(
-                itemView.context.getColor(if (isAdmin) R.color.orange else R.color.primary_dark_green)
+        fun bind(room: RoomItem) {
+            tvRoomName.text = itemView.context.getString(
+                R.string.room_capacity_format,
+                room.roomName,
+                room.roomCapacity
             )
 
-            // EDIT BUTTON (you can implement later)
+            // EDIT
             btnEdit.setOnClickListener {
-                Toast.makeText(itemView.context, "Edit user - Coming soon", Toast.LENGTH_SHORT).show()
+                val dialog = EditRoomDialogFragment.newInstance(
+                    roomId = room.roomId,
+                    roomName = room.roomName,
+                    roomCapacity = room.roomCapacity
+                )
+                dialog.setOnRoomUpdatedListener { onRoomUpdated() }
+                dialog.show(activity.supportFragmentManager, "EditRoom")
             }
 
-            // DELETE BUTTON → Soft Delete
+            // DELETE (Soft Delete)
             btnDelete.setOnClickListener {
                 androidx.appcompat.app.AlertDialog.Builder(itemView.context)
-                    .setTitle("Remove User")
-                    .setMessage("Remove \"${user.fullName}\" from the system?\n\nThis is reversible.")
+                    .setTitle("Remove Room")
+                    .setMessage("Remove \"${room.roomName}\" from the list?\n\nYou can restore it later.")
                     .setPositiveButton("Remove") { _, _ ->
-                        softDeleteUser(user.personId)
+                        softDeleteRoom(room.roomId)
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
             }
         }
 
-        private fun softDeleteUser(personId: Int) {
-            val json = JSONObject().apply { put("person_id", personId) }
+        private fun softDeleteRoom(roomId: Int) {
+            val json = JSONObject().apply { put("room_id", roomId) }
             val body = json.toString().toRequestBody("application/json".toMediaType())
 
             val request = Request.Builder()
-                .url("$BACKEND_URL/soft_delete_user.php")
+                .url("$BACKEND_URL/soft_delete_room.php")
                 .post(body)
                 .build()
 
@@ -103,27 +109,17 @@ class AdminUserAdapter(
                         ).show()
 
                         if (result.getBoolean("success")) {
-                            onUserUpdated() // Refresh the list
+                            onRoomUpdated() // Refresh list
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            itemView.context,
-                            "Delete failed: ${e.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(itemView.context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
     }
 
-    class UserDiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem.personId == newItem.personId
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
-            oldItem == newItem
-    }
 }
