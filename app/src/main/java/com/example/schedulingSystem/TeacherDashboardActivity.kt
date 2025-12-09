@@ -1,43 +1,38 @@
 package com.example.schedulingSystem
 
-import com.example.schedulingSystem.models.RoomAvailability
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
+import com.example.schedulingSystem.models.TeacherScheduleItem
+import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class TeacherDashboardActivity : AppCompatActivity() {
 
-    private lateinit var rvRooms: RecyclerView
+    private lateinit var rvSchedule: RecyclerView
     private lateinit var tvProfName: TextView
     private lateinit var tvGreeting: TextView
     private lateinit var btnSettings: ImageView
     private lateinit var tvListHeader: TextView
+    private lateinit var btnDay: MaterialButton
+    private lateinit var btnWeek: MaterialButton
 
-    private val client = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
-        .build()
-
-    private val roomAdapter = TeacherRoomAdapter()
+    private val scheduleAdapter = TeacherScheduleAdapter()
     private var currentView = "day" // "day" or "week"
 
-    companion object {
-        private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
-    }
+    // Store all mock data
+    private val allSchedules = mutableListOf<TeacherScheduleItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,20 +60,72 @@ class TeacherDashboardActivity : AppCompatActivity() {
         setupClickListeners()
         updateUserName()
         setupRecyclerView()
-        loadRoomsFromApi()
+        generateMockData()
+        filterAndDisplaySchedule()
     }
 
     private fun initViews() {
-        rvRooms = findViewById(R.id.rvRooms)
+        rvSchedule = findViewById(R.id.rvSchedule)
         tvProfName = findViewById(R.id.tvProfName)
         tvGreeting = findViewById(R.id.tvGreeting)
         btnSettings = findViewById(R.id.btnSettings)
         tvListHeader = findViewById(R.id.tvListHeader)
+        btnDay = findViewById(R.id.btnDay)
+        btnWeek = findViewById(R.id.btnWeek)
     }
 
     private fun setupClickListeners() {
         btnSettings.setOnClickListener {
             performLogout()
+        }
+
+        // Day View Button
+        btnDay.setOnClickListener {
+            currentView = "day"
+            updateViewToggleButtons()
+            filterAndDisplaySchedule()
+        }
+
+        // Week View Button
+        btnWeek.setOnClickListener {
+            currentView = "week"
+            updateViewToggleButtons()
+            filterAndDisplaySchedule()
+        }
+
+        // Room Schedules Tab (disabled/placeholder)
+        findViewById<TextView>(R.id.tabRoomSchedules).setOnClickListener {
+            Toast.makeText(this, "Room Schedules - Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateViewToggleButtons() {
+        if (currentView == "day") {
+            // Day button active
+            btnDay.apply {
+                backgroundTintList = ContextCompat.getColorStateList(this@TeacherDashboardActivity, R.color.primary_green)
+                setTextColor(ContextCompat.getColor(this@TeacherDashboardActivity, R.color.white))
+                strokeWidth = 0
+            }
+            // Week button inactive
+            btnWeek.apply {
+                backgroundTintList = ContextCompat.getColorStateList(this@TeacherDashboardActivity, R.color.white)
+                setTextColor(ContextCompat.getColor(this@TeacherDashboardActivity, R.color.primary_green))
+                strokeWidth = 4
+            }
+        } else {
+            // Week button active
+            btnWeek.apply {
+                backgroundTintList = ContextCompat.getColorStateList(this@TeacherDashboardActivity, R.color.primary_green)
+                setTextColor(ContextCompat.getColor(this@TeacherDashboardActivity, R.color.white))
+                strokeWidth = 0
+            }
+            // Day button inactive
+            btnDay.apply {
+                backgroundTintList = ContextCompat.getColorStateList(this@TeacherDashboardActivity, R.color.white)
+                setTextColor(ContextCompat.getColor(this@TeacherDashboardActivity, R.color.primary_green))
+                strokeWidth = 4
+            }
         }
     }
 
@@ -91,84 +138,262 @@ class TeacherDashboardActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        rvRooms.layoutManager = LinearLayoutManager(this)
-        rvRooms.adapter = roomAdapter
+        rvSchedule.layoutManager = LinearLayoutManager(this)
+        rvSchedule.adapter = scheduleAdapter
     }
 
-    private fun loadRoomsFromApi() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Get current date
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val currentDate = dateFormat.format(Date())
+    private fun generateMockData() {
+        // Get current day
+        val dateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+        val currentDay = dateFormat.format(Date())
 
-                // Build URL with view type parameter
-                val url = if (currentView == "day") {
-                    "$BACKEND_URL/get_rooms_schedule.php?view=day&date=$currentDate"
-                } else {
-                    "$BACKEND_URL/get_rooms_schedule.php?view=week&date=$currentDate"
-                }
+        // Define week days
+        val days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 
-                val request = Request.Builder()
-                    .url(url)
-                    .build()
+        // Mock schedule data
+        val mockSchedules = listOf(
+            // Monday
+            TeacherScheduleItem(
+                scheduleId = 1,
+                dayName = "Monday",
+                timeStart = "08:00 AM",
+                timeEnd = "09:30 AM",
+                subjectCode = "CC 101",
+                subjectName = "Computer Programming",
+                sectionName = "IT 1A",
+                sectionYear = 1,
+                roomName = "Lab 101",
+                roomCapacity = 40,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Monday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 2,
+                dayName = "Monday",
+                timeStart = "10:00 AM",
+                timeEnd = "11:30 AM",
+                subjectCode = "IT 201",
+                subjectName = "Data Structures",
+                sectionName = "IT 2B",
+                sectionYear = 2,
+                roomName = "Lab 102",
+                roomCapacity = 35,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Monday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 3,
+                dayName = "Monday",
+                timeStart = "01:00 PM",
+                timeEnd = "02:30 PM",
+                subjectCode = "CS 301",
+                subjectName = "Algorithm Analysis",
+                sectionName = "CS 3A",
+                sectionYear = 3,
+                roomName = "Room 204",
+                roomCapacity = 45,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Monday"
+            ),
 
-                val response = client.newCall(request).execute()
-                val jsonData = response.body?.string() ?: ""
+            // Tuesday
+            TeacherScheduleItem(
+                scheduleId = 4,
+                dayName = "Tuesday",
+                timeStart = "08:00 AM",
+                timeEnd = "09:30 AM",
+                subjectCode = "IT 201",
+                subjectName = "Data Structures",
+                sectionName = "IT 2A",
+                sectionYear = 2,
+                roomName = "Lab 103",
+                roomCapacity = 40,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Tuesday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 5,
+                dayName = "Tuesday",
+                timeStart = "11:00 AM",
+                timeEnd = "12:30 PM",
+                subjectCode = "CC 101",
+                subjectName = "Computer Programming",
+                sectionName = "IT 1B",
+                sectionYear = 1,
+                roomName = "Lab 101",
+                roomCapacity = 40,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Tuesday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 6,
+                dayName = "Tuesday",
+                timeStart = "02:00 PM",
+                timeEnd = "03:30 PM",
+                subjectCode = "CS 401",
+                subjectName = "Software Engineering",
+                sectionName = "CS 4A",
+                sectionYear = 4,
+                roomName = "Room 305",
+                roomCapacity = 50,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Tuesday"
+            ),
 
-                if (jsonData.isEmpty()) {
-                    Log.w("TeacherDashboard", "Empty response from get_rooms_schedule.php")
-                    return@launch
-                }
+            // Wednesday
+            TeacherScheduleItem(
+                scheduleId = 7,
+                dayName = "Wednesday",
+                timeStart = "09:00 AM",
+                timeEnd = "10:30 AM",
+                subjectCode = "CS 301",
+                subjectName = "Algorithm Analysis",
+                sectionName = "CS 3B",
+                sectionYear = 3,
+                roomName = "Room 205",
+                roomCapacity = 42,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Wednesday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 8,
+                dayName = "Wednesday",
+                timeStart = "01:00 PM",
+                timeEnd = "02:30 PM",
+                subjectCode = "IT 301",
+                subjectName = "Web Development",
+                sectionName = "IT 3A",
+                sectionYear = 3,
+                roomName = "Lab 104",
+                roomCapacity = 38,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Wednesday"
+            ),
 
-                val json = JSONObject(jsonData)
-                val success = json.optBoolean("success", false)
+            // Thursday
+            TeacherScheduleItem(
+                scheduleId = 9,
+                dayName = "Thursday",
+                timeStart = "08:00 AM",
+                timeEnd = "09:30 AM",
+                subjectCode = "CC 101",
+                subjectName = "Computer Programming",
+                sectionName = "IT 1C",
+                sectionYear = 1,
+                roomName = "Lab 102",
+                roomCapacity = 35,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Thursday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 10,
+                dayName = "Thursday",
+                timeStart = "10:00 AM",
+                timeEnd = "11:30 AM",
+                subjectCode = "IT 301",
+                subjectName = "Web Development",
+                sectionName = "IT 3B",
+                sectionYear = 3,
+                roomName = "Lab 103",
+                roomCapacity = 40,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Thursday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 11,
+                dayName = "Thursday",
+                timeStart = "02:00 PM",
+                timeEnd = "03:30 PM",
+                subjectCode = "CS 401",
+                subjectName = "Software Engineering",
+                sectionName = "CS 4B",
+                sectionYear = 4,
+                roomName = "Room 306",
+                roomCapacity = 48,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Thursday"
+            ),
 
-                if (success) {
-                    val roomsArray = json.optJSONArray("rooms")
-                    if (roomsArray != null) {
-                        val list = mutableListOf<RoomAvailability>()
+            // Friday
+            TeacherScheduleItem(
+                scheduleId = 12,
+                dayName = "Friday",
+                timeStart = "09:00 AM",
+                timeEnd = "10:30 AM",
+                subjectCode = "IT 201",
+                subjectName = "Data Structures",
+                sectionName = "IT 2C",
+                sectionYear = 2,
+                roomName = "Lab 101",
+                roomCapacity = 40,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Friday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 13,
+                dayName = "Friday",
+                timeStart = "11:00 AM",
+                timeEnd = "12:30 PM",
+                subjectCode = "CS 301",
+                subjectName = "Algorithm Analysis",
+                sectionName = "CS 3C",
+                sectionYear = 3,
+                roomName = "Room 206",
+                roomCapacity = 44,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Friday"
+            ),
+            TeacherScheduleItem(
+                scheduleId = 14,
+                dayName = "Friday",
+                timeStart = "01:30 PM",
+                timeEnd = "03:00 PM",
+                subjectCode = "IT 401",
+                subjectName = "Capstone Project",
+                sectionName = "IT 4A",
+                sectionYear = 4,
+                roomName = "Lab 105",
+                roomCapacity = 30,
+                scheduleStatus = "Completed",
+                isToday = currentDay == "Friday"
+            )
+        )
 
-                        for (i in 0 until roomsArray.length()) {
-                            try {
-                                val obj = roomsArray.getJSONObject(i)
-                                list.add(
-                                    RoomAvailability(
-                                        roomId = obj.getInt("room_ID"),
-                                        roomName = obj.getString("room_name"),
-                                        roomCapacity = obj.getInt("room_capacity"),
-                                        status = obj.optString("status", "Available"),
-                                        isAvailable = obj.optBoolean("isAvailable", true)
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                Log.e("TeacherDashboard", "Error parsing room at index $i: ${e.message}")
-                            }
-                        }
+        allSchedules.clear()
+        allSchedules.addAll(mockSchedules)
 
-                        withContext(Dispatchers.Main) {
-                            roomAdapter.submitList(list)
-                            Log.d("TeacherDashboard", "✓ Loaded ${list.size} rooms for $currentView view")
-                        }
-                    } else {
-                        Log.w("TeacherDashboard", "No rooms array in response")
-                    }
-                } else {
-                    val message = json.optString("message", "Failed to load rooms")
-                    Log.e("TeacherDashboard", "✗ API error: $message")
-                }
-            } catch (e: Exception) {
-                Log.e("TeacherDashboard", "✗ Error loading rooms: ${e.message}", e)
-            }
+        Log.d("TeacherDashboard", "Generated ${allSchedules.size} mock schedules. Current day: $currentDay")
+    }
+
+    private fun filterAndDisplaySchedule() {
+        val filteredList = if (currentView == "day") {
+            // Show only today's schedule
+            allSchedules.filter { it.isToday }
+        } else {
+            // Show full week schedule
+            allSchedules
+        }
+
+        scheduleAdapter.submitList(filteredList)
+
+        Log.d("TeacherDashboard", "Displaying ${filteredList.size} schedules in $currentView view")
+
+        if (filteredList.isEmpty() && currentView == "day") {
+            Toast.makeText(this, "No classes scheduled for today", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun performLogout() {
-        getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
+                Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                redirectToLogin()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun redirectToLogin() {

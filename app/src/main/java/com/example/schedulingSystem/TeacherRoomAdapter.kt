@@ -1,6 +1,5 @@
 package com.example.schedulingSystem
 
-import com.example.schedulingSystem.models.RoomAvailability
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.schedulingSystem.models.TeacherScheduleItem
 
-class TeacherRoomAdapter : ListAdapter<RoomAvailability, TeacherRoomAdapter.ViewHolder>(RoomDiffCallback()) {
+class TeacherScheduleAdapterV2 : ListAdapter<TeacherScheduleItem, TeacherScheduleAdapterV2.ViewHolder>(ScheduleDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_teacher_if_room_available, parent, false)
+            .inflate(R.layout.item_teacher_schedule, parent, false)
         return ViewHolder(view)
     }
 
@@ -22,37 +22,49 @@ class TeacherRoomAdapter : ListAdapter<RoomAvailability, TeacherRoomAdapter.View
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvRoomName: TextView = itemView.findViewById(R.id.tvRoomName)
+        private val statusIndicator: View = itemView.findViewById(R.id.statusIndicator)
+        private val tvDay: TextView = itemView.findViewById(R.id.tvDay)
+        private val tvTime: TextView = itemView.findViewById(R.id.tvTime)
         private val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
-        private val tvSchedule: TextView = itemView.findViewById(R.id.tvSchedule)
+        private val tvSubject: TextView = itemView.findViewById(R.id.tvSubject)
+        private val tvSection: TextView = itemView.findViewById(R.id.tvSection)
+        private val tvRoomName: TextView = itemView.findViewById(R.id.tvRoomName)
 
-        fun bind(room: RoomAvailability) {
-            tvRoomName.text = room.roomName
+        fun bind(schedule: TeacherScheduleItem) {
+            // Day
+            tvDay.text = schedule.dayName
 
-            // Update status text and color based on availability
-            if (room.isAvailable) {
-                tvStatus.text = itemView.context.getString(
-                    R.string.teacher_status_available,
-                    room.roomCapacity
-                )
-                tvStatus.setTextColor(itemView.context.getColor(R.color.primary_dark_green))
-                tvSchedule.text = itemView.context.getString(R.string.vacant_until_2_00_pm)
+            // Time
+            tvTime.text = "${schedule.timeStart} - ${schedule.timeEnd}"
+
+            // Subject (Code + Name)
+            tvSubject.text = "${schedule.subjectCode} - ${schedule.subjectName}"
+
+            // Section (Name + Year)
+            tvSection.text = "${schedule.sectionName} (${schedule.sectionYear})"
+
+            // Room
+            tvRoomName.text = schedule.roomName
+
+            // Status Badge and Indicator Color
+            if (schedule.isToday) {
+                tvStatus.visibility = View.VISIBLE
+                tvStatus.text = "Today"
+                statusIndicator.setBackgroundColor(itemView.context.getColor(R.color.primary_green))
             } else {
-                tvStatus.text = room.status
-                tvStatus.setTextColor(itemView.context.getColor(R.color.status_red_text))
-                tvSchedule.text = room.status
+                tvStatus.visibility = View.GONE
+                statusIndicator.setBackgroundColor(itemView.context.getColor(R.color.text_grey_light))
             }
-
         }
     }
-}
 
-class RoomDiffCallback : DiffUtil.ItemCallback<RoomAvailability>() {
-    override fun areItemsTheSame(oldItem: RoomAvailability, newItem: RoomAvailability): Boolean {
-        return oldItem.roomId == newItem.roomId
-    }
+    class ScheduleDiffCallback : DiffUtil.ItemCallback<TeacherScheduleItem>() {
+        override fun areItemsTheSame(oldItem: TeacherScheduleItem, newItem: TeacherScheduleItem): Boolean {
+            return oldItem.scheduleId == newItem.scheduleId
+        }
 
-    override fun areContentsTheSame(oldItem: RoomAvailability, newItem: RoomAvailability): Boolean {
-        return oldItem == newItem
+        override fun areContentsTheSame(oldItem: TeacherScheduleItem, newItem: TeacherScheduleItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }
