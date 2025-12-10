@@ -63,7 +63,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         rvRooms = findViewById(R.id.containerRooms)
         roomAdapter = AdminRoomScheduleAdapter { room ->
             // Navigate to AdminDashboardScheduleRoom with room ID
-            val intent = Intent(this, AdminDashboardScheduleRoom::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             intent.putExtra("room_id", room.roomId)
             intent.putExtra("room_name", room.roomName)
             startActivity(intent)
