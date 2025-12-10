@@ -122,8 +122,9 @@ class AdminManageRoomsActivity : AppCompatActivity() {
                             RoomItem(
                                 roomId = obj.getInt("id"),
                                 roomName = obj.getString("name"),
-                                roomCapacity = obj.getInt("capacity")
-
+                                roomCapacity = obj.getInt("capacity"),
+                                status = "Available",
+                                isAvailable = true
                             )
                         )
                     }

@@ -6,5 +6,7 @@ package com.example.schedulingSystem.models
 data class RoomItem(
     val roomId: Int,
     val roomName: String,
-    val roomCapacity: Int
+    val roomCapacity: Int,
+    val status: String,
+    val isAvailable: Boolean
 )
