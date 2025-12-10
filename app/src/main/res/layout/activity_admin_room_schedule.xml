@@ -115,111 +115,81 @@
     </HorizontalScrollView>
 
     <!-- Main Scrollable Content -->
-    <HorizontalScrollView
+    <!-- WEEK / DAY TOGGLE SWITCH -->
+    <LinearLayout
+        android:id="@+id/layoutViewMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/navTabs">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/week"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switchViewMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:thumbTint="@color/white"
+            app:trackTint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/day"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerDaySelect"
+            android:layout_width="140dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/bg_spinner_rounded"
+            android:entries="@array/day_of_week"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- TIMETABLE CONTAINER - Switches between Week & Day -->
+    <FrameLayout
+        android:id="@+id/timetableContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
-        android:clipToPadding="false"
-        android:paddingBottom="88dp"
-        android:scrollbars="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/navTabs"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutViewMode"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="wrap_content"
+        <!-- WEEK VIEW -->
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollWeekly"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal">
+
+            <include layout="@layout/layout_timetable_week" />
+        </HorizontalScrollView>
+
+        <!-- DAY VIEW -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollDailyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
             android:clipToPadding="false">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="0dp">
-
-                <!-- Timetable Header: Schedule Title + Days of Week -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@color/primary_dark_green">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="60dp"
-                        android:text="SCHEDULE"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="MONDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="TUESDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="WEDNESDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="THURSDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="FRIDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="SATURDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <!-- RecyclerView for time rows with schedule -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/containerRooms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false" />
-
-            </LinearLayout>
+            <include layout="@layout/layout_timetable_day" />
         </androidx.core.widget.NestedScrollView>
-    </HorizontalScrollView>
+    </FrameLayout>
 
     <!-- FAB Overlay & Menu (unchanged) -->
     <View
