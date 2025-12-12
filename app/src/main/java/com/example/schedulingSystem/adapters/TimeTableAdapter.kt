@@ -7,11 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 
-
-//val ScheduleItem.sectionDisplay: String
-//    get() = "${sectionName ?: "Unknown"} (Year $sectionYear)"
-
-
 class TimeTableAdapter(
     private val timeRanges: List<String>, // e.g. "7:00 AM – 8:30 AM", "8:30 AM – 10:00 AM"
     private val scheduleMap: MutableMap<String, MutableList<com.example.schedulingSystem.fragments.TimeTableScheduleItem>> // day_timeRange → list of classes

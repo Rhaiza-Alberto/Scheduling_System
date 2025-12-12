@@ -6,33 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background"
-    tools:context=".AdminDashboardActivity">
+    tools:context=".AdminDashboardScheduleRoom">
 
-    <!-- Header Background -->
     <View
         android:id="@+id/headerBg"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="120dp"
         android:background="@color/primary_dark_green"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Admin Title -->
     <TextView
-        android:id="@+id/tvAdminTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvRoomName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="20dp"
-        android:text="@string/admin_portal"
-        android:textColor="#CCFFFFFF"
-        android:textSize="12sp"
-        android:letterSpacing="0.1"
-        android:textAllCaps="true"
+        android:text="@string/room_name"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSettings"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Settings Button -->
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="40dp"
@@ -41,257 +38,65 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/settings"
         android:src="@drawable/ic_settings"
-        app:layout_constraintBottom_toBottomOf="@+id/tvAdminTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvAdminTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvRoomName"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRoomName"
         app:tint="@color/white"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <!-- Greeting -->
-    <TextView
-        android:id="@+id/tvGreeting"
+    <LinearLayout
+        android:id="@+id/layoutViewToggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/admin_manage_schedule"
-        android:textColor="@color/white"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvAdminTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvAdminTitle" />
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/bg_toggle_group"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRoomName">
 
-    <!-- Tabs -->
-    <HorizontalScrollView
-        android:id="@+id/navTabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:clipToPadding="false"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@+id/tvGreeting">
-        <!-- Your tabs here (unchanged) -->
-        <LinearLayout
+        <Button
+            android:id="@+id/btnWeekView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <!-- Your 3 tabs -->
-            <TextView
-                android:id="@+id/tabSchedules"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_input_outline"
-                android:backgroundTint="@color/white"
-                android:elevation="2dp"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="@string/schedules"
-                android:textColor="@color/primary_dark_green"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tabUsers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_input_outline"
-                android:backgroundTint="#26FFFFFF"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="@string/users"
-                android:textColor="@color/white" />
-            <TextView
-                android:id="@+id/tabRooms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_input_outline"
-                android:backgroundTint="#26FFFFFF"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="@string/rooms"
-                android:textColor="@color/white" />
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="36dp"
+            android:text="@string/week"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_toggle_active"
+            android:minWidth="0dp"
+            android:paddingHorizontal="16dp"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
-    <!-- Main Scrollable Content -->
+        <Button
+            android:id="@+id/btnDayView"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/day"
+            android:textColor="@color/primary_green"
+            android:background="@android:color/transparent"
+            android:minWidth="0dp"
+            android:paddingHorizontal="16dp"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+    </LinearLayout>
+
     <HorizontalScrollView
+        android:id="@+id/hsvTimetable"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
-        android:clipToPadding="false"
-        android:paddingBottom="88dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:scrollbars="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/navTabs"
+        app:layout_constraintTop_toBottomOf="@+id/layoutViewToggle"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTimetable"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:clipToPadding="false">
+            android:clipToPadding="false"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:paddingBottom="20dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="0dp">
-
-                <!-- Timetable Header: Schedule Title + Days of Week -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@color/primary_dark_green">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="60dp"
-                        android:text="SCHEDULE"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="MONDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="TUESDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="WEDNESDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="THURSDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="FRIDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="60dp"
-                        android:text="SATURDAY"
-                        android:gravity="center"
-                        android:background="@color/primary_dark_green"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <!-- RecyclerView for time rows with schedule -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/containerRooms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
     </HorizontalScrollView>
-
-    <!-- FAB Overlay & Menu (unchanged) -->
-    <View
-        android:id="@+id/fabOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:elevation="8dp"
-        android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true" />
-
-    <!-- Your 3 FAB options + main FAB (unchanged) -->
-    <!-- ... (layoutAddUser, layoutAddRoom, layoutAddSchedule, fabMain) ... -->
-    <!-- Keep them exactly as you had — they’re perfect -->
-
-    <LinearLayout
-        android:id="@+id/layoutAddUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="9dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/layoutAddRoom"
-        app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutAddRoom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="9dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/layoutAddSchedule"
-        app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutAddSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:elevation="9dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/fabMain"
-        app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:backgroundTint="@color/primary_green"
-        android:contentDescription="@string/add_new_room"
-        android:src="@drawable/ic_add"
-        app:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
