@@ -8,7 +8,6 @@
     android:background="@color/app_background"
     tools:context=".AdminManageRoomsActivity">
 
-    <!-- Header -->
     <View
         android:id="@+id/headerBg"
         android:layout_width="match_parent"
@@ -55,7 +54,6 @@
         app:layout_constraintStart_toStartOf="@id/tvAdminTitle"
         app:layout_constraintTop_toBottomOf="@id/tvAdminTitle" />
 
-    <!-- Tabs (Rooms tab active) -->
     <HorizontalScrollView
         android:id="@+id/navTabs"
         android:layout_width="match_parent"
@@ -109,7 +107,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -143,13 +140,14 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- FAB to Add Room -->
     <ImageButton
         android:id="@+id/btnMain"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_margin="24dp"
+        android:background="@drawable/bg_circle_shape"
         android:backgroundTint="@color/primary_dark_green"
+        android:elevation="6dp"
         android:src="@drawable/ic_add"
         android:scaleType="center"
         android:contentDescription="@string/add_new_room"

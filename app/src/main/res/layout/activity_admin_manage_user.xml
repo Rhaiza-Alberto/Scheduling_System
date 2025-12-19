@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background"
     tools:context=".AdminDashboardActivity">
-
-    <!-- Header Background -->
+    
     <View
         android:id="@+id/headerBg"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:background="@color/primary_dark_green"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Admin Title -->
     <TextView
         android:id="@+id/tvAdminTitle"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Settings Button -->
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="40dp"
@@ -47,7 +44,6 @@
         app:tint="@color/white"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <!-- Greeting -->
     <TextView
         android:id="@+id/tvGreeting"
         android:layout_width="wrap_content"
@@ -60,7 +56,6 @@
         app:layout_constraintStart_toStartOf="@+id/tvAdminTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvAdminTitle" />
 
-    <!-- Tabs -->
     <HorizontalScrollView
         android:id="@+id/navTabs"
         android:layout_width="match_parent"
@@ -71,12 +66,12 @@
         android:paddingEnd="20dp"
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@+id/tvGreeting">
-        <!-- Your tabs here (unchanged) -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <!-- Your 3 tabs -->
+
             <TextView
                 android:id="@+id/tabSchedules"
                 android:layout_width="wrap_content"
@@ -90,6 +85,7 @@
                 android:text="@string/schedules"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tabUsers"
                 android:layout_width="wrap_content"
@@ -100,7 +96,9 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="8dp"
                 android:text="@string/users"
-                android:textColor="@color/primary_dark_green" />
+                android:textColor="@color/primary_dark_green"
+                android:textStyle="bold"/>
+
             <TextView
                 android:id="@+id/tabRooms"
                 android:layout_width="wrap_content"
@@ -114,7 +112,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Main Scrollable Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -130,7 +127,6 @@
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
 
-            <!-- Pending Requests Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/requestsCard"
                 android:layout_width="match_parent"
@@ -139,11 +135,9 @@
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
-                <!-- Your card content (unchanged) -->
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Manage Rooms Title -->
             <TextView
                 android:id="@+id/tvManageTitle"
                 android:layout_width="wrap_content"
@@ -154,9 +148,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- NEW: RecyclerView for dynamic rooms -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/containerRooms"
+                android:id="@+id/containerUsers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
@@ -166,7 +159,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- FAB Overlay & Menu (unchanged) -->
     <View
         android:id="@+id/fabOverlay"
         android:layout_width="match_parent"
@@ -176,10 +168,6 @@
         android:visibility="gone"
         android:clickable="true"
         android:focusable="true" />
-
-    <!-- Your 3 FAB options + main FAB (unchanged) -->
-    <!-- ... (layoutAddUser, layoutAddRoom, layoutAddSchedule, fabMain) ... -->
-    <!-- Keep them exactly as you had — they’re perfect -->
 
     <LinearLayout
         android:id="@+id/layoutAddUser"
@@ -193,7 +181,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/layoutAddRoom"
         app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
     </LinearLayout>
 
     <LinearLayout
@@ -208,7 +195,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/layoutAddSchedule"
         app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
     </LinearLayout>
 
     <LinearLayout
@@ -223,7 +209,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btnMain"
         app:layout_constraintEnd_toEndOf="parent">
-        <!-- ... -->
     </LinearLayout>
 
     <ImageButton
@@ -231,7 +216,9 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_margin="24dp"
+        android:background="@drawable/bg_circle_shape"
         android:backgroundTint="@color/primary_dark_green"
+        android:elevation="6dp"
         android:contentDescription="@string/add_new_room"
         android:src="@drawable/ic_add"
         android:scaleType="center"
