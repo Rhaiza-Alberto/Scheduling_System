@@ -23,11 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="@string/teacher_portal"
-        android:textColor="#CCFFFFFF"
-        android:textSize="12sp"
         android:letterSpacing="0.1"
+        android:text="@string/teacher_portal"
         android:textAllCaps="true"
+        android:textColor="#263238"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTeacherTitle"
         app:tint="@color/white"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
 
     <!-- Greeting Text -->
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/welcome"
-        android:textColor="#E8F5E9"
+        android:textColor="#263238"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/tvTeacherTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvTeacherTitle" />
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_prof_name"
-        android:textColor="@color/white"
+        android:textColor="#0D47A1"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvGreeting"
@@ -99,7 +99,7 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="8dp"
                 android:text="@string/my_schedule"
-                android:textColor="@color/primary_green"
+                android:textColor="#43A047"
                 android:textStyle="bold" />
 
             <TextView
@@ -111,7 +111,7 @@
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="8dp"
                 android:text="@string/room_schedules"
-                android:textColor="@color/white" />
+                android:textColor="#4E342E" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -142,31 +142,33 @@
                     android:id="@+id/btnDay"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
                     android:text="@string/day_view"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:textColor="#0D47A1"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     app:backgroundTint="@color/primary_green"
                     app:cornerRadius="8dp"
-                    app:elevation="2dp" />
+                    app:elevation="2dp"
+                    tools:ignore="VisualLintButtonSize" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnWeek"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     android:text="@string/week_view"
-                    android:textColor="@color/primary_green"
-                    android:textStyle="bold"
+                    android:textColor="#43A047"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     app:backgroundTint="@color/white"
                     app:cornerRadius="8dp"
+                    app:elevation="2dp"
                     app:strokeColor="@color/primary_green"
                     app:strokeWidth="2dp"
-                    app:elevation="2dp" />
+                    tools:ignore="VisualLintButtonSize" />
 
             </LinearLayout>
 

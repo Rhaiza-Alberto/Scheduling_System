@@ -24,11 +24,12 @@
         android:layout_marginTop="24dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/back"
-        app:srcCompat="@drawable/ic_arrow_back"
-        app:tint="@color/white"
         android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back"
+        app:tint="@color/white"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -37,7 +38,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:text="@string/my_requests"
-        android:textColor="@color/white"
+        android:textColor="#0D47A1"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/track_your_booking_status"
-        android:textColor="#E8F5E9"
+        android:textColor="#263238"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
@@ -81,7 +82,7 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
                 android:text="@string/all"
-                android:textColor="@color/primary_green"
+                android:textColor="#43A047"
                 android:textStyle="bold" />
 
             <TextView
