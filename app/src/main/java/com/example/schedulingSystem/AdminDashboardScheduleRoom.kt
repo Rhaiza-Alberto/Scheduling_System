@@ -173,7 +173,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = "$BACKEND_URL/get_schedules_by_room.php?room_id=$roomId"
+                val url = "$BACKEND_URL/get_all_schedules.php?room_id=$roomId"
                 val request = Request.Builder().url(url).build()
                 val response = client.newCall(request).execute()
                 val body = response.body?.string() ?: ""
@@ -194,8 +194,8 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                     scheduleList.add(
                         ScheduleEntry(
                             dayName = s.getString("day_name"),
-                            startDisplay = s.getString("start_display"),
-                            endDisplay = s.getString("end_display"),
+                            startDisplay = s.getString("time_start"),
+                            endDisplay = s.getString("time_end"),
                             subject = s.getString("subject_name"),
                             section = s.getString("section_name"),
                             teacher = s.getString("teacher_name")
