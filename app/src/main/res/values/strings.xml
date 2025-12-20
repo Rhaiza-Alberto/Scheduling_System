@@ -184,10 +184,21 @@
     <string name="day">day</string>
     <string name="week">week</string>
 
+    <string name="edit_schedule">Edit Schedule</string>
+    <string name="edit_day">Day</string>
+    <string name="edit_schedule_day">Monday</string>
+    <string name="edit_subject_code">Subject Code</string>
+    <string name="edit_subject_name">Subject Name</string>
+    <string name="edit_section">Section</string>
+    <string name="edit_teacher">Teacher</string>
+    <string name="edit_status">Status</string>
 
+    <string name="edit_subject_code_name">CC 104</string>
+    <string name="edit_subject_name_name">CC 104</string>
+    <string name="edit_section_name">BSCS</string>
+    <string name="edit_teacher_name">Teachers Name</string>
+    <string name="edit_status_name">Occupied</string>
 
-
-    <!-- Day/Week View Toggle Buttons - NEWLY ADDED -->
     <string name="day_view">Day</string>
     <string name="week_view">Week</string>
 </resources>

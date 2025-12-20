@@ -6,5 +6,6 @@ data class ScheduleEntry(
     val endDisplay: String,
     val subject: String,
     val section: String,
-    val teacher: String
+    val teacher: String,
+    val status: String = "Pending" // Default to "Pending", can be "Pending", "Occupied", or empty for no schedule
 )

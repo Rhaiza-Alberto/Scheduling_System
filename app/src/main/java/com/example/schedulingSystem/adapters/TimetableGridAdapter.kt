@@ -63,17 +63,31 @@ class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>
         }
     }
 
-    class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        init {
+            // Set light green background for empty slots
+            view.setBackgroundResource(R.drawable.bg_empty_slot)
+        }
+    }
 
     class BlockViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val tvSubject: TextView = view.findViewById(R.id.tvSubject)
         private val tvSection: TextView = view.findViewById(R.id.tvSection)
         private val tvTeacher: TextView = view.findViewById(R.id.tvTeacher)
+        private val container = view.findViewById<View>(R.id.classBlockContainer)
 
         fun bind(item: TimetableItem.ClassBlock) {
             tvSubject.text = item.subject
             tvSection.text = item.section
             tvTeacher.text = item.teacher
+            
+            // Set background color based on status
+            val context = container.context
+            when (item.status.lowercase()) {
+                "pending" -> container.setBackgroundResource(R.drawable.bg_class_block_pending)
+                "occupied" -> container.setBackgroundResource(R.drawable.bg_class_block_occupied)
+                else -> container.setBackgroundResource(R.drawable.bg_class_block_pending)
+            }
             
             // Handle rowSpan height (each slot is approx 60dp + margins)
             // We'll approximate 60dp per span + some compensation for margins if needed

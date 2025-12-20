@@ -8,6 +8,7 @@ sealed class TimetableItem {
         val subject: String,
         val section: String,
         val teacher: String,
-        val rowSpan: Int = 1
+        val rowSpan: Int = 1,
+        val status: String = "Pending" // "Pending", "Occupied", or empty
     ) : TimetableItem()
 }

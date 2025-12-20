@@ -198,7 +198,8 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                             endDisplay = s.getString("time_end"),
                             subject = s.getString("subject_name"),
                             section = s.getString("section_name"),
-                            teacher = s.getString("teacher_name")
+                            teacher = s.getString("teacher_name"),
+                            status = s.optString("schedule_status", "Pending")
                         )
                     )
                 }
@@ -244,7 +245,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             }
         }
 
-        // 2. Insert new schedule entries
+        // 2. Insert new schedule entries by splitting time ranges into individual slots
         schedules.forEach { entry ->
             // Determine the column index based on view mode
             val dayColumnIndex = if (isWeekView) {
@@ -264,22 +265,19 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             val endRow = timeSlots.indexOf(entry.endDisplay)
             if (startRow == -1 || endRow == -1 || startRow >= endRow) return@forEach
 
-            val spanCount = endRow - startRow // how many 30-min blocks
-
-            // Grid position: (Header Row + (Start Row * numColumns)) + Column Index
-            val position = numColumns + (startRow * numColumns) + dayColumnIndex
-
-            // Place the class (spans vertically)
-            currentList[position] = TimetableItem.ClassBlock(
-                subject = entry.subject,
-                section = entry.section,
-                teacher = entry.teacher,
-                rowSpan = spanCount
-            )
-
-            // Clear cells covered by the span below the starting position
-            for (i in 1 until spanCount) {
-                currentList[position + i * numColumns] = TimetableItem.Empty
+            // Fill each individual 30-minute slot instead of creating a span
+            for (row in startRow until endRow) {
+                // Grid position: (Header Row + (Row * numColumns)) + Column Index
+                val position = numColumns + (row * numColumns) + dayColumnIndex
+                
+                // Fill each time slot with the same class information
+                currentList[position] = TimetableItem.ClassBlock(
+                    subject = entry.subject,
+                    section = entry.section,
+                    teacher = entry.teacher,
+                    rowSpan = 1, // Each slot is now individual (rowSpan = 1)
+                    status = entry.status
+                )
             }
         }
 
