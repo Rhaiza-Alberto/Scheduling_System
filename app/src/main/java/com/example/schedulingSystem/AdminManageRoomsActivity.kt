@@ -48,12 +48,17 @@ class AdminManageRoomsActivity : AppCompatActivity() {
             return
         }
 
-        // Setup RecyclerView
-        rvRooms = findViewById(R.id.containerRooms)
-        roomAdapter = AdminRoomAdapter(this, ::loadRoomsFromApi)
-        rvRooms.apply {
-            layoutManager = LinearLayoutManager(this@AdminManageRoomsActivity)
-            adapter = roomAdapter
+        // Setup RecyclerView with error handling
+        try {
+            rvRooms = findViewById(R.id.containerRooms)
+            roomAdapter = AdminRoomAdapter(this, ::loadRoomsFromApi)
+            rvRooms.apply {
+                layoutManager = LinearLayoutManager(this@AdminManageRoomsActivity)
+                adapter = roomAdapter
+            }
+        } catch (e: Exception) {
+            Log.e("AdminManageRooms", "Error setting up RecyclerView", e)
+            Toast.makeText(this, "Error setting up rooms list: ${e.message}", Toast.LENGTH_LONG).show()
         }
 
         setupClickListeners()
@@ -108,63 +113,95 @@ class AdminManageRoomsActivity : AppCompatActivity() {
                         .build()
                 ).execute()
 
+                if (!response.isSuccessful) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AdminManageRoomsActivity, "HTTP Error: ${response.code}", Toast.LENGTH_LONG).show()
+                    }
+                    return@launch
+                }
+
                 val jsonData = response.body?.string() ?: ""
                 Log.d("ManageRooms", "Response: $jsonData")
 
-                val json = JSONObject(jsonData)
-                if (json.getBoolean("success")) {
-                    val roomsArray = json.getJSONArray("rooms")
-                    val roomList = mutableListOf<RoomItem>()
+                if (jsonData.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AdminManageRoomsActivity, "Empty response from server", Toast.LENGTH_LONG).show()
+                    }
+                    return@launch
+                }
 
-                    for (i in 0 until roomsArray.length()) {
-                        val obj = roomsArray.getJSONObject(i)
+                val json = JSONObject(jsonData)
+                if (!json.getBoolean("success")) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AdminManageRoomsActivity, "API Error: ${json.optString("message", "Unknown")}", Toast.LENGTH_LONG).show()
+                    }
+                    return@launch
+                }
+
+                val roomsArray = json.getJSONArray("rooms")
+                val roomList = mutableListOf<RoomItem>()
+
+                for (i in 0 until roomsArray.length()) {
+                    val obj = roomsArray.getJSONObject(i)
+                    try {
                         roomList.add(
                             RoomItem(
                                 roomId = obj.getInt("id"),
-                                roomName = obj.getString("name"),
+                                roomName = obj.getString("name") ?: "Unknown Room",
                                 roomCapacity = obj.getInt("capacity"),
                                 status = "Available",
                                 isAvailable = true
                             )
                         )
+                    } catch (e: Exception) {
+                        Log.e("ManageRooms", "Error parsing room at index $i", e)
                     }
+                }
 
-                    withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
+                    try {
                         roomAdapter.submitList(roomList)
                         Toast.makeText(
                             this@AdminManageRoomsActivity,
                             "Loaded ${roomList.size} rooms",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            this@AdminManageRoomsActivity,
-                            "Error: ${json.optString("message")}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    } catch (e: Exception) {
+                        Log.e("ManageRooms", "Error updating adapter", e)
+                        Toast.makeText(this@AdminManageRoomsActivity, "Error displaying rooms: ${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
+
             } catch (e: Exception) {
-                Log.e("ManageRooms", "Load error", e)
+                Log.e("ManageRooms", "Failed to load rooms", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@AdminManageRoomsActivity,
-                        "Network error: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@AdminManageRoomsActivity, "Network error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
+    private fun performLogout() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
+                redirectToLogin()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     private fun redirectToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        })
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        )
         finish()
     }
+
     private fun updateTabSelection(selected: TextView, vararg others: TextView) {
         selected.apply {
             setBackgroundResource(R.drawable.bg_input_outline)
@@ -184,20 +221,4 @@ class AdminManageRoomsActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
-    private fun performLogout() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Logout")
-            .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Yes") { _, _ ->
-                getSharedPreferences("user_session", MODE_PRIVATE).edit { clear() }
-                Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
-                redirectToLogin()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
 }

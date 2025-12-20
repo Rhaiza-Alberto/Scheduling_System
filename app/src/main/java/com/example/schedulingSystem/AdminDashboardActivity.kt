@@ -99,9 +99,15 @@ class AdminDashboardActivity : AppCompatActivity() {
         }
 
         tabRooms.setOnClickListener {
-            updateTabSelection(tabRooms, tabSchedules, tabUsers)
-            startActivity(Intent(this, AdminManageRoomsActivity::class.java))
-            finish()
+            try {
+                updateTabSelection(tabRooms, tabSchedules, tabUsers)
+                val intent = Intent(this@AdminDashboardActivity, AdminManageRoomsActivity::class.java)
+                startActivity(intent)
+                finish()
+            } catch (e: Exception) {
+                Log.e("AdminDashboard", "Error navigating to Manage Rooms", e)
+                Toast.makeText(this@AdminDashboardActivity, "Error opening Manage Rooms: ${e.message}", Toast.LENGTH_LONG).show()
+            }
         }
 
         // Default: highlight Schedules tab
