@@ -199,4 +199,38 @@ class DropdownDataService {
             Result.failure(e)
         }
     }
+
+    suspend fun getRooms(): Result<List<Room>> = withContext(Dispatchers.IO) {
+        try {
+            val request = Request.Builder()
+                .url("$BACKEND_URL/get_rooms.php")
+                .build()
+            
+            val response = client.newCall(request).execute()
+            val body = response.body?.string() ?: ""
+            
+            val json = JSONObject(body)
+            if (!json.getBoolean("success")) {
+                return@withContext Result.failure(Exception("Failed to fetch rooms"))
+            }
+            
+            val roomsArray = json.getJSONArray("rooms")
+            val rooms = mutableListOf<Room>()
+            
+            for (i in 0 until roomsArray.length()) {
+                val roomJson = roomsArray.getJSONObject(i)
+                rooms.add(
+                    Room(
+                        id = roomJson.getInt("id"),
+                        name = roomJson.getString("name"),
+                        capacity = roomJson.getInt("capacity")
+                    )
+                )
+            }
+            
+            Result.success(rooms)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

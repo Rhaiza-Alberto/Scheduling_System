@@ -25,7 +25,7 @@ class EditScheduleActivity : AppCompatActivity() {
 
     // AutoCompleteTextViews
     private lateinit var etDay: AutoCompleteTextView
-    private lateinit var etRoomName: TextInputEditText
+    private lateinit var etRoomName: AutoCompleteTextView
     private lateinit var etSubjectCode: AutoCompleteTextView
     private lateinit var etSubjectName: AutoCompleteTextView
     private lateinit var etSection: AutoCompleteTextView
@@ -57,6 +57,7 @@ class EditScheduleActivity : AppCompatActivity() {
 
     // Data lists
     private var days: List<Day> = emptyList()
+    private var rooms: List<Room> = emptyList()
     private var teachers: List<Teacher> = emptyList()
     private var timeSlots: List<TimeSlot> = emptyList()
     private var subjects: List<Subject> = emptyList()
@@ -64,6 +65,7 @@ class EditScheduleActivity : AppCompatActivity() {
 
     // Selected IDs
     private var selectedDayId: Int = -1
+    private var selectedRoomId: Int = -1
     private var selectedTeacherId: Int = -1
     private var selectedSubjectId: Int = -1
     private var selectedSectionId: Int = -1
@@ -72,8 +74,6 @@ class EditScheduleActivity : AppCompatActivity() {
 
     // Schedule info from intent
     private var scheduleId: Int = -1
-    private var roomId: Int = -1
-    private var roomName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,16 +81,10 @@ class EditScheduleActivity : AppCompatActivity() {
 
         // Get schedule info from intent
         scheduleId = intent.getIntExtra("schedule_id", -1)
-        roomId = intent.getIntExtra("room_id", -1)
-        roomName = intent.getStringExtra("room_name") ?: ""
 
         initViews()
         setupClickListeners()
         loadDropdownData()
-
-        // Pre-fill room name (not editable as dropdown, since it's fixed for the room)
-        etRoomName.setText(roomName)
-        etRoomName.isEnabled = false  // Make it non-editable if room is fixed
 
         // Load schedule details if editing existing schedule
         if (scheduleId != -1) {
@@ -101,7 +95,7 @@ class EditScheduleActivity : AppCompatActivity() {
     private fun initViews() {
         // Initialize AutoCompleteTextViews
         etDay = findViewById(R.id.dayAutoComplete)
-        etRoomName = findViewById(R.id.etEditRoomName)
+        etRoomName = findViewById(R.id.roomNameAutoComplete)
         etSubjectCode = findViewById(R.id.subjectCodeAutoComplete)
         etSubjectName = findViewById(R.id.subjectNameAutoComplete)
         etSection = findViewById(R.id.sectionAutoComplete)
@@ -138,6 +132,7 @@ class EditScheduleActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             // Load all dropdown data
             val daysResult = dropdownService.getDays()
+            val roomsResult = dropdownService.getRooms()
             val teachersResult = dropdownService.getTeachers()
             val timeSlotsResult = dropdownService.getTimeSlots()
             val subjectsResult = dropdownService.getSubjects()
@@ -148,6 +143,13 @@ class EditScheduleActivity : AppCompatActivity() {
                     setupDayDropdown()
                 }.onFailure {
                     Toast.makeText(this@EditScheduleActivity, "Failed to load days", Toast.LENGTH_SHORT).show()
+                }
+
+                roomsResult.onSuccess { roomsList ->
+                    rooms = roomsList
+                    setupRoomDropdown()
+                }.onFailure {
+                    Toast.makeText(this@EditScheduleActivity, "Failed to load rooms", Toast.LENGTH_SHORT).show()
                 }
 
                 teachersResult.onSuccess { teachersList ->
@@ -190,6 +192,22 @@ class EditScheduleActivity : AppCompatActivity() {
         etDay.setOnItemClickListener { parent, _, position, _ ->
             selectedDayId = days[position].id
             dayInputLayout.error = null // Clear error on selection
+        }
+    }
+
+    private fun setupRoomDropdown() {
+        val roomNames = rooms.map { it.name }
+        val adapter = DropdownAdapter(this, roomNames)
+        etRoomName.setAdapter(adapter)
+
+        // Show dropdown when clicked
+        etRoomName.setOnClickListener {
+            etRoomName.showDropDown()
+        }
+
+        etRoomName.setOnItemClickListener { parent, _, position, _ ->
+            selectedRoomId = rooms[position].id
+            roomNameInputLayout.error = null // Clear error on selection
         }
     }
 
@@ -414,6 +432,16 @@ class EditScheduleActivity : AppCompatActivity() {
                 selectedTimeEndId = timeSlots[endTimeIndex].id
             }
 
+            // Set room if available
+            val roomName = schedule.optString("room_name", "")
+            if (roomName.isNotEmpty()) {
+                val roomIndex = rooms.indexOfFirst { it.name.equals(roomName, ignoreCase = true) }
+                if (roomIndex >= 0) {
+                    etRoomName.setText(rooms[roomIndex].name, false)
+                    selectedRoomId = rooms[roomIndex].id
+                }
+            }
+
             // Set status
             val status = schedule.optString("schedule_status", "Pending")
             etStatus.setText(status, false)
@@ -491,9 +519,11 @@ class EditScheduleActivity : AppCompatActivity() {
         }
 
         // Validate Room
-        if (roomId == -1) {
-            Toast.makeText(this, "Room information is missing", Toast.LENGTH_SHORT).show()
+        if (etRoomName.text.toString().isEmpty() || selectedRoomId == -1) {
+            roomNameInputLayout.error = "Please select a room"
             isValid = false
+        } else {
+            roomNameInputLayout.error = null
         }
 
         return isValid
@@ -510,7 +540,7 @@ class EditScheduleActivity : AppCompatActivity() {
             put("teacher_id", selectedTeacherId)
             put("time_start_id", selectedTimeStartId)
             put("time_end_id", selectedTimeEndId)
-            put("room_id", roomId)
+            put("room_id", selectedRoomId)
             put("schedule_status", status)
             if (scheduleId != -1) {
                 put("schedule_id", scheduleId)

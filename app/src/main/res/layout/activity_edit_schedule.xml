@@ -51,10 +51,10 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Room Name (TextInputEditText - not dropdown) -->
+        <!-- Room Name Dropdown -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/roomNameInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -66,10 +66,11 @@
             app:boxStrokeColor="@color/primary_dark_green"
             app:hintTextColor="@color/primary_dark_green">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditRoomName"
+            <AutoCompleteTextView
+                android:id="@+id/roomNameAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="none"
                 android:padding="16dp"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
