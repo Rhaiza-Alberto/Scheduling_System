@@ -22,8 +22,9 @@ import org.json.JSONObject
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import com.example.schedulingSystem.adapters.TimetableGridAdapter
+import com.example.schedulingSystem.adapters.OnScheduleClickListener
 
-class AdminDashboardScheduleRoom : AppCompatActivity() {
+class AdminDashboardScheduleRoom : AppCompatActivity(), OnScheduleClickListener {
 
     private lateinit var rvTimetable: RecyclerView
     private lateinit var tvRoomName: TextView
@@ -34,6 +35,8 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
     private var isWeekView: Boolean = true // Default to Week View
     private var currentDay: String = "" // Tracks the selected day for Day View (e.g., "Monday")
     private var allSchedules: List<ScheduleEntry> = emptyList() // Store full schedule
+    private var roomId: Int = -1 // Store room ID for editing
+    private var roomName: String = "" // Store room name for editing
 
     // 7:00 AM to 7:00 PM → 25 slots (inclusive)
     private val timeSlots = listOf(
@@ -60,6 +63,10 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
 
         val roomId = intent.getIntExtra("room_id", -1)
         val roomName = intent.getStringExtra("room_name") ?: "Room Schedule"
+
+        // Store in class variables
+        this.roomId = roomId
+        this.roomName = roomName
 
         tvRoomName = findViewById(R.id.tvRoomName)
         rvTimetable = findViewById(R.id.rvTimetable)
@@ -130,7 +137,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
     }
 
     private fun setupTimetableGrid() {
-        val adapter = TimetableGridAdapter()
+        val adapter = TimetableGridAdapter(this)
         rvTimetable.adapter = adapter
 
         // Change the grid columns and headers based on the view mode
@@ -193,6 +200,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                     val s = schedules.getJSONObject(i)
                     scheduleList.add(
                         ScheduleEntry(
+                            scheduleId = s.getInt("schedule_ID"),
                             dayName = s.getString("day_name"),
                             startDisplay = s.getString("time_start"),
                             endDisplay = s.getString("time_end"),
@@ -204,7 +212,7 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                     )
                 }
 
-                allSchedules = scheduleList // Store the full list
+                allSchedules = scheduleList 
 
                 withContext(Dispatchers.Main) {
                     if (isWeekView) {
@@ -272,11 +280,14 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
                 
                 // Fill each time slot with the same class information
                 currentList[position] = TimetableItem.ClassBlock(
+                    scheduleId = entry.scheduleId,
                     subject = entry.subject,
                     section = entry.section,
                     teacher = entry.teacher,
                     rowSpan = 1, // Each slot is now individual (rowSpan = 1)
-                    status = entry.status
+                    status = entry.status,
+                    dayName = entry.dayName,
+                    timeSlot = timeSlots[row]
                 )
             }
         }
@@ -297,5 +308,27 @@ class AdminDashboardScheduleRoom : AppCompatActivity() {
             }
             .setNegativeButton("No", null)
             .show()
+    }
+
+    override fun onScheduleClick(scheduleId: Int, dayName: String, timeSlot: String, status: String) {
+        // Handle schedule click - open edit dialog with schedule ID
+        showEditScheduleDialog(scheduleId, dayName, timeSlot, status)
+    }
+
+    override fun onEmptySlotClick(dayName: String, timeSlot: String) {
+        // Handle empty slot click - open create dialog
+        showEditScheduleDialog(-1, dayName, timeSlot, "")
+    }
+
+    private fun showEditScheduleDialog(scheduleId: Int, dayName: String, timeSlot: String, status: String) {
+        val intent = Intent(this, EditScheduleActivity::class.java).apply {
+            putExtra("schedule_id", scheduleId)
+            putExtra("room_id", roomId)
+            putExtra("room_name", roomName)
+            putExtra("day_name", dayName)
+            putExtra("time_slot", timeSlot)
+            putExtra("status", status)
+        }
+        startActivity(intent)
     }
 }

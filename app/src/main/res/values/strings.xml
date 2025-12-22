@@ -192,12 +192,16 @@
     <string name="edit_section">Section</string>
     <string name="edit_teacher">Teacher</string>
     <string name="edit_status">Status</string>
+    <string name="edit_time_start">Time Start</string>
+    <string name="edit_time_end">Time End</string>
 
     <string name="edit_subject_code_name">CC 104</string>
     <string name="edit_subject_name_name">CC 104</string>
     <string name="edit_section_name">BSCS</string>
     <string name="edit_teacher_name">Teachers Name</string>
     <string name="edit_status_name">Occupied</string>
+    <string name="edit_time_start_name">07:00 AM</string>
+    <string name="edit_time_end_name">10:00 AM</string>
 
     <string name="day_view">Day</string>
     <string name="week_view">Week</string>

@@ -5,10 +5,13 @@ sealed class TimetableItem {
     data class TimeLabel(val time: String) : TimetableItem()
     data object Empty : TimetableItem()
     data class ClassBlock(
+        val scheduleId: Int = -1,
         val subject: String,
         val section: String,
         val teacher: String,
         val rowSpan: Int = 1,
-        val status: String = "Pending" // "Pending", "Occupied", or empty
+        val status: String = "Pending", 
+        val dayName: String = "", 
+        val timeSlot: String = "" 
     ) : TimetableItem()
 }

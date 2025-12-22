@@ -49,7 +49,11 @@
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:label="@string/admin_manage_schedule" />
-
+        <activity
+            android:name=".EditScheduleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:label="@string/edit_schedule" />
 
         <!-- Professor Dashboard Activity -->
         <activity

@@ -1,6 +1,7 @@
 package com.example.schedulingSystem.models
 
 data class ScheduleEntry(
+    val scheduleId: Int = -1, // Add schedule ID from API
     val dayName: String,
     val startDisplay: String,
     val endDisplay: String,

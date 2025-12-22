@@ -10,7 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.schedulingSystem.R
 import com.example.schedulingSystem.models.TimetableItem
 
-class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>(TimetableDiffCallback()) {
+interface OnScheduleClickListener {
+    fun onScheduleClick(scheduleId: Int, dayName: String, timeSlot: String, status: String)
+    fun onEmptySlotClick(dayName: String, timeSlot: String)
+}
+
+class TimetableGridAdapter(
+    private val clickListener: OnScheduleClickListener? = null
+) : ListAdapter<TimetableItem, RecyclerView.ViewHolder>(TimetableDiffCallback()) {
 
     companion object {
         private const val TYPE_HEADER = 0
@@ -44,8 +51,28 @@ class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>
         when (holder) {
             is HeaderViewHolder -> holder.bind(item as TimetableItem.Header)
             is TimeViewHolder -> holder.bind(item as TimetableItem.TimeLabel)
-            is BlockViewHolder -> holder.bind(item as TimetableItem.ClassBlock)
-            is EmptyViewHolder -> { }
+            is BlockViewHolder -> holder.bind(item as TimetableItem.ClassBlock, clickListener)
+            is EmptyViewHolder -> {
+                // Calculate day and time for empty slots
+                val numColumns = if (itemCount > 50) 8 else 2 // Rough estimate for week/day view
+                val row = (position - numColumns) / numColumns
+                val col = position % numColumns
+                
+                if (row >= 0 && col > 0) { // Valid grid position
+                    val dayName = if (numColumns == 8) {
+                        listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")[col - 1]
+                    } else {
+                        // Day view - use current day (this would need to be passed in)
+                        ""
+                    }
+                    val timeSlot = listOf("7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM",
+                        "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+                        "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
+                        "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM").getOrNull(row) ?: ""
+                    
+                    holder.bind(dayName, timeSlot, clickListener)
+                }
+            }
         }
     }
 
@@ -68,6 +95,12 @@ class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>
             // Set light green background for empty slots
             view.setBackgroundResource(R.drawable.bg_empty_slot)
         }
+        
+        fun bind(dayName: String, timeSlot: String, clickListener: OnScheduleClickListener?) {
+            itemView.setOnClickListener {
+                clickListener?.onEmptySlotClick(dayName, timeSlot)
+            }
+        }
     }
 
     class BlockViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -76,7 +109,7 @@ class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>
         private val tvTeacher: TextView = view.findViewById(R.id.tvTeacher)
         private val container = view.findViewById<View>(R.id.classBlockContainer)
 
-        fun bind(item: TimetableItem.ClassBlock) {
+        fun bind(item: TimetableItem.ClassBlock, clickListener: OnScheduleClickListener?) {
             tvSubject.text = item.subject
             tvSection.text = item.section
             tvTeacher.text = item.teacher
@@ -97,6 +130,11 @@ class TimetableGridAdapter : ListAdapter<TimetableItem, RecyclerView.ViewHolder>
             val params = itemView.layoutParams
             params.height = (heightDp * density).toInt()
             itemView.layoutParams = params
+            
+            // Set click listener on the container instead of the entire item view
+            container.setOnClickListener {
+                clickListener?.onScheduleClick(item.scheduleId, item.dayName, item.timeSlot, item.status)
+            }
         }
     }
 
