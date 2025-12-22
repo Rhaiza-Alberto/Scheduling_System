@@ -85,11 +85,6 @@ class EditScheduleActivity : AppCompatActivity() {
         initViews()
         setupClickListeners()
         loadDropdownData()
-
-        // Load schedule details if editing existing schedule
-        if (scheduleId != -1) {
-            loadScheduleDetails()
-        }
     }
 
     private fun initViews() {
@@ -175,6 +170,11 @@ class EditScheduleActivity : AppCompatActivity() {
 
                 // Setup status dropdown
                 setupStatusDropdown()
+
+                // Load schedule details after all dropdown data is loaded
+                if (scheduleId != -1) {
+                    loadScheduleDetails()
+                }
             }
         }
     }

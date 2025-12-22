@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit();
 }
 
-$sql = "SELECT time_ID AS id, display_name FROM time";
+$sql = "SELECT time_ID AS id, display_name, time_slot AS start_time, time_slot AS end_time FROM time";
 
 $result = $conn->query($sql);
 if (!$result) {
@@ -28,7 +28,7 @@ while ($row = $result->fetch_assoc()) {
 
 echo json_encode([
     'success' => true,
-    'time_slots' => $timeSlots
+    'times' => $timeSlots
 ]);
 
 $conn->close();

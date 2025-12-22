@@ -38,8 +38,8 @@ $sql = "SELECT
     s.schedule_ID,
     s.schedule_status,
     d.day_name,
-    t.time_start,
-    t.time_end,
+    t.display_name AS time_start,
+    t2.display_name AS time_end,
     sub.subject_code,
     sub.subject_name,
     sec.section_name,
@@ -49,7 +49,8 @@ $sql = "SELECT
     r.room_name
 FROM schedule s
 LEFT JOIN day d ON s.day_ID = d.day_ID
-LEFT JOIN time t ON s.time_ID = t.time_ID
+LEFT JOIN time t ON s.time_start_ID = t.time_ID
+LEFT JOIN time t2 ON s.time_end_ID = t2.time_ID
 LEFT JOIN subject sub ON s.subject_ID = sub.subject_ID
 LEFT JOIN section sec ON s.section_ID = sec.section_ID
 LEFT JOIN person p ON s.person_ID = p.person_ID
