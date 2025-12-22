@@ -7,7 +7,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
+/**
+ * Service class for fetching data for dropdown menus from the backend API.
+ */
 class DropdownDataService {
     private val client = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
@@ -18,6 +22,10 @@ class DropdownDataService {
         private const val BACKEND_URL = "http://10.0.2.2/scheduling-api"
     }
 
+    /**
+     * Fetches a list of days.
+     * @return A [Result] containing a list of [Day] objects on success, or an exception on failure.
+     */
     suspend fun getDays(): Result<List<Day>> = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()
@@ -51,6 +59,10 @@ class DropdownDataService {
         }
     }
 
+    /**
+     * Fetches a list of teachers.
+     * @return A [Result] containing a list of [Teacher] objects on success, or an exception on failure.
+     */
     suspend fun getTeachers(): Result<List<Teacher>> = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()
@@ -73,7 +85,7 @@ class DropdownDataService {
                 teachers.add(
                     Teacher(
                         id = teacherJson.getInt("id"),
-                        name = teacherJson.getString("name"),
+                        name = teacherJson.getString("teacher_name"),
                         email = teacherJson.optString("email", "")
                     )
                 )
@@ -85,6 +97,10 @@ class DropdownDataService {
         }
     }
 
+    /**
+     * Fetches a list of time slots.
+     * @return A [Result] containing a list of [TimeSlot] objects on success, or an exception on failure.
+     */
     suspend fun getTimeSlots(): Result<List<TimeSlot>> = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()
@@ -120,6 +136,10 @@ class DropdownDataService {
         }
     }
 
+    /**
+     * Fetches a list of subjects.
+     * @return A [Result] containing a list of [Subject] objects on success, or an exception on failure.
+     */
     suspend fun getSubjects(): Result<List<Subject>> = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()
@@ -154,28 +174,38 @@ class DropdownDataService {
         }
     }
 
+    /**
+     * Fetches a list of sections, optionally filtered by teacher and/or subject.
+     * @param teacherId The ID of the teacher to filter by.
+     * @param subjectId The ID of the subject to filter by.
+     * @return A [Result] containing a list of [Section] objects on success, or an exception on failure.
+     */
     suspend fun getSections(teacherId: Int? = null, subjectId: Int? = null): Result<List<Section>> = withContext(Dispatchers.IO) {
         try {
-            val url = if (teacherId != null && subjectId != null) {
-                "$BACKEND_URL/get_sections.php?teacher_id=$teacherId&subject_id=$subjectId"
-            } else if (teacherId != null) {
-                "$BACKEND_URL/get_sections.php?teacher_id=$teacherId"
-            } else if (subjectId != null) {
-                "$BACKEND_URL/get_sections.php?subject_id=$subjectId"
-            } else {
-                "$BACKEND_URL/get_sections.php"
+            // Build URL with query parameters
+            val urlBuilder = "$BACKEND_URL/get_sections.php".toHttpUrlOrNull()?.newBuilder()
+                ?: return@withContext Result.failure(Exception("Invalid URL"))
+            
+            if (teacherId != null) {
+                urlBuilder.addQueryParameter("teacher_id", teacherId.toString())
             }
+            if (subjectId != null) {
+                urlBuilder.addQueryParameter("subject_id", subjectId.toString())
+            }
+            
+            val url = urlBuilder.build().toString()
             
             val request = Request.Builder()
                 .url(url)
                 .build()
-            
+                
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
             
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
-                return@withContext Result.failure(Exception("Failed to fetch sections"))
+                val errorMsg = json.optString("message", "Failed to fetch sections")
+                return@withContext Result.failure(Exception(errorMsg))
             }
             
             val sectionsArray = json.getJSONArray("sections")
@@ -186,10 +216,8 @@ class DropdownDataService {
                 sections.add(
                     Section(
                         id = sectionJson.getInt("id"),
-                        name = sectionJson.getString("name"),
-                        year = sectionJson.getInt("year"),
-                        teacherId = sectionJson.getInt("teacher_id"),
-                        subjectId = sectionJson.getInt("subject_id")
+                        name = sectionJson.getString("section_name"),
+                        year = sectionJson.getInt("section_year")
                     )
                 )
             }
@@ -200,6 +228,10 @@ class DropdownDataService {
         }
     }
 
+    /**
+     * Fetches a list of rooms.
+     * @return A [Result] containing a list of [Room] objects on success, or an exception on failure.
+     */
     suspend fun getRooms(): Result<List<Room>> = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()

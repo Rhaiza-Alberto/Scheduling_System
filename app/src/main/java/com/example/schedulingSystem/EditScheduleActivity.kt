@@ -212,7 +212,7 @@ class EditScheduleActivity : AppCompatActivity() {
     }
 
     private fun setupTeacherDropdown() {
-        val teacherNames = teachers.map { "${it.name} (${it.email})" }
+        val teacherNames = teachers.map { it.name }
         val adapter = DropdownAdapter(this, teacherNames)
         etTeacher.setAdapter(adapter)
 
@@ -292,7 +292,8 @@ class EditScheduleActivity : AppCompatActivity() {
     }
 
     private fun loadSectionsForTeacherAndSubject(callback: (() -> Unit)? = null) {
-        if (selectedTeacherId != -1 && selectedSubjectId != -1) {
+        // Load sections if either teacher or subject is selected
+        if (selectedTeacherId != -1 || selectedSubjectId != -1) {
             CoroutineScope(Dispatchers.IO).launch {
                 val sectionsResult = dropdownService.getSections(selectedTeacherId, selectedSubjectId)
 
@@ -395,11 +396,9 @@ class EditScheduleActivity : AppCompatActivity() {
 
             // Set teacher
             val teacherName = schedule.getString("teacher_name")
-            val teacherEmail = schedule.optString("teacher_email", "")
-            val teacherDisplay = "$teacherName ($teacherEmail)"
-            val teacherIndex = teachers.indexOfFirst { "${it.name} (${it.email})".equals(teacherDisplay, ignoreCase = true) }
+            val teacherIndex = teachers.indexOfFirst { it.name.equals(teacherName, ignoreCase = true) }
             if (teacherIndex >= 0) {
-                etTeacher.setText(teacherDisplay, false)
+                etTeacher.setText(teachers[teacherIndex].name, false)
                 selectedTeacherId = teachers[teacherIndex].id
             }
 
