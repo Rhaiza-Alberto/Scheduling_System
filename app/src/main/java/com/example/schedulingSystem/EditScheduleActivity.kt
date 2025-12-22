@@ -2,15 +2,14 @@ package com.example.schedulingSystem
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
+import com.example.schedulingSystem.adapters.DropdownAdapter
 import com.example.schedulingSystem.models.*
 import com.example.schedulingSystem.services.DropdownDataService
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class EditScheduleActivity : AppCompatActivity() {
 
+    // AutoCompleteTextViews
     private lateinit var etDay: AutoCompleteTextView
     private lateinit var etRoomName: TextInputEditText
     private lateinit var etSubjectCode: AutoCompleteTextView
@@ -33,6 +33,17 @@ class EditScheduleActivity : AppCompatActivity() {
     private lateinit var etStatus: AutoCompleteTextView
     private lateinit var etTimeStart: AutoCompleteTextView
     private lateinit var etTimeEnd: AutoCompleteTextView
+
+    // TextInputLayouts for error handling
+    private lateinit var dayInputLayout: TextInputLayout
+    private lateinit var roomNameInputLayout: TextInputLayout
+    private lateinit var subjectCodeInputLayout: TextInputLayout
+    private lateinit var subjectNameInputLayout: TextInputLayout
+    private lateinit var sectionInputLayout: TextInputLayout
+    private lateinit var teacherInputLayout: TextInputLayout
+    private lateinit var statusInputLayout: TextInputLayout
+    private lateinit var timeStartInputLayout: TextInputLayout
+    private lateinit var timeEndInputLayout: TextInputLayout
 
     private val dropdownService = DropdownDataService()
     private val client = OkHttpClient.Builder()
@@ -88,15 +99,27 @@ class EditScheduleActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        etDay = findViewById(R.id.etEditScheduleDay)
+        // Initialize AutoCompleteTextViews
+        etDay = findViewById(R.id.dayAutoComplete)
         etRoomName = findViewById(R.id.etEditRoomName)
-        etSubjectCode = findViewById(R.id.etSubjectCode)
-        etSubjectName = findViewById(R.id.etSubjectName)
-        etSection = findViewById(R.id.etSection)
-        etTeacher = findViewById(R.id.etTeacher)
-        etStatus = findViewById(R.id.etStatus)
-        etTimeStart = findViewById(R.id.etTimeStart)
-        etTimeEnd = findViewById(R.id.etTimeEnd)
+        etSubjectCode = findViewById(R.id.subjectCodeAutoComplete)
+        etSubjectName = findViewById(R.id.subjectNameAutoComplete)
+        etSection = findViewById(R.id.sectionAutoComplete)
+        etTeacher = findViewById(R.id.teacherAutoComplete)
+        etStatus = findViewById(R.id.statusAutoComplete)
+        etTimeStart = findViewById(R.id.timeStartAutoComplete)
+        etTimeEnd = findViewById(R.id.timeEndAutoComplete)
+
+        // Initialize TextInputLayouts
+        dayInputLayout = findViewById(R.id.dayInputLayout)
+        roomNameInputLayout = findViewById(R.id.roomNameInputLayout)
+        subjectCodeInputLayout = findViewById(R.id.subjectCodeInputLayout)
+        subjectNameInputLayout = findViewById(R.id.subjectNameInputLayout)
+        sectionInputLayout = findViewById(R.id.sectionInputLayout)
+        teacherInputLayout = findViewById(R.id.teacherInputLayout)
+        statusInputLayout = findViewById(R.id.statusInputLayout)
+        timeStartInputLayout = findViewById(R.id.timeStartInputLayout)
+        timeEndInputLayout = findViewById(R.id.timeEndInputLayout)
     }
 
     private fun setupClickListeners() {
@@ -105,7 +128,9 @@ class EditScheduleActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btnUpdateRoom).setOnClickListener {
-            saveSchedule()
+            if (validateInputs()) {
+                saveSchedule()
+            }
         }
     }
 
@@ -154,38 +179,61 @@ class EditScheduleActivity : AppCompatActivity() {
 
     private fun setupDayDropdown() {
         val dayNames = days.map { it.name }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, dayNames)
+        val adapter = DropdownAdapter(this, dayNames)
         etDay.setAdapter(adapter)
+
+        // Show dropdown when clicked
+        etDay.setOnClickListener {
+            etDay.showDropDown()
+        }
 
         etDay.setOnItemClickListener { parent, _, position, _ ->
             selectedDayId = days[position].id
+            dayInputLayout.error = null // Clear error on selection
         }
     }
 
     private fun setupTeacherDropdown() {
         val teacherNames = teachers.map { "${it.name} (${it.email})" }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, teacherNames)
+        val adapter = DropdownAdapter(this, teacherNames)
         etTeacher.setAdapter(adapter)
+
+        // Show dropdown when clicked
+        etTeacher.setOnClickListener {
+            etTeacher.showDropDown()
+        }
 
         etTeacher.setOnItemClickListener { parent, _, position, _ ->
             selectedTeacherId = teachers[position].id
+            teacherInputLayout.error = null // Clear error on selection
             loadSectionsForTeacherAndSubject()
         }
     }
 
     private fun setupTimeDropdowns() {
         val timeDisplayNames = timeSlots.map { it.displayName }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, timeDisplayNames)
+        val adapter = DropdownAdapter(this, timeDisplayNames)
 
         etTimeStart.setAdapter(adapter)
         etTimeEnd.setAdapter(adapter)
 
+        // Show dropdown when clicked
+        etTimeStart.setOnClickListener {
+            etTimeStart.showDropDown()
+        }
+
+        etTimeEnd.setOnClickListener {
+            etTimeEnd.showDropDown()
+        }
+
         etTimeStart.setOnItemClickListener { parent, _, position, _ ->
             selectedTimeStartId = timeSlots[position].id
+            timeStartInputLayout.error = null // Clear error on selection
         }
 
         etTimeEnd.setOnItemClickListener { parent, _, position, _ ->
             selectedTimeEndId = timeSlots[position].id
+            timeEndInputLayout.error = null // Clear error on selection
         }
     }
 
@@ -193,18 +241,34 @@ class EditScheduleActivity : AppCompatActivity() {
         val subjectCodes = subjects.map { it.code }
         val subjectNames = subjects.map { it.name }
 
-        etSubjectCode.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, subjectCodes))
-        etSubjectName.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, subjectNames))
+        val codeAdapter = DropdownAdapter(this, subjectCodes)
+        val nameAdapter = DropdownAdapter(this, subjectNames)
+
+        etSubjectCode.setAdapter(codeAdapter)
+        etSubjectName.setAdapter(nameAdapter)
+
+        // Show dropdown when clicked
+        etSubjectCode.setOnClickListener {
+            etSubjectCode.showDropDown()
+        }
+
+        etSubjectName.setOnClickListener {
+            etSubjectName.showDropDown()
+        }
 
         etSubjectCode.setOnItemClickListener { parent, _, position, _ ->
             selectedSubjectId = subjects[position].id
             etSubjectName.setText(subjects[position].name, false)
+            subjectCodeInputLayout.error = null // Clear error on selection
+            subjectNameInputLayout.error = null
             loadSectionsForTeacherAndSubject()
         }
 
         etSubjectName.setOnItemClickListener { parent, _, position, _ ->
             selectedSubjectId = subjects[position].id
             etSubjectCode.setText(subjects[position].code, false)
+            subjectCodeInputLayout.error = null // Clear error on selection
+            subjectNameInputLayout.error = null
             loadSectionsForTeacherAndSubject()
         }
     }
@@ -229,21 +293,32 @@ class EditScheduleActivity : AppCompatActivity() {
 
     private fun setupSectionDropdown() {
         val sectionNames = sections.map { "${it.name} - Year ${it.year}" }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, sectionNames)
+        val adapter = DropdownAdapter(this, sectionNames)
         etSection.setAdapter(adapter)
+
+        // Show dropdown when clicked
+        etSection.setOnClickListener {
+            etSection.showDropDown()
+        }
 
         etSection.setOnItemClickListener { parent, _, position, _ ->
             selectedSectionId = sections[position].id
+            sectionInputLayout.error = null // Clear error on selection
         }
     }
 
     private fun setupStatusDropdown() {
-        val statuses = arrayOf("Pending", "Occupied", "Available")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statuses)
+        val statuses = listOf("Pending", "Occupied", "Available")
+        val adapter = DropdownAdapter(this, statuses)
         etStatus.setAdapter(adapter)
 
+        // Show dropdown when clicked
+        etStatus.setOnClickListener {
+            etStatus.showDropDown()
+        }
+
         etStatus.setOnItemClickListener { parent, _, position, _ ->
-            // Handle status selection if needed
+            statusInputLayout.error = null // Clear error on selection
         }
     }
 
@@ -302,7 +377,7 @@ class EditScheduleActivity : AppCompatActivity() {
 
             // Set teacher
             val teacherName = schedule.getString("teacher_name")
-            val teacherEmail = schedule.optString("teacher_email", "")  // Assuming email is in the JSON
+            val teacherEmail = schedule.optString("teacher_email", "")
             val teacherDisplay = "$teacherName ($teacherEmail)"
             val teacherIndex = teachers.indexOfFirst { "${it.name} (${it.email})".equals(teacherDisplay, ignoreCase = true) }
             if (teacherIndex >= 0) {
@@ -348,15 +423,83 @@ class EditScheduleActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveSchedule() {
-        // Validate required fields
-        if (selectedDayId == -1 || selectedTeacherId == -1 || selectedSubjectId == -1 ||
-            selectedSectionId == -1 || selectedTimeStartId == -1 || selectedTimeEndId == -1 ||
-            roomId == -1) {
-            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
-            return
+    private fun validateInputs(): Boolean {
+        var isValid = true
+
+        // Validate Day
+        if (etDay.text.toString().isEmpty() || selectedDayId == -1) {
+            dayInputLayout.error = "Please select a day"
+            isValid = false
+        } else {
+            dayInputLayout.error = null
         }
 
+        // Validate Subject Code
+        if (etSubjectCode.text.toString().isEmpty() || selectedSubjectId == -1) {
+            subjectCodeInputLayout.error = "Please select a subject"
+            isValid = false
+        } else {
+            subjectCodeInputLayout.error = null
+        }
+
+        // Validate Subject Name
+        if (etSubjectName.text.toString().isEmpty()) {
+            subjectNameInputLayout.error = "Please select a subject"
+            isValid = false
+        } else {
+            subjectNameInputLayout.error = null
+        }
+
+        // Validate Section
+        if (etSection.text.toString().isEmpty() || selectedSectionId == -1) {
+            sectionInputLayout.error = "Please select a section"
+            isValid = false
+        } else {
+            sectionInputLayout.error = null
+        }
+
+        // Validate Teacher
+        if (etTeacher.text.toString().isEmpty() || selectedTeacherId == -1) {
+            teacherInputLayout.error = "Please select a teacher"
+            isValid = false
+        } else {
+            teacherInputLayout.error = null
+        }
+
+        // Validate Status
+        if (etStatus.text.toString().isEmpty()) {
+            statusInputLayout.error = "Please select a status"
+            isValid = false
+        } else {
+            statusInputLayout.error = null
+        }
+
+        // Validate Time Start
+        if (etTimeStart.text.toString().isEmpty() || selectedTimeStartId == -1) {
+            timeStartInputLayout.error = "Please select start time"
+            isValid = false
+        } else {
+            timeStartInputLayout.error = null
+        }
+
+        // Validate Time End
+        if (etTimeEnd.text.toString().isEmpty() || selectedTimeEndId == -1) {
+            timeEndInputLayout.error = "Please select end time"
+            isValid = false
+        } else {
+            timeEndInputLayout.error = null
+        }
+
+        // Validate Room
+        if (roomId == -1) {
+            Toast.makeText(this, "Room information is missing", Toast.LENGTH_SHORT).show()
+            isValid = false
+        }
+
+        return isValid
+    }
+
+    private fun saveSchedule() {
         val status = etStatus.text.toString()
 
         // Build JSON payload

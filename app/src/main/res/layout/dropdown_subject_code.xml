@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dropdown_subject_code.xml -->
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/subjectCodeInputLayout"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:hint="@string/edit_subject_code"
+    app:boxCornerRadiusTopStart="12dp"
+    app:boxCornerRadiusTopEnd="12dp"
+    app:boxCornerRadiusBottomStart="12dp"
+    app:boxCornerRadiusBottomEnd="12dp"
+    app:boxStrokeColor="@color/primary_dark_green"
+    app:hintTextColor="@color/primary_dark_green">
+
+    <AutoCompleteTextView
+        android:id="@+id/subjectCodeAutoComplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:padding="16dp"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp" />
+
+</com.google.android.material.textfield.TextInputLayout>
