@@ -7,7 +7,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 /**
  * Service class for fetching data for dropdown menus from the backend API.
@@ -31,18 +30,18 @@ class DropdownDataService {
             val request = Request.Builder()
                 .url("$BACKEND_URL/get_days.php")
                 .build()
-            
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 return@withContext Result.failure(Exception("Failed to fetch days"))
             }
-            
+
             val daysArray = json.getJSONArray("days")
             val days = mutableListOf<Day>()
-            
+
             for (i in 0 until daysArray.length()) {
                 val dayJson = daysArray.getJSONObject(i)
                 days.add(
@@ -52,7 +51,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(days)
         } catch (e: Exception) {
             Result.failure(e)
@@ -68,18 +67,18 @@ class DropdownDataService {
             val request = Request.Builder()
                 .url("$BACKEND_URL/get_teachers.php")
                 .build()
-            
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 return@withContext Result.failure(Exception("Failed to fetch teachers"))
             }
-            
+
             val teachersArray = json.getJSONArray("teachers")
             val teachers = mutableListOf<Teacher>()
-            
+
             for (i in 0 until teachersArray.length()) {
                 val teacherJson = teachersArray.getJSONObject(i)
                 teachers.add(
@@ -90,7 +89,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(teachers)
         } catch (e: Exception) {
             Result.failure(e)
@@ -106,18 +105,18 @@ class DropdownDataService {
             val request = Request.Builder()
                 .url("$BACKEND_URL/get_time_slots.php")
                 .build()
-            
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 return@withContext Result.failure(Exception("Failed to fetch time slots"))
             }
-            
+
             val timesArray = json.getJSONArray("times")
             val timeSlots = mutableListOf<TimeSlot>()
-            
+
             for (i in 0 until timesArray.length()) {
                 val timeJson = timesArray.getJSONObject(i)
                 timeSlots.add(
@@ -129,7 +128,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(timeSlots)
         } catch (e: Exception) {
             Result.failure(e)
@@ -145,18 +144,18 @@ class DropdownDataService {
             val request = Request.Builder()
                 .url("$BACKEND_URL/get_subjects.php")
                 .build()
-            
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 return@withContext Result.failure(Exception("Failed to fetch subjects"))
             }
-            
+
             val subjectsArray = json.getJSONArray("subjects")
             val subjects = mutableListOf<Subject>()
-            
+
             for (i in 0 until subjectsArray.length()) {
                 val subjectJson = subjectsArray.getJSONObject(i)
                 subjects.add(
@@ -167,7 +166,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(subjects)
         } catch (e: Exception) {
             Result.failure(e)
@@ -175,42 +174,27 @@ class DropdownDataService {
     }
 
     /**
-     * Fetches a list of sections, optionally filtered by teacher and/or subject.
-     * @param teacherId The ID of the teacher to filter by.
-     * @param subjectId The ID of the subject to filter by.
+     * Fetches a list of sections without any filtering conditions.
      * @return A [Result] containing a list of [Section] objects on success, or an exception on failure.
      */
-    suspend fun getSections(teacherId: Int? = null, subjectId: Int? = null): Result<List<Section>> = withContext(Dispatchers.IO) {
+    suspend fun getSections(): Result<List<Section>> = withContext(Dispatchers.IO) {
         try {
-            // Build URL with query parameters
-            val urlBuilder = "$BACKEND_URL/get_sections.php".toHttpUrlOrNull()?.newBuilder()
-                ?: return@withContext Result.failure(Exception("Invalid URL"))
-            
-            if (teacherId != null) {
-                urlBuilder.addQueryParameter("teacher_id", teacherId.toString())
-            }
-            if (subjectId != null) {
-                urlBuilder.addQueryParameter("subject_id", subjectId.toString())
-            }
-            
-            val url = urlBuilder.build().toString()
-            
             val request = Request.Builder()
-                .url(url)
+                .url("$BACKEND_URL/get_sections.php")
                 .build()
-                
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 val errorMsg = json.optString("message", "Failed to fetch sections")
                 return@withContext Result.failure(Exception(errorMsg))
             }
-            
+
             val sectionsArray = json.getJSONArray("sections")
             val sections = mutableListOf<Section>()
-            
+
             for (i in 0 until sectionsArray.length()) {
                 val sectionJson = sectionsArray.getJSONObject(i)
                 sections.add(
@@ -221,7 +205,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(sections)
         } catch (e: Exception) {
             Result.failure(e)
@@ -237,18 +221,18 @@ class DropdownDataService {
             val request = Request.Builder()
                 .url("$BACKEND_URL/get_rooms.php")
                 .build()
-            
+
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-            
+
             val json = JSONObject(body)
             if (!json.getBoolean("success")) {
                 return@withContext Result.failure(Exception("Failed to fetch rooms"))
             }
-            
+
             val roomsArray = json.getJSONArray("rooms")
             val rooms = mutableListOf<Room>()
-            
+
             for (i in 0 until roomsArray.length()) {
                 val roomJson = roomsArray.getJSONObject(i)
                 rooms.add(
@@ -259,7 +243,7 @@ class DropdownDataService {
                     )
                 )
             }
-            
+
             Result.success(rooms)
         } catch (e: Exception) {
             Result.failure(e)

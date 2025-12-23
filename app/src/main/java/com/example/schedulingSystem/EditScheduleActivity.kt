@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.schedulingSystem.adapters.DropdownAdapter
 import com.example.schedulingSystem.models.*
 import com.example.schedulingSystem.services.DropdownDataService
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +74,10 @@ class EditScheduleActivity : AppCompatActivity() {
     // Schedule info from intent
     private var scheduleId: Int = -1
 
+    // Timing control for proper data population
+    private var dropdownsLoaded = false
+    private var scheduleDataToPopulate: JSONObject? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_schedule)
@@ -85,6 +88,11 @@ class EditScheduleActivity : AppCompatActivity() {
         initViews()
         setupClickListeners()
         loadDropdownData()
+
+        // Load schedule details if editing existing schedule
+        if (scheduleId != -1) {
+            loadScheduleDetails()
+        }
     }
 
     private fun initViews() {
@@ -131,12 +139,16 @@ class EditScheduleActivity : AppCompatActivity() {
             val teachersResult = dropdownService.getTeachers()
             val timeSlotsResult = dropdownService.getTimeSlots()
             val subjectsResult = dropdownService.getSubjects()
+            val sectionsResult = dropdownService.getSections()
 
             withContext(Dispatchers.Main) {
+                var allLoaded = true
+
                 daysResult.onSuccess { daysList ->
                     days = daysList
                     setupDayDropdown()
                 }.onFailure {
+                    allLoaded = false
                     Toast.makeText(this@EditScheduleActivity, "Failed to load days", Toast.LENGTH_SHORT).show()
                 }
 
@@ -144,6 +156,7 @@ class EditScheduleActivity : AppCompatActivity() {
                     rooms = roomsList
                     setupRoomDropdown()
                 }.onFailure {
+                    allLoaded = false
                     Toast.makeText(this@EditScheduleActivity, "Failed to load rooms", Toast.LENGTH_SHORT).show()
                 }
 
@@ -151,6 +164,7 @@ class EditScheduleActivity : AppCompatActivity() {
                     teachers = teachersList
                     setupTeacherDropdown()
                 }.onFailure {
+                    allLoaded = false
                     Toast.makeText(this@EditScheduleActivity, "Failed to load teachers", Toast.LENGTH_SHORT).show()
                 }
 
@@ -158,6 +172,7 @@ class EditScheduleActivity : AppCompatActivity() {
                     timeSlots = timeSlotsList
                     setupTimeDropdowns()
                 }.onFailure {
+                    allLoaded = false
                     Toast.makeText(this@EditScheduleActivity, "Failed to load time slots", Toast.LENGTH_SHORT).show()
                 }
 
@@ -165,15 +180,28 @@ class EditScheduleActivity : AppCompatActivity() {
                     subjects = subjectsList
                     setupSubjectDropdowns()
                 }.onFailure {
+                    allLoaded = false
                     Toast.makeText(this@EditScheduleActivity, "Failed to load subjects", Toast.LENGTH_SHORT).show()
+                }
+
+                sectionsResult.onSuccess { sectionsList ->
+                    sections = sectionsList
+                    setupSectionDropdown()
+                }.onFailure {
+                    allLoaded = false
+                    Toast.makeText(this@EditScheduleActivity, "Failed to load sections", Toast.LENGTH_SHORT).show()
                 }
 
                 // Setup status dropdown
                 setupStatusDropdown()
 
-                // Load schedule details after all dropdown data is loaded
-                if (scheduleId != -1) {
-                    loadScheduleDetails()
+                // Mark dropdowns as loaded
+                dropdownsLoaded = allLoaded
+
+                // If we have schedule data waiting to be populated, do it now
+                if (dropdownsLoaded && scheduleDataToPopulate != null) {
+                    populateFormWithScheduleData(scheduleDataToPopulate!!)
+                    scheduleDataToPopulate = null
                 }
             }
         }
@@ -212,7 +240,7 @@ class EditScheduleActivity : AppCompatActivity() {
     }
 
     private fun setupTeacherDropdown() {
-        val teacherNames = teachers.map { it.name }
+        val teacherNames = teachers.map { "${it.name} (${it.email})" }
         val adapter = DropdownAdapter(this, teacherNames)
         etTeacher.setAdapter(adapter)
 
@@ -224,7 +252,6 @@ class EditScheduleActivity : AppCompatActivity() {
         etTeacher.setOnItemClickListener { parent, _, position, _ ->
             selectedTeacherId = teachers[position].id
             teacherInputLayout.error = null // Clear error on selection
-            loadSectionsForTeacherAndSubject()
         }
     }
 
@@ -279,7 +306,6 @@ class EditScheduleActivity : AppCompatActivity() {
             etSubjectName.setText(subjects[position].name, false)
             subjectCodeInputLayout.error = null // Clear error on selection
             subjectNameInputLayout.error = null
-            loadSectionsForTeacherAndSubject()
         }
 
         etSubjectName.setOnItemClickListener { parent, _, position, _ ->
@@ -287,26 +313,6 @@ class EditScheduleActivity : AppCompatActivity() {
             etSubjectCode.setText(subjects[position].code, false)
             subjectCodeInputLayout.error = null // Clear error on selection
             subjectNameInputLayout.error = null
-            loadSectionsForTeacherAndSubject()
-        }
-    }
-
-    private fun loadSectionsForTeacherAndSubject(callback: (() -> Unit)? = null) {
-        // Load sections if either teacher or subject is selected
-        if (selectedTeacherId != -1 || selectedSubjectId != -1) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val sectionsResult = dropdownService.getSections(selectedTeacherId, selectedSubjectId)
-
-                withContext(Dispatchers.Main) {
-                    sectionsResult.onSuccess { sectionsList ->
-                        sections = sectionsList
-                        setupSectionDropdown()
-                        callback?.invoke()
-                    }.onFailure {
-                        Toast.makeText(this@EditScheduleActivity, "Failed to load sections", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
         }
     }
 
@@ -362,7 +368,13 @@ class EditScheduleActivity : AppCompatActivity() {
                 val schedule = json.getJSONObject("schedule")
 
                 withContext(Dispatchers.Main) {
-                    populateFormWithScheduleData(schedule)
+                    // Check if dropdowns are loaded
+                    if (dropdownsLoaded) {
+                        populateFormWithScheduleData(schedule)
+                    } else {
+                        // Store schedule data to populate later when dropdowns are ready
+                        scheduleDataToPopulate = schedule
+                    }
                 }
 
             } catch (e: Exception) {
@@ -396,23 +408,23 @@ class EditScheduleActivity : AppCompatActivity() {
 
             // Set teacher
             val teacherName = schedule.getString("teacher_name")
-            val teacherIndex = teachers.indexOfFirst { it.name.equals(teacherName, ignoreCase = true) }
+            val teacherEmail = schedule.optString("teacher_email", "")
+            val teacherDisplay = "$teacherName ($teacherEmail)"
+            val teacherIndex = teachers.indexOfFirst { "${it.name} (${it.email})".equals(teacherDisplay, ignoreCase = true) }
             if (teacherIndex >= 0) {
-                etTeacher.setText(teachers[teacherIndex].name, false)
+                etTeacher.setText(teacherDisplay, false)
                 selectedTeacherId = teachers[teacherIndex].id
             }
 
-            // After setting subject and teacher IDs, load sections and then set section
-            loadSectionsForTeacherAndSubject {
-                val sectionName = schedule.getString("section_name")
-                val sectionYear = schedule.optInt("section_year", 0)
-                val sectionIndex = sections.indexOfFirst {
-                    it.name.equals(sectionName, ignoreCase = true) && it.year == sectionYear
-                }
-                if (sectionIndex >= 0) {
-                    etSection.setText("${sections[sectionIndex].name} - Year ${sections[sectionIndex].year}", false)
-                    selectedSectionId = sections[sectionIndex].id
-                }
+            // Set section
+            val sectionName = schedule.getString("section_name")
+            val sectionYear = schedule.optInt("section_year", 0)
+            val sectionIndex = sections.indexOfFirst {
+                it.name.equals(sectionName, ignoreCase = true) && it.year == sectionYear
+            }
+            if (sectionIndex >= 0) {
+                etSection.setText("${sections[sectionIndex].name} - Year ${sections[sectionIndex].year}", false)
+                selectedSectionId = sections[sectionIndex].id
             }
 
             // Set time slots

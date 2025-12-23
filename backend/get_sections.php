@@ -19,7 +19,7 @@ $subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : null;
 
 // Build SQL query - sections table doesn't have teacher/subject relationships
 // So we return all sections for now
-$sql = "SELECT section_ID AS id, section_name AS name, section_year AS year FROM section ORDER BY section_name, section_year";
+$sql = "SELECT section_ID AS id, section_name AS name, section_year AS year FROM section ORDER BY name, year";
 
 $stmt = $conn->prepare($sql);
 if ($stmt === false) {
