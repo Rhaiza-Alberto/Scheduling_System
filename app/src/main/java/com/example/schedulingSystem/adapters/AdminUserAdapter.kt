@@ -45,8 +45,8 @@ class AdminUserAdapter(
         private val tvName: TextView = itemView.findViewById(R.id.tvUserName)
         private val tvEmail: TextView = itemView.findViewById(R.id.tvUserEmail)
         private val tvType: TextView = itemView.findViewById(R.id.tvUserType)
-        private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit1)
-        private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete1)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEditUser)
+        private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDeleteUser)
 
         fun bind(user: User) {
             tvName.text = user.fullName

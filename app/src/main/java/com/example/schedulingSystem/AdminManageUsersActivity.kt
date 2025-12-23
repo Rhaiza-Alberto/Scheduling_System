@@ -47,52 +47,70 @@ class AdminManageUsersActivity : AppCompatActivity() {
             return
         }
 
-        setContentView(R.layout.activity_admin_dashboard) // Reuse layout
+        try {
+            setContentView(R.layout.activity_admin_manage_rooms) // Use a cleaner layout
 
-        // Back press → go to dashboard
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                startActivity(Intent(this@AdminManageUsersActivity, AdminDashboardActivity::class.java))
-                finish()
+            // Back press → go to dashboard
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    startActivity(Intent(this@AdminManageUsersActivity, AdminDashboardActivity::class.java))
+                    finish()
+                }
+            })
+
+            // Setup RecyclerView
+            rvUsers = findViewById(R.id.containerRooms)
+            userAdapter = AdminUserAdapter(this, ::loadUsersFromApi)
+            rvUsers.apply {
+                layoutManager = LinearLayoutManager(this@AdminManageUsersActivity)
+                adapter = userAdapter
             }
-        })
 
-        // Setup RecyclerView
-        rvUsers = findViewById(R.id.containerRooms) // Reusing same container
-        userAdapter = AdminUserAdapter(this, ::loadUsersFromApi)
-        rvUsers.apply {
-            layoutManager = LinearLayoutManager(this@AdminManageUsersActivity)
-            adapter = userAdapter
+            setupClickListeners()
+            updateUIForUsersTab()
+            loadUsersFromApi()
+
+        } catch (e: Exception) {
+            Log.e("AdminUsers", "Error in onCreate", e)
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            finish()
         }
-
-        setupClickListeners()
-        updateUIForUsersTab()
-        loadUsersFromApi()
     }
 
     private fun setupClickListeners() {
-        findViewById<ImageButton>(R.id.btnSettings).setOnClickListener { performLogout() }
+        try {
+            findViewById<ImageButton>(R.id.btnSettings)?.setOnClickListener { performLogout() }
 
-        val tabSchedules = findViewById<TextView>(R.id.tabSchedules)
-        val tabUsers = findViewById<TextView>(R.id.tabUsers)
-        val tabRooms = findViewById<TextView>(R.id.tabRooms)
+            val tabSchedules = findViewById<TextView>(R.id.tabSchedules)
+            val tabUsers = findViewById<TextView>(R.id.tabUsers)
+            val tabRooms = findViewById<TextView>(R.id.tabRooms)
 
-        tabSchedules.setOnClickListener {
-            startActivity(Intent(this, AdminDashboardActivity::class.java))
-            finish()
+            tabSchedules?.setOnClickListener {
+                startActivity(Intent(this, AdminDashboardActivity::class.java))
+                finish()
+            }
+
+            tabUsers?.setOnClickListener {
+                Toast.makeText(this, "You are here: Manage Users", Toast.LENGTH_SHORT).show()
+            }
+
+            tabRooms?.setOnClickListener {
+                startActivity(Intent(this, AdminManageRoomsActivity::class.java))
+                finish()
+            }
+
+            // FAB to Add User
+            findViewById<ImageButton>(R.id.btnMain)?.setOnClickListener {
+                Toast.makeText(this, "Add New User - Coming soon", Toast.LENGTH_SHORT).show()
+            }
+
+            // Highlight current tab
+            if (tabUsers != null && tabSchedules != null && tabRooms != null) {
+                updateTabSelection(tabUsers, tabSchedules, tabRooms)
+            }
+        } catch (e: Exception) {
+            Log.e("AdminUsers", "Error setting up click listeners", e)
         }
-
-        tabUsers.setOnClickListener {
-            Toast.makeText(this, "You are here: Manage Users", Toast.LENGTH_SHORT).show()
-        }
-
-        tabRooms.setOnClickListener {
-            startActivity(Intent(this, AdminManageRoomsActivity::class.java))
-            finish()
-        }
-
-        // Highlight current tab
-        updateTabSelection(tabUsers, tabSchedules, tabRooms)
     }
 
     private fun updateUIForUsersTab() {

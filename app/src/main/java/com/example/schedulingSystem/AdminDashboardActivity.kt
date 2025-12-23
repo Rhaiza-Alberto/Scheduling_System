@@ -76,8 +76,6 @@ class AdminDashboardActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         // Settings → Logout
         findViewById<ImageButton>(R.id.btnSettings).setOnClickListener { performLogout() }
-
-        // Review button (placeholder)
         findViewById<MaterialButton>(R.id.btnReview).setOnClickListener {
             Toast.makeText(this, "Review pending approvals - Coming soon", Toast.LENGTH_SHORT).show()
         }
@@ -95,7 +93,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         tabUsers.setOnClickListener {
             updateTabSelection(tabUsers, tabSchedules, tabRooms)
             startActivity(Intent(this, AdminManageUsersActivity::class.java))
-            finish()
+
         }
 
         tabRooms.setOnClickListener {
@@ -103,7 +101,6 @@ class AdminDashboardActivity : AppCompatActivity() {
                 updateTabSelection(tabRooms, tabSchedules, tabUsers)
                 val intent = Intent(this@AdminDashboardActivity, AdminManageRoomsActivity::class.java)
                 startActivity(intent)
-                finish()
             } catch (e: Exception) {
                 Log.e("AdminDashboard", "Error navigating to Manage Rooms", e)
                 Toast.makeText(this@AdminDashboardActivity, "Error opening Manage Rooms: ${e.message}", Toast.LENGTH_LONG).show()
